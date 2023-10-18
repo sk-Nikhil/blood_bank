@@ -1,19 +1,20 @@
 const express = require('express')
-const mongoose = require('./db/mongoose.js')
+const app = express()
 const bodyparser = require('body-parser')
 const cors = require('cors')
+const dotenv= require('dotenv')
 const donorRouter = require('./routers/donors.js')
+const mongoose = require('./db/mongoose.js')
+const { v4: uuidv4 } = require('uuid');
 
-const port = 3000
-
-const app = express()
-
+dotenv.config()
 app.use(cors())
 app.use(express.json())
 app.use(donorRouter)
 app.use(bodyparser.urlencoded({ extended: true }))
 app.use(bodyparser.json())
+console.log(uuidv4())
 
-app.listen(port, ()=>{
-    console.log(`server started on port ${port}`)
+app.listen(process.env.port, ()=>{
+    console.log(`server started on port ${process.env.port}`)
 })

@@ -1,21 +1,16 @@
 import axios from 'axios'
 export default {
-    // async setDonors(context){
-    //     await axios.get('http://localhost:3000/getDonors').then(response=>{
-    //         context.commit('setDonors', response.data)
-    //     })
-    // },
 
     async setDonors(context, page){
         if(!context.state.searchTerm){
             await axios.get(`http://localhost:3000/getDonors?page=${page}`).then(response=>{
-                context.commit('setDonors', response.data)
+                context.commit('setDonors', response.data);
             })
         }
         else{
             await axios.get(`http://localhost:3000/filterSearch/${context.state.searchTerm}?page=${page}`)
             .then(response=>{
-                context.commit('setDonors', response.data)
+                context.commit('setDonors', response.data);
             })
         }
     },
