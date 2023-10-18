@@ -30,7 +30,7 @@ async function getTotalDonors(){
 
 async function getDonors(skip, limit){
     try{
-        return await Donor.find().skip(skip).limit(limit);
+        return await Donor.find().sort({_id:-1}).skip(skip).limit(limit);
     }
     catch(err){
         throw Error(err);

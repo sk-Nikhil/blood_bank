@@ -1,12 +1,15 @@
 export default {
   setDonors(state, donors) {
     state.donors = donors.donors;
-    state.currentPage = donors.currentPage;
     state.totalPages = donors.totalPages;
+    if(donors.source) 
+        state.currentPage = 1
+    else
+        state.currentPage = donors.currentPage;
   },
 
   addDonor(state, data) {
-    state.donors.push(data);
+    state.donors.unshift(data);
   },
 
   removeDonor(state, id) {

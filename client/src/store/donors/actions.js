@@ -17,17 +17,19 @@ export default {
 
 
     async addDonor(context, payload){
-        await axios.post('http://localhost:3000/addDonor', payload).then(response=>{
-            console.log(response)
+        await axios.post('http://localhost:3000/addDonor', payload)
+        .then(()=>{
+            context.dispatch('setDonors',context.getters.getCurrPage)
             context.commit('addDonor', payload)
         })
     },
-
+    
     async removeDonor(context, payload){
+        console.log(context)
         await axios.delete(`http://localhost:3000/removeDonor/${payload}`)
-        .then(response=>{
-            console.log(response)
+        .then(()=>{
             context.commit('removeDonor', payload)
+            context.dispatch('setDonors',{source:'remove', page:context.getters.getCurrPage})
         })
     },
 
