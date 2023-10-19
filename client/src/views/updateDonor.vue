@@ -5,7 +5,7 @@
             <h2>Update Donor Details</h2>
 
             <div id="close" @click="disableEdit()">close</div>
-            <form @submit.prevent="updateDonor(donor)">
+            <form @submit.prevent="handleEditForm(donor)">
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" v-model="donor.name" disabled>
     
@@ -35,6 +35,9 @@
 
 <script>
 import {mapGetters,mapActions} from 'vuex'
+
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 export default{
     data(){
         return{
@@ -46,8 +49,22 @@ export default{
     },
     methods:{
         ...mapActions('donor',['updateDonor']),
-        ...mapActions(['disableEdit'])
+        ...mapActions(['disableEdit']),
+
+        handleEditForm(donor){
+            this.updateDonor(donor)
+            .then(response=>this.notify(response))   
+        }
         
+    },
+
+    setup() {
+        const notify = (msg) => {
+            toast(msg, {
+                autoClose: 1000,
+            }); // ToastOptions
+        }
+        return { notify };
     },
     created(){
         this.donor = this.getDonorToBeUpdated

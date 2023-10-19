@@ -1,4 +1,5 @@
-import axios from 'axios'
+import axios from 'axios';
+
 export default {
 
     async setDonors(context, page){
@@ -15,22 +16,26 @@ export default {
         }
     },
 
-
     async addDonor(context, payload){
+        let addResponse
         await axios.post('http://localhost:3000/addDonor', payload)
-        .then(()=>{
+        .then((response)=>{
+            addResponse = response.data
             context.dispatch('setDonors',context.getters.getCurrPage)
             context.commit('addDonor', payload)
         })
+        return addResponse
     },
     
     async removeDonor(context, payload){
-        console.log(context)
+        let removeReponse
         await axios.delete(`http://localhost:3000/removeDonor/${payload}`)
-        .then(()=>{
+        .then((response)=>{
+            removeReponse = response.data
             context.commit('removeDonor', payload)
             context.dispatch('setDonors',{source:'remove', page:context.getters.getCurrPage})
         })
+        return removeReponse
     },
 
     async updateDonor(context, payload){
@@ -38,12 +43,14 @@ export default {
         const d = new Date()
         const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
         const donor = {...payload, last_donated}
+        var updateResponse
 
         await axios.patch('http://localhost:3000/updateDonor', donor)
         .then(response=>{
-            console.log(response.data)
             context.commit('updateDonor', donor)
+            updateResponse = response.data
         })
+        return updateResponse
 
     },
 

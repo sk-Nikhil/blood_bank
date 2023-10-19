@@ -4,7 +4,7 @@ const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`
 
 const donorSchema = new mongoose.Schema({
     id:{
-        type:Number,
+        type:String,
         required:true,
         trim:true
     },

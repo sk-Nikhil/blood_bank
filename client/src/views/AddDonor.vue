@@ -34,6 +34,9 @@
 
 <script>
 import { mapActions } from 'vuex'
+
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
 export default {
     data() {
         return {
@@ -56,10 +59,34 @@ export default {
             const d = new Date()
             const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
             this.changeAddformStatus()
-            this.addDonor({ ...this.form, last_donated })
+            this.addDonor({id:this.generateRandomId(this.form.name), ...this.form, last_donated })
+            .then((response)=>this.notify(response))
         },
+
+        generateRandomId(name) {
+            // Use a cryptographic random number generator to ensure uniqueness
+            const randomArray = new Uint32Array(1);
+            window.crypto.getRandomValues(randomArray);
+            const randomValue = randomArray[0] % 1000000; // Ensure it's a 6-digit number
+          
+            // Convert the random value to a 6-digit string
+            const randomId = randomValue.toString().padStart(6, '0');
+          
+            // Take the first 3 characters of the name and concatenate with the random 6-digit ID
+            const namePart = name.slice(0, 3).toUpperCase();
+          
+            return namePart + randomId;
+        }
         
-    }
+    },
+    setup() {
+        const notify = (msg) => {
+            toast(msg, {
+                autoClose: 1000,
+            }); // ToastOptions
+        }
+        return { notify };
+    },
 }
 </script>
 

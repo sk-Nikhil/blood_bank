@@ -7,7 +7,7 @@
 <script>
 import TheHeader from './components/layout/TheHeader.vue'
 import TheFooter from './components/layout/TheFooter.vue'
-import TheHome from './components/pages/TheHome.vue'
+import TheHome from './views/TheHome.vue'
 export default {
   name: 'App',
   components: {

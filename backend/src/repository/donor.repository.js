@@ -1,14 +1,5 @@
 const Donor = require('../models/donors.js');
 
-async function getDonorById(){
-    try{
-        return await Donor.find().sort({id:-1}).limit(1);
-    }
-    catch(err){
-        throw Error(err);
-    }
-}
-
 async function addDonor(donor){
     try{
         await donor.save();
@@ -65,8 +56,7 @@ async function updateDonor(id, address, contact, last_donated){
 }
 
 
-module.exports={
-    getDonorById,
+module.exports={ 
     addDonor,
     getTotalDonors,
     getDonors,

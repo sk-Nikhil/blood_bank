@@ -7,8 +7,8 @@ export default{
     state(){
         return{
             donors:[],
-            currentPage:1,
-            totalPages:1,
+            currentPage:0,
+            totalPages:0,
             searchTerm:'',
             sortBy:null
         }

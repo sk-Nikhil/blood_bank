@@ -1,7 +1,6 @@
 <template>
     <button id="addButton" @click="changeAddformStatus">Add Donor</button>
 
-
     <div id="container">
         <div class="search-container">
             <input type="text" class="search-input" id="searchInput" placeholder="Search for donors..." v-model="searchTerm"
@@ -10,7 +9,7 @@
         <table>
             <thead>
                 <tr>
-                    <th @click="sortDonors('id')">S.No</th>
+                    <th @click="sortDonors('id')">donor_id</th>
                     <th @click="sortDonors('name')">Name</th>
                     <th @click="sortDonors('blood_group')">Blood Group</th>
                     <th @click="sortDonors('address')">Address</th>
@@ -29,14 +28,14 @@
                     <td>{{ donor.last_donated }}</td>
                     <td>
                         <button class="action" style="background-color: green;" @click="changeEditStatus(donor)">Edit</button>
-                        <button class="action" style="background-color: red;" @click="removeDonor(donor.id)">Delete</button>
+                        <button class="action" style="background-color: red;" @click="handleRemovedDonor(donor.id)">Delete</button>
                     </td>
                 </tr>
                 <!-- Add more rows as needed -->
             </tbody>
         </table>
         <div class="pagination">
-            <button @click="setDonors(getCurrPage - 1)" :disabled="getCurrPage === 1">Previous</button>
+            <button @click="setDonors(getCurrPage - 1)" :disabled="getCurrPage <= 1">Previous</button>
             <span>Page {{ getCurrPage }} of {{ getTotalPages }}</span>
             <button @click="setDonors(getCurrPage + 1)" :disabled="getCurrPage === getTotalPages">Next</button>
         </div>
@@ -51,6 +50,11 @@
 import { mapGetters, mapActions } from 'vuex'
 import AddDonor from './AddDonor.vue'
 import EditDonor from './updateDonor.vue'
+
+
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+
 export default {
     components: {
         AddDonor,
@@ -73,12 +77,25 @@ export default {
         handleInput() {
             this.setSearchTerm(this.searchTerm)
             this.setDonors(this.getCurrPage)
+        },
+        handleRemovedDonor(id){
+            this.removeDonor(id)
+            .then(response=>this.notify(response))
         }
+
     },
 
     created() {
         this.setDonors(this.getCurrPage)
-    }
+    },
+    setup() {
+        const notify = (msg) => {
+            toast(msg, {
+                autoClose: 1000,
+            }); // ToastOptions
+        }
+        return { notify };
+    },
 
 
 }
@@ -89,7 +106,7 @@ export default {
 
 #container{
     width:70%;
-    margin: 6% auto auto;
+    margin: 6% auto 15%;
 }
 table {
     padding: 0;
@@ -157,8 +174,6 @@ td {
 .pagination button{
     padding:8px 15px;
     border-radius:10px;
-    background-color:black;
-    color:white
 }
 
 .action{

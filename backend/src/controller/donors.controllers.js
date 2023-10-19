@@ -4,10 +4,9 @@ const donorService = require('../services/donor.service.js')
 async function addDonor(req,res){
     try{
         const name = await donorService.addDonor(req.body)
-        res.send(`Donor ${name} added successfully`)
+        res.status(200).send(`Donor ${name} added successfully`)
     }
     catch(err){
-        console.log(err.message)
         res.status(401).send(err.message)
     }
 }
@@ -18,7 +17,8 @@ async function getDonors(req,res){
         const donor = await donorService.getDonors(page)
         res.send(donor)
     } catch (err) {
-      res.status(500).json({ error: err.message });
+        console.log(err.message)
+        res.status(500).json({ error: err.message });
     }
 }
 
@@ -39,9 +39,10 @@ async function getFilteredDonors(req,res){
 async function removeDonor(req,res){
     try{
         const donor_name = await donorService.removeDonor(req.params.id)
-        res.status(200).send(`donor with id ${donor_name} is removed successfully`)
+        res.status(200).send(`donor ${donor_name} is removed successfully`)
     }
     catch(err){
+        console.log(err.message)
         res.status(500).send(err.message)
     }
 }
