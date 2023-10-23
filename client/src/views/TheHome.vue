@@ -1,6 +1,7 @@
 <template>
     <button id="addButton" @click="changeAddformStatus">Add Donor</button>
-
+    
+    <BloodGroupChart :counter="getBloodCount"></BloodGroupChart>
     <div id="container">
         <div class="search-container">
             <input type="text" class="search-input" id="searchInput" placeholder="Search for donors..." v-model="searchTerm"
@@ -50,6 +51,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import AddDonor from '../components/AddDonor.vue'
 import EditDonor from '../components/updateDonor.vue'
+import BloodGroupChart from '../components/BloodGroupChart.vue'
 
 
 import { toast } from 'vue3-toastify';
@@ -58,7 +60,8 @@ import 'vue3-toastify/dist/index.css';
 export default {
     components: {
         AddDonor,
-        EditDonor
+        EditDonor,
+        BloodGroupChart
     },
     data() {
         return {
@@ -68,7 +71,7 @@ export default {
     },
     computed: {
         ...mapGetters('donor', ['getCurrPage', 'getTotalPages', 'filteredDonors', 'getDonors']),
-        ...mapGetters(['getEditStatus', 'getAddFormStatus']),
+        ...mapGetters(['getEditStatus', 'getAddFormStatus', 'getBloodCount', ]),
     },
     methods: {
         ...mapActions('donor', ['setDonors', 'removeDonor', 'setSearchTerm', 'sortDonors']),
@@ -174,6 +177,7 @@ td {
 .pagination button{
     padding:8px 15px;
     border-radius:10px;
+    background-color: #ccc;
 }
 
 .action{

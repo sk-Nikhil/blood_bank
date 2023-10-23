@@ -65,10 +65,15 @@ async function updateDonor(donorData){
     return await donorRepository.updateDonor(id, address, contact, last_donated);
 }
 
+async function countBloodGroups(){
+    return await donorRepository.countBloodGroups()
+}
+
 module.exports = {
     addDonor,
     getDonors,
     getFilteredDonors,
     removeDonor,
-    updateDonor
+    updateDonor,
+    countBloodGroups
 }

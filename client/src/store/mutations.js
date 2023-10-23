@@ -8,5 +8,8 @@ export default {
     },
     disableEdit(state){
         state.editDonor = false
+    },
+    countGroups(state){
+        console.log(state)
     }
 }

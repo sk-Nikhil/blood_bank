@@ -58,10 +58,23 @@ async function updateDonor(req,res){
     }
 }
 
+async function countBloodGroups(req,res){
+    console.log("executed")
+    try{
+        await donorService.countBloodGroups()
+        res.status(200).send()
+    }
+    catch(err){
+        console.log(err.message)
+        res.status(401).send(err.message)
+    }
+}
+
 module.exports={
     addDonor,
     getDonors,
     getFilteredDonors,
     removeDonor,
-    updateDonor
+    updateDonor,
+    countBloodGroups
 }

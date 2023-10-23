@@ -55,6 +55,24 @@ async function updateDonor(id, address, contact, last_donated){
     }
 }
 
+async function countBloodGroups(){
+    try{
+        const counts = await Donor.aggregate([
+            {
+              $group: {
+                _id: `$${Donor.blood_group}`,
+                count: { $sum: 1 },
+              },
+            },
+          ]);
+        console.log(counts)
+    }
+    catch(err){
+        console.log(err.message)
+        throw Error(err)
+    }
+}
+
 
 module.exports={ 
     addDonor,
@@ -62,5 +80,6 @@ module.exports={
     getDonors,
     getFilteredDonors,
     removeDonor,
-    updateDonor
+    updateDonor,
+    countBloodGroups
 }
