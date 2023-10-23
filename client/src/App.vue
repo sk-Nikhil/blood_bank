@@ -1,19 +1,23 @@
 <template>
   <the-header></the-header>
+  
   <the-home></the-home>
+  <!-- <login-page></login-page> -->
   <the-footer></the-footer>
 </template>
 
 <script>
-import TheHeader from './components/layout/TheHeader.vue'
-import TheFooter from './components/layout/TheFooter.vue'
+import TheHeader from './components/TheHeader.vue'
+import TheFooter from './components/TheFooter.vue'
 import TheHome from './views/TheHome.vue'
+// import LoginPage from './views/LoginPage.vue'
 export default {
   name: 'App',
   components: {
     TheHeader,
     TheFooter,
-    TheHome
+    TheHome,
+    // LoginPage
   }
 }
 </script>

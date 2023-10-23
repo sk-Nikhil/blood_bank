@@ -48,8 +48,8 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import AddDonor from './AddDonor.vue'
-import EditDonor from './updateDonor.vue'
+import AddDonor from '../components/AddDonor.vue'
+import EditDonor from '../components/updateDonor.vue'
 
 
 import { toast } from 'vue3-toastify';
