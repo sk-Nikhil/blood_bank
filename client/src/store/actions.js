@@ -11,8 +11,7 @@ export default {
     },
 
     async countGroups(context){
-        const blood_groups = await axios.get('http:/localhost:3000/getCounter')
-        console.log(blood_groups)
-        context.commit('countGroups')
+        const counts = await axios.get('http://localhost:3000/countBloodGroups')
+        context.commit('countGroups', counts.data)
     }
 }

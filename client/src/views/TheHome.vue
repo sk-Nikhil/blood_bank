@@ -1,7 +1,7 @@
 <template>
     <button id="addButton" @click="changeAddformStatus">Add Donor</button>
     
-    <BloodGroupChart :counter="getBloodCount"></BloodGroupChart>
+    <BloodGroupChart></BloodGroupChart>
     <div id="container">
         <div class="search-container">
             <input type="text" class="search-input" id="searchInput" placeholder="Search for donors..." v-model="searchTerm"
@@ -48,11 +48,10 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
-import AddDonor from '../components/AddDonor.vue'
-import EditDonor from '../components/updateDonor.vue'
-import BloodGroupChart from '../components/BloodGroupChart.vue'
-
+import { mapGetters, mapActions } from 'vuex';
+import AddDonor from '../components/AddDonor.vue';
+import EditDonor from '../components/updateDonor.vue';
+import BloodGroupChart from '../components/BloodGroupChart.vue';
 
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
@@ -71,11 +70,12 @@ export default {
     },
     computed: {
         ...mapGetters('donor', ['getCurrPage', 'getTotalPages', 'filteredDonors', 'getDonors']),
-        ...mapGetters(['getEditStatus', 'getAddFormStatus', 'getBloodCount', ]),
+        ...mapGetters(['getEditStatus', 'getAddFormStatus' ]),
     },
     methods: {
         ...mapActions('donor', ['setDonors', 'removeDonor', 'setSearchTerm', 'sortDonors']),
         ...mapActions(['changeEditStatus', 'changeAddformStatus']),
+        ...mapActions(['countGroups']),
 
         handleInput() {
             this.setSearchTerm(this.searchTerm)
@@ -83,13 +83,19 @@ export default {
         },
         handleRemovedDonor(id){
             this.removeDonor(id)
-            .then(response=>this.notify(response))
+            .then(response=>{
+                this.countGroups()
+                this.notify(response)
+            })
         }
 
     },
 
     created() {
         this.setDonors(this.getCurrPage)
+    },
+    beforeCreate(){
+        // this.countGroups()
     },
     setup() {
         const notify = (msg) => {

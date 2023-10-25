@@ -10,7 +10,25 @@ export default {
     },
 
     getBloodCount(state){
-        return [state.A_Count, state.AN_Count, state.B_Count, state.BN_Count, state.AB_Count, state.ABN_Count, state.O_Count, state.ON_Count];
+
+        const chartData = {
+            labels:[],
+            datasets: [
+                {
+                    data: [30, 50, 20],
+                    backgroundColor: ['#FF5733', '#33FF57', '#5733FF', 'red', 'yellow', 'pink'],
+                },
+            ],
+        };
+        let labels = [];
+        let data = [];
+        for(var i = 0; i < state.group_count.length; i++) {
+            labels.push(state.group_count[i]._id)
+            data.push(state.group_count[i].count)
+        }
+        chartData.labels = labels;
+        chartData.datasets[0].data = data;
+        return chartData;
     },
 
 }

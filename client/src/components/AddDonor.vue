@@ -55,12 +55,16 @@ export default {
     methods: {
         ...mapActions(['changeAddformStatus']),
         ...mapActions('donor', ['addDonor']),
+        ...mapActions(['countGroups']),
         addDonors() {
             const d = new Date()
             const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
             this.changeAddformStatus()
             this.addDonor({id:this.generateRandomId(this.form.name), ...this.form, last_donated })
-            .then((response)=>this.notify(response))
+            .then((response)=>{
+                this.notify(response)
+                this.countGroups()
+            })
         },
 
         generateRandomId(name) {

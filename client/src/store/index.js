@@ -14,14 +14,7 @@ const store = createStore({
             donorToBeUpdated:{},
             showAddForm:false,
             editDonor:false,
-            A_Count: 1,     //A+ count
-            AN_Count:2,     //A- count
-            B_Count:3,      //B+ count
-            BN_Count:4,     //B- count
-            AB_Count:5,     //AB+ count
-            ABN_Count:6,    //AB- count
-            O_Count:7,      //O+ count
-            ON_Count:8        //O- count
+            group_count:[]
         }
     },
     mutations:rootMutations,

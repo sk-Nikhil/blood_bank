@@ -61,8 +61,8 @@ async function updateDonor(req,res){
 async function countBloodGroups(req,res){
     console.log("executed")
     try{
-        await donorService.countBloodGroups()
-        res.status(200).send()
+        const counts = await donorService.countBloodGroups()
+        res.status(200).send(counts)
     }
     catch(err){
         console.log(err.message)
