@@ -4,42 +4,47 @@ async function addDonor(donor) {
   try {
     await donor.save();
     return donor.name;
-  } catch (e) {
+  }
+  catch (e) {
     throw Error(err);
   }
-}
+};
 
 async function getTotalDonors() {
   try {
     return await Donor.countDocuments();
-  } catch (err) {
+  }
+  catch(err) {
     throw Error(err);
   }
-}
+};
 
 async function getDonors(skip, limit) {
   try {
     return await Donor.find().sort({ _id: -1 }).skip(skip).limit(limit);
-  } catch (err) {
+  }
+  catch (err) {
     throw Error(err);
   }
-}
+};
 
 async function getFilteredDonors(searchQuery, skip, limit) {
   try {
     return await Donor.find(searchQuery).skip(skip).limit(limit);
-  } catch (err) {
+  } 
+  catch (err) {
     throw Error(err);
   }
-}
+};
 
 async function removeDonor(id) {
   try {
     return await Donor.findOneAndDelete({ id: id });
-  } catch (err) {
+  } 
+  catch (err) {
     throw Error(err);
   }
-}
+};
 
 async function updateDonor(id, address, contact, last_donated) {
   try {
@@ -47,10 +52,11 @@ async function updateDonor(id, address, contact, last_donated) {
       { id },
       { address, contact, last_donated }
     );
-  } catch (err) {
+  } 
+  catch (err) {
     throw Error(err);
   }
-}
+};
 
 async function countBloodGroups() {
   try {
@@ -62,13 +68,12 @@ async function countBloodGroups() {
         }
       }
     ]);
-
     return result;
   }
   catch(err) {
-    throw Error(err)
+    throw Error(err);
   }
-}
+};
 
 module.exports = {
   addDonor,

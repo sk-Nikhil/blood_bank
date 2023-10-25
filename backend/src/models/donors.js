@@ -1,6 +1,6 @@
-const mongoose = require('mongoose')
-const d = new Date()
-const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`
+const mongoose = require('mongoose');
+const d = new Date();
+const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
 
 const donorSchema = new mongoose.Schema({
     id:{
@@ -32,8 +32,8 @@ const donorSchema = new mongoose.Schema({
         type:String,
         default:last_donated
     }
-})
+});
 
-const Donor = mongoose.model('donors_data', donorSchema)
+const Donor = mongoose.model('donors_data', donorSchema);
 
-module.exports = Donor
+module.exports = Donor;

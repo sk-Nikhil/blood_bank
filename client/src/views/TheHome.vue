@@ -88,7 +88,6 @@ export default {
                 this.notify(response)
             })
         }
-
     },
 
     created() {
@@ -105,14 +104,10 @@ export default {
         }
         return { notify };
     },
-
-
 }
 </script>
 
-
 <style scoped>
-
 #container{
     width:70%;
     margin: 6% auto 15%;

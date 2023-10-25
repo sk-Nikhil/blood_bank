@@ -4,9 +4,9 @@ export default {
         return state.donors.slice(0,5);
     },
     getCurrPage(state){
-        return state.currentPage
+        return state.currentPage;
     },
     getTotalPages(state){
-        return state.totalPages
+        return state.totalPages;
     },      
 }
