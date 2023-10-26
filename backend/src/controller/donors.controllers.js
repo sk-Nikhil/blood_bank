@@ -1,4 +1,3 @@
-const Donor = require('../models/donors.js');
 const donorService = require('../services/donor.service.js');
 
 async function addDonor(req,res){

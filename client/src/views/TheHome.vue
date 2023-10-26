@@ -1,12 +1,11 @@
 <template>
-    <button id="addButton" @click="changeAddformStatus">Add Donor</button>
-    
-    <BloodGroupChart></BloodGroupChart>
     <div id="container">
-        <div class="search-container">
-            <input type="text" class="search-input" id="searchInput" placeholder="Search for donors..." v-model="searchTerm"
-                @input="handleInput()">
-        </div>
+        <form class="search">
+            <input type="text" placeholder="Search" class="searchinput" name="search" v-model="searchTerm" @input="handleInput()" />
+            <button type="button" class="searchbutton">
+                <i class="fa-solid fa-magnifying-glass"></i>
+            </button>
+        </form>
         <table>
             <thead>
                 <tr>
@@ -28,8 +27,10 @@
                     <td>{{ donor.contact }}</td>
                     <td>{{ donor.last_donated }}</td>
                     <td>
-                        <button class="action" style="background-color: green;" @click="changeEditStatus(donor)">Edit</button>
-                        <button class="action" style="background-color: red;" @click="handleRemovedDonor(donor.id)">Delete</button>
+                        <div id="action">
+                            <button class="action" style="background-color: green;" @click="changeEditStatus(donor)">Edit</button>
+                            <button class="action" style="background-color: red;" @click="handleRemovedDonor(donor.id)">Delete</button>
+                        </div>
                     </td>
                 </tr>
                 <!-- Add more rows as needed -->
@@ -40,27 +41,22 @@
             <span>Page {{ getCurrPage }} of {{ getTotalPages }}</span>
             <button @click="setDonors(getCurrPage + 1)" :disabled="getCurrPage === getTotalPages">Next</button>
         </div>
+
+
     </div>
 
-
-    <add-donor v-if="getAddFormStatus"></add-donor>
     <edit-donor v-if="getEditStatus"></edit-donor>
 </template>
 
 <script>
 import { mapGetters, mapActions } from 'vuex';
-import AddDonor from '../components/AddDonor.vue';
-import EditDonor from '../components/updateDonor.vue';
-import BloodGroupChart from '../components/BloodGroupChart.vue';
-
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import EditDonor from '../components/updateDonor.vue';
 
 export default {
     components: {
-        AddDonor,
         EditDonor,
-        BloodGroupChart
     },
     data() {
         return {
@@ -70,11 +66,12 @@ export default {
     },
     computed: {
         ...mapGetters('donor', ['getCurrPage', 'getTotalPages', 'filteredDonors', 'getDonors']),
-        ...mapGetters(['getEditStatus', 'getAddFormStatus' ]),
+        ...mapGetters(['getEditStatus' ]),
+        ...mapGetters('admin', ['getLoginStatus'])
     },
     methods: {
         ...mapActions('donor', ['setDonors', 'removeDonor', 'setSearchTerm', 'sortDonors']),
-        ...mapActions(['changeEditStatus', 'changeAddformStatus']),
+        ...mapActions(['changeEditStatus']),
         ...mapActions(['countGroups']),
 
         handleInput() {
@@ -139,23 +136,6 @@ td {
     border: 1px solid #ddd;
 }
 
-
-/* search */
-.search-container {
-    float:right;
-    margin-bottom: 1%;
-}
-
-/* Style the search input */
-.search-input {
-    padding: 15px 15px;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    width: 32rem;
-    font-size: 1rem;
-    font-weight: 500;
-}
-
 #addButton{
     float:right;
     clear: both;
@@ -167,6 +147,8 @@ td {
 }
 
 .pagination{
+    display: flex;
+    align-items: center;
     float:right;
     margin-top: 10px;
 }
@@ -185,5 +167,58 @@ td {
     padding:5px 10px;
     margin:0 2px;
     border-radius: 8px;
+    color:white;
 }
+
+#action{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.search{
+    display: inline-flex;
+    float: right;
+    background-color: #501566;
+    color:white;
+    padding:10px;
+    border-radius: 4px;
+    border:1px solid black;
+    margin-bottom:5px;
+  }
+
+  .search :is(input, button){
+    background:transparent;
+    color:inherit;
+    border:none;
+    outline:none;
+  }
+
+  .searchinput{
+    width:0;
+    transition:width 0.5s;
+  }
+
+  .searchbutton{
+    display: grid;
+    place-items: center;
+    width:25px;
+    height:25px;
+    cursor:pointer;
+    transition:color 0.25s;
+  }
+
+  .searchbutton:hover{
+    color:#e3e3e3;
+  }
+
+  .search:focus-within input{
+    width:200px;
+  }
+
+  ::placeholder{
+    font:inherit;
+    color:#e3e3e3;
+  }
 </style>

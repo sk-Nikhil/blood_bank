@@ -23,8 +23,10 @@
             background-color: #333;
             color: white;
             text-align: center;
-            padding: 20px 0;
+            padding:0;
+            margin:0;
             width:100%;
+            height:10%;
         }
 
         /* Style footer links */
