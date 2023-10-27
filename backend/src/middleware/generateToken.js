@@ -1,10 +1,9 @@
 // const secretKey = 'thisisthefirsttokeniammakingformyproject'
 const jwt = require('jsonwebtoken');
 
-const generateToken = (payload) => {
-    const user = {id:payload._id, role:payload.role};
+const generateToken = (user) => {
     const token = jwt.sign(user,process.env.SECRET_KEY, { expiresIn: '1h' });
-    return token;
+    return {token, role:user.role};
 }
 
 module.exports = generateToken;

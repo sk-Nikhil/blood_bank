@@ -13,17 +13,25 @@
     name: 'NotFound',
     data(){
         return{
-            timer:4
+            timer:4,
+            page:''
         }
     },
     computed:{
-        ...mapGetters('admin', ['getLoginStatus']),
+        ...mapGetters('admin', ['getLoginStatus', 'getRole']),
     },
     created(){
+      if(this.getRole === 'admin')
+        this.page = 'admin_home'
+      else if(this.getRole === 'user')
+          this.page = 'user_home'
+      else
+        this.page='login'
+
         const timer = setInterval(()=>{
             this.timer--;
             if(this.timer === 0){
-                this.$router.replace('/home')
+                this.$router.replace(`/${this.page}`)
                 clearInterval(timer)
             }
         },1000)

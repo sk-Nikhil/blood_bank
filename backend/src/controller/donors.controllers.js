@@ -14,7 +14,7 @@ async function getDonors(req,res){
     const page = parseInt(req.query.page) || 1;
     try {
         const donor = await donorService.getDonors(page);
-        res.send(donor);
+        res.status(200).send(donor);
     } catch (err) {
         console.log(err.message);
         res.status(500).json({ error: err.message });
@@ -26,7 +26,7 @@ async function getFilteredDonors(req,res){
     const query = req.params.searchTerm;
     try {
         const donors = await donorService.getFilteredDonors(page, query);
-        res.send(donors);
+        res.status(200).send(donors);
     }
     catch(err) {
         console.log(err.message);

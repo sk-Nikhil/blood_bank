@@ -19,7 +19,7 @@ const store = createStore({
             donorToBeUpdated:{},
             showAddForm:false,
             editDonor:false,
-            group_count:[]
+            group_count:[],
         }
     },
     mutations:rootMutations,
@@ -29,12 +29,12 @@ const store = createStore({
         createPersistedState({
           key: 'your-app-key', // Change to a unique key for your app
           paths: [
-            // Define the state properties you want to persist
-            'admin.loggedIn', // Example: 'user' is the state property you want to persist
+            'admin.role', 
+            'admin.loggedIn',
           ],
           storage: {
             getItem: (key) => Cookies.get(key), // Use secure cookies
-            setItem: (key, value) => Cookies.set(key, value, { expires: 365, secure: true }),
+            setItem: (key, value) => Cookies.set(key, value, { expires: 1, secure: true }),
             removeItem: (key) => Cookies.remove(key),
           },
         }),

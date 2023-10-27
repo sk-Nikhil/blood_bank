@@ -12,7 +12,7 @@ const initializePassport = (passport)=>{
 
             try {
                 if(await bcrypt.compare(password, user.password)){
-                    return done(null, user);
+                    return done(null, {_id:user._id, role:user.role});
                 }
                 else{
                     return done(null, false);
@@ -24,12 +24,6 @@ const initializePassport = (passport)=>{
             }
         }
     ));
-    passport.serializeUser((email, done)=>{
-        done(null, email)
-    });
-    passport.deserializeUser((email,  done) => {
-        done(null, email );
-    });
 }
 
 module.exports = initializePassport;

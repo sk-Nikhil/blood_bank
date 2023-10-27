@@ -6,7 +6,7 @@ async function addAdmin(admin){
     const adminExists = await adminRepository.ifAdminExits(admin.email);
     if(!adminExists){
         const hashedPassword = await bcrypt.hash(admin.password, 10);
-        const adminData = new Admin({...admin,password:hashedPassword, role:'admin'});
+        const adminData = new Admin({...admin,password:hashedPassword});
         return await adminRepository.addAdmin(adminData);
     }
     return "email is already registered with us";

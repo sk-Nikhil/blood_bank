@@ -1,50 +1,130 @@
 <template>
-    <div class="register">
-        <form class="form">
-            <label for="chk" aria-hidden="true">Register</label>
-            <input class="input" type="text" name="txt" placeholder="username" required>
-            <input type="email" class="input" name="email" placeholder="Email" required>
-            <input type="password" class="input" name="pswd" placeholder="Password" required>
-            <button>Register</button>
+    <div id="container">
+        <form @submit.prevent="handleSignup()">
+            <div id="heading">
+                <h1>Register with us</h1>
+            </div>
+            <div class="form-group">
+                <label for="username">Name : </label>
+                <input type="email" id="username" class="form-control" v-model="user.username"
+                    placeholder="Enter Your Fullname" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Email : </label>
+                <input type="email" id="username" class="form-control" v-model="user.username" required>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password : </label>
+                <input type="password" id="password" class="form-control" v-model="user.password" required>
+            </div>
+            <button class="btn btn-primary">Sign up</button>
         </form>
     </div>
-
 </template>
-
-<script>
-export default{
-    beforeCreate(){
-        console.log("signup")
-    }
     
+<script>
+import { mapActions } from 'vuex'
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+export default {
+    data() {
+        return {
+            user: {
+                username: '',
+                password: '',
+            },
+            errMessage: ''
+        }
+    },
+    watch: {
+        errMessage() {
+
+        }
+    },
+    methods: {
+        ...mapActions('admin', ['signup']),
+
+        handleSignup() {
+            // this.$router.push('/home')
+            const response = this.login(this.user);
+            response.then((res) => this.errMessage = res)
+            this.clearForm();
+            this.notify("You have successfully registered with us")
+        },
+        clearForm() {
+            this.user.username = ''
+            this.user.password = ''
+        }
+    },
+
+    setup() {
+        const notify = (msg) => {
+            toast(msg, {
+                autoClose: 1000,
+            }); // ToastOptions
+        }
+        return { notify };
+    },
 }
 </script>
-
-
+    
 <style scoped>
-.register{
-    background:#eee;
-    border-radius: 60%/10%;
-    transform:translateY(5%);
-    transition:.8s ease-in-out;
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Raleway, sans-serif;
+
 }
 
-.register label{
-    color:#573b8a;
-    transform: scale(.6);
+#container {
+    margin-top: 5vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-#chk:checked ~ .register label{
-    transform:scale(1);
-    margin:10% 0 5%;
+form {
+    width: 30vw;
+    min-height: 50vh;
+    padding: 2vw 3vw;
+    box-shadow: 0px 0px 24px #c8c6de;
 }
 
-#chk:checked ~ .login label{
-    transform:scale(.6);
-    margin:5% 0 5%;
+label {
+    margin-bottom: 0.5vw;
 }
 
-.form buton:hover{
-    background-color: #6d44b8;
+.form-group {
+    margin-bottom: 1vw;
+}
+
+input {
+    padding: 5px 10px;
+}
+
+#error {
+    color: red
+}
+
+.error {
+    color: red;
+    margin-top: -10px;
+}
+
+
+#heading {
+    text-align: center;
+    margin-bottom: 2vw;
+}
+
+#heading h1 {
+    font-weight: 600
+}
+
+button {
+    padding: 8px 15px;
+    float: right;
 }
 </style>

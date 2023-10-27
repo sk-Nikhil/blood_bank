@@ -2,7 +2,7 @@
     <ul class="nav nav-tabs d-flex justify-content-between align-items-center">
         <div style="display: flex;" v-if="getLoginStatus">
             <li class="nav-item">
-                <router-link to="/home" class="nav-link" active-class="active   ">Home</router-link>
+                <router-link :to="getRole === 'admin'?'/admin_home':'/user_home'" class="nav-link" active-class="active">Home</router-link>
             </li>
             <li class="nav-item">
                 <router-link to="/piechart" class="nav-link" active-class="active">PieChart</router-link>
@@ -17,7 +17,7 @@
                 </ul>
             </div> -->
             <li class="nav-item">
-                <router-link to="" class="nav-link" active-class=""  @click="changeAddformStatus">Add Donor</router-link>
+                <router-link to="" v-if="getRole==='admin'" class="nav-link" active-class=""  @click="changeAddformStatus">Add Donor</router-link>
             </li>
 
             <div class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
@@ -30,7 +30,7 @@
                 </div>
                 <div class="offcanvas-body">
                     <div>
-                        <router-link to="/home" @click="hideOffCampus()">Home</router-link>
+                        <router-link :to="getRole === 'admin'?'/admin_home':'/user_home'" @click="hideOffCampus()">Home</router-link>
                     </div>
                     <li id="logout"><a @click="logout()">Logout</a></li>
                 </div>
@@ -58,13 +58,13 @@ export default {
         ...mapActions('admin', ['logout']),
         ...mapActions(['changeAddformStatus']),
         hideOffCampus(){
-            const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasExample'));
-            offcanvas.hide();
+            // const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasExample'));
+            // offcanvas.hide();
         }
     },
     computed: {
-        ...mapGetters('admin', ['getLoginStatus']),
-        ...mapGetters(['getAddFormStatus' ]),
+        ...mapGetters('admin', ['getLoginStatus', 'getRole']),
+        ...mapGetters(['getAddFormStatus']),
     },
     created() {
         console.log("header created")

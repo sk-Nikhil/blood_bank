@@ -1,27 +1,39 @@
 import axios from 'axios';
 const url = "http://localhost:3000";
-const router = require('../../routes')
+const router = require('../../routes');
 
 export default{
     async login(context, payload){
         const response = await axios.post(`${url}/login`, payload);
-        console.log(response)
         if(response.data.success){
-            context.dispatch('updateLoginStatus', true)
-            router.default.replace('/home')
+            const token = response.data.success.token;
+            localStorage.setItem('token', token);
+            context.dispatch('updateLoginStatus', true);
+
+            context.dispatch('updateRole',response.data.success.role)
+            if(response.data.success.role === 'admin')
+                router.default.replace({name:"admin_home"});
+            else{
+                router.default.replace({name:'user_home'});
+            }
         }
         else{
-            return response.data.failure
+            router.default.replace('/login');
+            return response.data.failure;
         }
-
     },
 
     logout(context){
-        context.dispatch('updateLoginStatus', false)
-        router.default.replace('/')
+        localStorage.removeItem('token');
+        context.dispatch('updateLoginStatus', false);
+        router.default.replace('/');
     },
 
     updateLoginStatus(context, payload){
-        context.commit('updateLoginStatus', payload)
+        context.commit('updateLoginStatus', payload);
+    },
+
+    updateRole(context, payload){
+        context.commit('updateRole', payload)
     }
 }

@@ -1,4 +1,5 @@
-import axios from 'axios';
+import axiosInstance from '@/service/axios.service';
+
 export default {
     changeAddformStatus(context){
         context.commit('changeAddformStatus');
@@ -11,7 +12,7 @@ export default {
     },
 
     async countGroups(context){
-        const counts = await axios.get('http://localhost:3000/countBloodGroups');
+        const counts = await axiosInstance.get('/countBloodGroups');
         context.commit('countGroups', counts.data);
-    }
+    },
 }

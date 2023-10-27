@@ -2,8 +2,8 @@ const adminService = require('../services/admin.service.js')
 const generateToken = require('../middleware/generateToken');
 const passport = require('passport');
 
-async function login(req,res, next){
-    passport.authenticate('login',{session:false}, (err, user)=>{
+async function login(req,res,next){
+    passport.authenticate('login',{session:false},  (err, user)=>{
         if(err || !user){
             res.send({failure:"Invalid usrename of password"});
             return;
@@ -11,12 +11,14 @@ async function login(req,res, next){
         req.login(user, {session:false}, (err)=>{
             if(err){
                 console.log(err);
-                res.redirect('http://localhost:8081/signup')
-                // res.send(err);
-                // return;
+                return res.send(err);
             }
-            const token = generateToken(user);
-            res.send({"success":token});
+
+            const expirationDate = new Date();
+            expirationDate.setDate(expirationDate.getDate() + 7); 
+            // res.cookie('user', user, { expires:expirationDate, httpOnly: true, sameSite: 'Lax'});
+            const successToken = generateToken(user);
+            return res.send({"success":successToken});
         })
     })
     (req,res,next);

@@ -1,23 +1,22 @@
-import axios from 'axios';
+import axiosInstance from '../../service/axios.service.js';
 
 export default {
     async setDonors(context, page){
         if(!context.state.searchTerm){
-            await axios.get(`http://localhost:3000/getDonors?page=${page}`).then(response=>{
+            const response = await axiosInstance.get(`/getDonors?page=${page}`)
+            if(response.status == 200)
                 context.commit('setDonors', response.data);
-            });
         }
         else{
-            await axios.get(`http://localhost:3000/filterSearch/${context.state.searchTerm}?page=${page}`)
-            .then(response=>{
+            const response = await axiosInstance.get(`/filterSearch/${context.state.searchTerm}?page=${page}`)
+            if(response.status == 200)
                 context.commit('setDonors', response.data);
-            });
         }
     },
 
     async addDonor(context, payload){
         let addResponse=null;
-        await axios.post('http://localhost:3000/addDonor', payload)
+        await axiosInstance.post('/addDonor', payload)
         .then((response)=>{
             addResponse = response.data;
             context.dispatch('setDonors',context.getters.getCurrPage);
@@ -28,7 +27,7 @@ export default {
     
     async removeDonor(context, payload){
         let removeReponse=null;
-        await axios.delete(`http://localhost:3000/removeDonor/${payload}`)
+        await axiosInstance.delete(`/removeDonor/${payload}`)
         .then((response)=>{
             removeReponse = response.data;
             context.commit('removeDonor', payload);
@@ -44,7 +43,7 @@ export default {
         const donor = {...payload, last_donated};
         var updateResponse = null;
 
-        await axios.patch('http://localhost:3000/updateDonor', donor)
+        await axiosInstance.patch('/updateDonor', donor)
         .then(response=>{
             context.commit('updateDonor', donor);
             updateResponse = response.data;

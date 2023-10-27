@@ -10,7 +10,6 @@ export default {
     },
 
     getBloodCount(state){
-
         const chartData = {
             labels:[],
             datasets: [
@@ -30,5 +29,9 @@ export default {
         chartData.datasets[0].data = data;
         return chartData;
     },
+
+    getRole(state){
+        return state.role;
+    }
 
 }

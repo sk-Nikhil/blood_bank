@@ -11,5 +11,5 @@ export default {
     },
     countGroups(state, payload){
         state.group_count = payload;
-    }
+    },
 }
