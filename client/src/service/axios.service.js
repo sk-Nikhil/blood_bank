@@ -29,7 +29,7 @@ axiosInstance.interceptors.response.use(
             localStorage.removeItem('authToken');
             router.replace('/login');
             store.dispatch('admin/logout')
-            return;
+            return false;
         }
         return response;
     },
