@@ -7,7 +7,9 @@ export default{
     state(){
         return{
             loggedIn:false,
-            role:''
+            role:'',
+            pendingEnquiries:0,
+            enquiries:[]
         }
     },
     mutations:adminMutations,

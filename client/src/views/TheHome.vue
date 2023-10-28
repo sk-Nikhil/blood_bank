@@ -73,6 +73,7 @@ export default {
         ...mapActions('donor', ['setDonors', 'removeDonor', 'setSearchTerm', 'sortDonors']),
         ...mapActions(['changeEditStatus']),
         ...mapActions(['countGroups']),
+        ...mapActions('admin', ['setTotalPendingEnquiries']),
 
         handleInput() {
             this.setSearchTerm(this.searchTerm)
@@ -88,7 +89,8 @@ export default {
     },
 
     created() {
-        this.setDonors(this.getCurrPage)
+        this.setDonors(this.getCurrPage);
+        this.setTotalPendingEnquiries()
     },
     beforeCreate(){
         // this.countGroups()

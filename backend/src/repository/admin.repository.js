@@ -1,4 +1,5 @@
-const Admin = require('../models/admin.js')
+const Admin = require('../models/admin.js');
+const UserEnquiry = require('../models/user_enquiry.js')
 
 async function addAdmin(admin){
     try{
@@ -24,7 +25,37 @@ async function ifAdminExits(email){
     }
 }
 
+async function getAllEnquiries(){
+    try{
+        return await UserEnquiry.find({});
+    }
+    catch(err){
+        throw Error(err);
+    }
+}
+
+async function getPendingEnquiries(){
+    try{
+        return await UserEnquiry.find({status:"pending"});
+    }
+    catch(err){
+        throw Error(err);
+    }
+}
+
+async function getTotalPendingEnquiries(){
+    try{
+        return await UserEnquiry.countDocuments({status:"pending"});
+    }
+    catch(err){
+        throw Error(err);
+    }
+}
+
 module.exports = {
     addAdmin,
-    ifAdminExits
+    ifAdminExits,
+    getAllEnquiries,
+    getPendingEnquiries,
+    getTotalPendingEnquiries
 }

@@ -12,7 +12,21 @@ async function addAdmin(admin){
     return "email is already registered with us";
 }
 
+async function getAllEnquiries(){
+    return await adminRepository.getAllEnquiries()
+}
+
+async function getPendingEnquiries(){
+    return await adminRepository.getPendingEnquiries();
+}
+
+async function getTotalPendingEnquiries(){
+    return await adminRepository.getTotalPendingEnquiries()
+}
 
 module.exports = {
-    addAdmin
+    addAdmin,
+    getAllEnquiries,
+    getPendingEnquiries,
+    getTotalPendingEnquiries
 } 

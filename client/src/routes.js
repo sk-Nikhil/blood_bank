@@ -23,13 +23,14 @@ const routes = [
     path: "/admin_home",
     name: "admin_home",
     component: HomeComponent,
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true, role:'admin' },
   },
 
   {
     path: "/user_home",
     name: "user_home",
     component: UserHomePage,
+    meta:{requiresAuth:true, role:'user'}
   },
 
   {
@@ -62,10 +63,24 @@ router.beforeEach((to, from, next) => {
     localStorage.setItem("storedRoute", to.path);
     if (to.meta.requiresAuth && !store.getters["admin/getLoginStatus"]) {
       next("/");
-    } else if ((to.path === "/" || to.path==='/login') && store.getters["admin/getLoginStatus"]) {
-      next({name:"admin_home"});
-    } else {
-      next();
+    }
+    // if user logged in and tries to access admin routes he will be redirected to pagenotfound page
+    else if(store.getters["admin/getRole"] === 'user' && to.meta.role === 'admin'){
+      next('/pagenotfound')
+    }
+    // if admin logged in and tries to access user routes he will be redirected to pagenotfound page 
+    else if(store.getters["admin/getRole"] === 'admin' && to.meta.role === 'user'){
+      next('/pagenotfound')
+    }
+    // if user or admin is logged in and visits the login page he will be redirected to their respective home page
+    else if ((to.path === "/" || to.path==='/login') && store.getters["admin/getLoginStatus"]) {
+      if(store.getters["admin/getRole"] === 'admin')
+        next({name:"admin_home"});
+      else
+        next({name:"user_home"});
+    }
+    else {
+      next(true);
     }
   }
 });

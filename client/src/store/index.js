@@ -2,8 +2,10 @@ import { createStore } from "vuex";
 import rootMutations from "./mutations";
 import rootActions from "./actions";
 import rootGetters from "./getters";
+
 import donorModule from "./donors/index";
 import adminModule from './admin/index'
+import userModule from './user/index'
 import createPersistedState from 'vuex-persistedstate';
 import Cookies from 'js-cookie';
 
@@ -12,7 +14,8 @@ const store = createStore({
     
     modules:{
         donor:donorModule,
-        admin:adminModule
+        admin:adminModule,
+        user:userModule
     },
     state(){
         return{

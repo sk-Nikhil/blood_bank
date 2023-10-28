@@ -26,16 +26,51 @@ async function login(req,res,next){
 
 async function signup(req,res){
     try{
-        const response = await adminService.addAdmin(req.body)
-        res.send(response)
+        const response = await adminService.addAdmin(req.body);
+        res.send(response);
     }
     catch(err){
-        console.log(err.message)
-        res.send(err.message)
+        console.log(err.message);
+        res.send(err.message);
     }
 }
 
+async function getAllEnquiries(req,res){
+    try{
+        const response = await adminService.getAllEnquiries();
+        res.send(response);
+    }
+    catch(err){
+        console.log(err.message);
+        res.send({error:err.message});
+    }
+}
+
+async function getPendingEnquiries(req,res){
+    try{
+        const response = await adminService.getPendingEnquiries();
+        res.send(response);
+    }
+    catch(err){
+        console.log(err.message);
+        res.send({error:err.message});
+    }
+}
+
+async function getTotalPendingEnquiries(req,res){
+    try{
+        const response = await adminService.getTotalPendingEnquiries();
+        res.json({data:response});
+    }
+    catch(err){
+        console.log(err.message);
+        res.send(err.message);
+    }
+}
 module.exports = {
     login,
-    signup
+    signup,
+    getAllEnquiries,
+    getPendingEnquiries,
+    getTotalPendingEnquiries
 }

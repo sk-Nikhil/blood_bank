@@ -17,7 +17,7 @@
 
         /* Style the footer container */
         .footer {
-            position:fixed;
+            position:absolute;
             bottom:0;
             left:0;
             background-color: #333;

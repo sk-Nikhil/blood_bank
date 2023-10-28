@@ -1,25 +1,33 @@
 <template>
     <ul class="nav nav-tabs d-flex justify-content-between align-items-center">
         <div style="display: flex;" v-if="getLoginStatus">
+            <!-- redirect to default home page of user or admin -->
             <li class="nav-item">
                 <router-link :to="getRole === 'admin'?'/admin_home':'/user_home'" class="nav-link" active-class="active">Home</router-link>
             </li>
+            <!-- piechart contains data of units of blood packages with that blood group present -->
             <li class="nav-item">
                 <router-link to="/piechart" class="nav-link" active-class="active">PieChart</router-link>
             </li>
         </div>
         <div style="display: flex; align-items: center;" v-if="getLoginStatus">
-            <!-- <div class="dropdown">
-                <button v-if="getLoginStatus" class="profile dropdown-toggle" type="button" data-bs-toggle="dropdown"></button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Add Donor</a></li>
-                    <li><a class="dropdown-item" @click="logout()">Logout</a></li>
-                </ul>
-            </div> -->
+            <!-- notification bell -->
+            <!-- if any user send blood enquiry -->
+            <div>
+                <router-link to="/admin_home" v-if="getRole==='admin'">
+                    <i class="fa-solid fa-bell">
+                        <div id="notification">{{ getTotalPendingEnquiries }}</div>
+                    </i>
+                </router-link>
+            </div>
+            <!-- button to add donor -->
             <li class="nav-item">
-                <router-link to="" v-if="getRole==='admin'" class="nav-link" active-class=""  @click="changeAddformStatus">Add Donor</router-link>
+                <router-link to="" v-if="getRole==='admin'" class="nav-link" active-class="" @click="changeAddformStatus">
+                    Add Donor
+                </router-link>
             </li>
 
+            <!-- bars, on click opens right-side-bar which contains button line logout, profile -->
             <div class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                 aria-controls="offcanvasRight"><i class="fa-solid fa-bars"></i></div>
 
@@ -30,14 +38,26 @@
                 </div>
                 <div class="offcanvas-body">
                     <div>
-                        <router-link :to="getRole === 'admin'?'/admin_home':'/user_home'" @click="hideOffCampus()">Home</router-link>
+                        <div>
+                            <router-link :to="getRole === 'admin'?'/admin_home':'/user_home'">Home</router-link>
+                        </div>
+                        <!-- pending enquiries will only be visible to admin and all enquiries will contain enquiries of all users -->
+                        <div v-if="getRole==='admin'">
+                            <div>
+                                <router-link to="/admin_home" @click="showAllEnquiries()">Show All Enquiries</router-link>
+                            </div>
+                            <div>
+                                <router-link to="/admin_home" @click="showPendingEnquiries()">Show Pending Enquiries</router-link>
+                            </div>
+                        </div>
                     </div>
+                    <!-- logout button -->
                     <li id="logout"><a @click="logout()">Logout</a></li>
                 </div>
             </div>
         </div>
     </ul>
-
+    <!-- add donor form component -->
     <add-donor v-if="getAddFormStatus"></add-donor>
 </template>
 
@@ -55,20 +75,20 @@ export default {
         }
     },
     methods: {
-        ...mapActions('admin', ['logout']),
+        ...mapActions('admin', ['logout','setAllEnquiries', 'setAllPendingEnquiries' ]),
         ...mapActions(['changeAddformStatus']),
-        hideOffCampus(){
-            // const offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvasExample'));
-            // offcanvas.hide();
+        showAllEnquiries(){
+            this.setAllEnquiries()
+            // this.$router.push('/enquiies')
+        },
+        showPendingEnquiries(){
+            this.setAllPendingEnquiries()
         }
     },
     computed: {
-        ...mapGetters('admin', ['getLoginStatus', 'getRole']),
+        ...mapGetters('admin', ['getLoginStatus', 'getRole', 'getTotalPendingEnquiries']),
         ...mapGetters(['getAddFormStatus']),
     },
-    created() {
-        console.log("header created")
-    }
 }
 </script>
 
@@ -89,7 +109,6 @@ export default {
 .nav {
     height: 8vh;
 }
-
 .profile {
     width: 40px;
     height: 40px;
@@ -120,6 +139,28 @@ export default {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+}
+
+.fa-bell{
+    position: relative;
+    margin-right: 12px;
+}
+
+.fa-bell:hover{
+    cursor: pointer;
+}
+#notification{
+    position: absolute;
+    left:70%;
+    bottom:70%;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    width:1.2vw;
+    height:1.2vw;
+    border-radius: 50%;
+    font-size:1rem;
+    color:grey;
 }
 
 </style>

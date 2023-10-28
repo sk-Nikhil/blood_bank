@@ -35,5 +35,23 @@ export default{
 
     updateRole(context, payload){
         context.commit('updateRole', payload)
+    },
+
+    async setTotalPendingEnquiries(context){
+        const response = await axios.get('http://localhost:3000/getTotalPendingEnquiries');
+        context.commit('setTotalPendingEnquiries', response.data.data);
+    },
+
+    // set enquiries in store
+    async setAllEnquiries(context){
+        const enquiries = await axios.get(`${url}/getAllEnquiries`)
+        console.log(enquiries)
+        context.commit('setEnquiries', enquiries.data)
+    },
+
+    async setAllPendingEnquiries(context){
+        const enquiries = await axios.get(`${url}/getPendingEnquiries`)
+        console.log(enquiries)
+        context.commit('setEnquiries', enquiries.data)
     }
 }

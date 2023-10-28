@@ -4,5 +4,8 @@ export default{
     },
     getRole(state){
         return state.role;
+    },
+    getTotalPendingEnquiries(state){
+        return state.pendingEnquiries
     }
 }
