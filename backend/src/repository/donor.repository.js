@@ -5,7 +5,8 @@ async function addDonor(donor) {
     await donor.save();
     return donor.name;
   }
-  catch (e) {
+  catch (err) {
+    console.log(err.message)
     throw Error(err);
   }
 };
@@ -14,33 +15,40 @@ async function getTotalDonors() {
   try {
     return await Donor.countDocuments();
   }
-  catch(err) {
+  catch (err) {
     throw Error(err);
   }
 };
 
-async function getDonors(skip, limit) {
+async function getDonors(skip, limit, query) {
+  const searchQuery = {
+    $or: [
+      { name: { $regex: query.searchTerm, $options: 'i' } },
+      { bloodGroup: { $regex: query.searchTerm, $options: 'i' } },
+      { address: { $regex: query.searchTerm, $options: 'i' } },
+      { contact: { $regex: query.searchTerm, $options: 'i' } },
+      { lastDonated: { $regex: query.searchTerm, $options: 'i' } },
+    ],
+  };
+  console.log(query)
   try {
-    return await Donor.find().sort({ _id: -1 }).skip(skip).limit(limit);
+    if (query.searchTerm !== '') {
+      return await Donor.find(searchQuery).skip(skip).limit(limit);
+    }
+    else {
+      return await Donor.find().sort({ _id: -1 }).skip(skip).limit(limit);
+    }
   }
   catch (err) {
     throw Error(err);
   }
 };
 
-async function getFilteredDonors(searchQuery, skip, limit) {
-  try {
-    return await Donor.find(searchQuery).skip(skip).limit(limit);
-  } 
-  catch (err) {
-    throw Error(err);
-  }
-};
 
 async function removeDonor(id) {
   try {
-    return await Donor.findOneAndDelete({ id: id });
-  } 
+    return await Donor.findOneAndDelete({ _id: id });
+  }
   catch (err) {
     throw Error(err);
   }
@@ -52,7 +60,7 @@ async function updateDonor(_id, address, contact, last_donated) {
       { _id },
       { address, contact, last_donated }
     );
-  } 
+  }
   catch (err) {
     throw Error(err);
   }
@@ -71,7 +79,7 @@ async function countBloodGroups() {
     ]);
     return result;
   }
-  catch(err) {
+  catch (err) {
     throw Error(err);
   }
 };
@@ -80,7 +88,6 @@ module.exports = {
   addDonor,
   getTotalDonors,
   getDonors,
-  getFilteredDonors,
   removeDonor,
   updateDonor,
   countBloodGroups,

@@ -13,10 +13,6 @@ async function login(req,res,next){
                 console.log(err);
                 return res.send(err);
             }
-
-            const expirationDate = new Date();
-            expirationDate.setDate(expirationDate.getDate() + 7); 
-            // res.cookie('user', user, { expires:expirationDate, httpOnly: true, sameSite: 'Lax'});
             const successToken = generateToken(user);
             return res.send({"success":successToken});
         })
@@ -31,7 +27,7 @@ async function signup(req,res){
     }
     catch(err){
         console.log(err.message);
-        res.send(err.message);
+        res.status(500).send(err.message);
     }
 }
 
@@ -42,18 +38,18 @@ async function getAllEnquiries(req,res){
     }
     catch(err){
         console.log(err.message);
-        res.send({error:err.message});
+        res.status(500).send({error:err.message});
     }
 }
 
 async function getPendingEnquiries(req,res){
     try{
         const response = await adminService.getPendingEnquiries();
-        res.send(response);
+        res.status(500).send(response);
     }
     catch(err){
         console.log(err.message);
-        res.send({error:err.message});
+        res.status(500).send({error:err.message});
     }
 }
 
@@ -64,7 +60,7 @@ async function getTotalPendingEnquiries(req,res){
     }
     catch(err){
         console.log(err.message);
-        res.send(err.message);
+        res.status(500).send(err.message);
     }
 }
 module.exports = {

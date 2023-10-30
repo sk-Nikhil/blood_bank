@@ -3,17 +3,12 @@ const d = new Date();
 const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}`;
 
 const donorSchema = new mongoose.Schema({
-    id:{
-        type:String,
-        required:true,
-        trim:true
-    },
     name:{
         type:String,
         required:true,
         trim:true
     },
-    blood_group:{
+    bloodGroup:{
         type:String,
         required:true,
         trim:true
@@ -28,12 +23,12 @@ const donorSchema = new mongoose.Schema({
         required:true,
         trim:true
     },
-    last_donated:{
+    lastDonated:{
         type:String,
         default:last_donated
     }
 });
 
-const Donor = mongoose.model('donors_data', donorSchema);
+const Donor = mongoose.model('donorsData', donorSchema);
 
 module.exports = Donor;

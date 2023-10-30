@@ -9,7 +9,7 @@
                 <input type="text" id="name" name="name" required v-model="form.name">
 
                 <label for="blood_group">Blood Group:</label>
-                <select id="blood_group" name="blood_group" required v-model="form.blood_group">
+                <select id="blood_group" name="blood_group" required v-model="form.bloodGroup">
                     <option value="A+">A+</option>
                     <option value="B+">B+</option>
                     <option value="AB+">AB+</option>
@@ -41,7 +41,7 @@ export default {
         return {
             form: {
                 name: '',
-                blood_group: '',
+                bloodGroup: '',
                 address: '',
                 contact: ''
             },
@@ -55,40 +55,14 @@ export default {
         ...mapActions(['changeAddformStatus']),
         ...mapActions('donor', ['addDonor']),
         ...mapActions(['countGroups']),
-        addDonors() {
+        async addDonors() {
             const d = new Date()
-            const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
+            const lastDonated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
             this.changeAddformStatus()
-            this.addDonor({id:this.generateRandomId(this.form.name), ...this.form, last_donated })
-            .then((response)=>{
-                console.log(response)
-                if(response.error){
-                    this.notify(response.error)
-                }
-                else{
-                    this.notify(response)
-                    this.countGroups()
-                }
-            }).catch((err)=>{
-                console.log(err)
-            })
+            const response = await this.addDonor({...this.form, lastDonated });
+            this.notify(response)
+            this.countGroups()
         },
-
-        generateRandomId(name) {
-            // Use a cryptographic random number generator to ensure uniqueness
-            const randomArray = new Uint32Array(1);
-            window.crypto.getRandomValues(randomArray);
-            const randomValue = randomArray[0] % 1000000; // Ensure it's a 6-digit number
-          
-            // Convert the random value to a 6-digit string
-            const randomId = randomValue.toString().padStart(6, '0');
-          
-            // Take the first 3 characters of the name and concatenate with the random 6-digit ID
-            const namePart = name.slice(0, 3).toUpperCase();
-          
-            return namePart + randomId;
-        }
-        
     },
     setup() {
         const notify = (msg) => {

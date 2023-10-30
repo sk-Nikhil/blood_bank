@@ -1,6 +1,6 @@
 export default {
   setDonors(state, donors) {
-    state.donors = donors.donors;
+    state.donors = donors.donorsFound;
     state.totalPages = donors.totalPages;
     if(donors.source) 
         state.currentPage = 1

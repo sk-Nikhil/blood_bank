@@ -11,25 +11,25 @@
                 <tr>
                     <th @click="sortDonors('id')">donor_id</th>
                     <th @click="sortDonors('name')">Name</th>
-                    <th @click="sortDonors('blood_group')">Blood Group</th>
+                    <th @click="sortDonors('bloodGroup')">Blood Group</th>
                     <th @click="sortDonors('address')">Address</th>
                     <th @click="sortDonors('contact')">Contact</th>
-                    <th @click="sortDonors('last_donated')">Last Donated</th>
+                    <th @click="sortDonors('lastDonated')">Last Donated</th>
                     <th>Actions</th>
                 </tr>
             </thead>
             <tbody>
-                <tr v-for="(donor) in getDonors" :key="donor.id">
-                    <td>{{ donor.id }}</td>
+                <tr v-for="(donor,index) in getDonors" :key="donor.id">
+                    <td>{{ getCurrPage+ index }}</td>
                     <td>{{ donor.name }}</td>
-                    <td>{{ donor.blood_group }}</td>
+                    <td>{{ donor.bloodGroup }}</td>
                     <td>{{ donor.address }}</td>
                     <td>{{ donor.contact }}</td>
-                    <td>{{ donor.last_donated }}</td>
+                    <td>{{ donor.lastDonated }}</td>
                     <td>
                         <div id="action">
                             <button class="action" style="background-color: green;" @click="changeEditStatus(donor)">Edit</button>
-                            <button class="action" style="background-color: red;" @click="handleRemovedDonor(donor.id)">Delete</button>
+                            <button class="action" style="background-color: red;" @click="handleRemovedDonor(donor._id)">Delete</button>
                         </div>
                     </td>
                 </tr>
@@ -76,37 +76,24 @@ export default {
         ...mapActions(['countGroups']),
         ...mapActions('admin', ['setTotalPendingEnquiries']),
 
-        handleInput() {
+        async handleInput() {
             this.setSearchTerm(this.searchTerm);
-            this.setDonors(this.getCurrPage)
-            .then(response=>{
-                if(response.error){
-                    this.notify(response.error)
-                }
-            })
+            const response = await this.setDonors(this.getCurrPage, this.searchTerm);
+            if(response.error){
+                this.notify("unexpected error occured")
+            }
         },
-        handleRemovedDonor(id){
-            this.removeDonor(id)
-            .then(response=>{
-                console.log(response)
-                if(response.error){
-                    this.notify(response.error)
-                }
-                else{
-                    this.countGroups()
-                    this.notify(response.data)
-                }
-            })
+        async handleRemovedDonor(id){
+            const response = await this.removeDonor(id);
+            this.notify(response)
+            this.countGroups()
         }
     },
 
-    created() {
-        this.setDonors(this.getCurrPage)
-        .then(response=>{
-            if(response.error){
-                this.notify(response.error);
-            }
-        })
+    async created() {
+        const response = await this.setDonors(this.getCurrPage)
+        console.log(response)
+        
         this.setTotalPendingEnquiries();
     },
     setup() {

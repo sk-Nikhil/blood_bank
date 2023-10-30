@@ -4,7 +4,6 @@ const Joi = require("joi");
 async function addDonor(req, res) {
     // Joi validation
     const schema = Joi.object().keys({
-        id: Joi.string().required(),
         name: Joi.string()
             .regex(/^[a-zA-Z]+$/)
             .required()
@@ -12,10 +11,10 @@ async function addDonor(req, res) {
                 "string.pattern.base":
                     "Name should not contain numbers or special characters",
             }),
-        blood_group: Joi.string().required(),
+        bloodGroup: Joi.string().required(),
         address: Joi.string().required(),
         contact: Joi.number().required(),
-        last_donated: Joi.string().required(),
+        lastDonated: Joi.string().required(),
     });
 
     if (schema.validate(req.body).error) {
@@ -25,66 +24,19 @@ async function addDonor(req, res) {
 
     try {
         const name = await donorService.addDonor(req.body);
-        res.status(200).send(`Donor ${name} added successfully`);
+        res.status(200).send({ data: `Donor ${name} added successfully` });
     } catch (err) {
-        res.status(401).send(err.message);
+        res.status(401).send({ error: err.message });
     }
 }
 
 async function getDonors(req, res) {
-    if (req.params.searchTerm) {
-        // Joi validations
-        // for filtered search
-        const schema = Joi.object({
-            searchTerm:Joi.string.required(),       //required
-            page: Joi.number().optional(),          //optional input
-        });
-
-        if (schema.validate(req.query).error) {
-            console.log(schema.validate(req.body).error.details);
-            return res.status(422).send({ error: schema.validate(req.query).error.details });
-        }
-        const page = parseInt(req.query.page) || 1;
-        const query = req.params.searchTerm;
-        try {
-            const donors = await donorService.getFilteredDonors(page, query);
-            res.status(200).send(donors);
-        } catch (err) {
-            console.log(err.message);
-            res.status(401).send(err.message);
-        }
-    }
-    else{
-        // Joi validations
-        const schema = Joi.object({
-            page: Joi.number().optional(),
-        });
-    
-        if (schema.validate(req.query).error) {
-            console.log(schema.validate(req.query).error.details);
-            return res.status(422).send({ error: schema.validate(req.query).error.details });
-        }
-    
-        const page = parseInt(req.query.page) || 1;
-        try {
-            const donor = await donorService.getDonors(page);
-            res.status(200).send(donor);
-        } catch (err) {
-            console.log(err.message);
-            res.status(500).json({ error: err.message });
-        }
-    }
-}
-
-async function getFilteredDonors(req, res) {
-    const page = parseInt(req.query.page) || 1;
-    const query = req.params.searchTerm;
     try {
-        const donors = await donorService.getFilteredDonors(page, query);
-        res.status(200).send(donors);
+        const donor = await donorService.getDonors(req.query);
+        res.status(200).send(donor);
     } catch (err) {
         console.log(err.message);
-        res.status(401).send(err.message);
+        res.status(500).json({ error: err.message });
     }
 }
 
@@ -95,15 +47,11 @@ async function removeDonor(req, res) {
 
     if (schema.validate(req.params).error) {
         console.log(schema.validate(req.body).error.details);
-        return res
-            .status(422)
-            .send({ error: schema.validate(req.body).error.details });
+        return res.status(422).send({ error: schema.validate(req.body).error.details });
     }
     try {
-        const donor_name = await donorService.removeDonor(req.params.id);
-        res
-            .status(200)
-            .send({ data: `donor ${donor_name} is removed successfully` });
+        const donorName = await donorService.removeDonor(req.params.id);
+        res.status(200).send({ data: `donor ${donorName} is removed successfully` });
     } catch (err) {
         console.log(err.message);
         res.status(500).send(err.message);
@@ -149,7 +97,6 @@ async function countBloodGroups(req, res) {
 module.exports = {
     addDonor,
     getDonors,
-    getFilteredDonors,
     removeDonor,
     updateDonor,
     countBloodGroups,

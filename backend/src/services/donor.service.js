@@ -8,44 +8,24 @@ async function addDonor(userData){
     return await donorRepository.addDonor(donor);
 }
 
-async function getDonors(page){
+async function getDonors(query){
+    const page = parseInt(query.page) || 1;
     const limit =5;
     const skip = (page - 1) * limit;
 
-    const totalDonors = await donorRepository.getTotalDonors();
-    const donors = await donorRepository.getDonors(skip, limit);
-    if(donors.length === 0) {
-        page=0;
+    try{
+        const totalDonors = await donorRepository.getTotalDonors();
+        const donorsFound = await donorRepository.getDonors(skip, limit, query);
+        const donors = {
+            donorsFound, 
+            currentPage: donorsFound.length === 0 ? 0 :page,
+            totalPages: Math.ceil(totalDonors / limit),
+        };
+        return donors;
     }
-    const donor = {
-        donors, 
-        currentPage: page,
-        totalPages: Math.ceil(totalDonors / limit),
-    };
-    return donor;
-};
-
-async function getFilteredDonors(page, searchTerm){
-    const limit =5;
-    const skip = (page - 1) * limit;
-    const searchQuery = {
-        $or: [
-            { id: { $regex: searchTerm, $options:'i' } },
-            { name: { $regex: searchTerm, $options:'i' } },
-            { blood_group: { $regex: searchTerm, $options:'i' } },
-            { address: { $regex: searchTerm, $options:'i' } },
-            { contact: { $regex: searchTerm, $options:'i' } },
-            { last_donated: { $regex: searchTerm, $options:'i' } },
-        ],
-    };
-
-    const donors = await donorRepository.getFilteredDonors(searchQuery, skip, limit);
-    const donor = {
-        donors, 
-        currentPage: 1,
-        totalPages: Math.ceil(donors.length / limit),
-    };
-    return donor;
+    catch(err){
+        return err
+    }
 };
 
 async function removeDonor(id){
@@ -67,7 +47,6 @@ async function countBloodGroups(){
 module.exports = {
     addDonor,
     getDonors,
-    getFilteredDonors,
     removeDonor,
     updateDonor,
     countBloodGroups
