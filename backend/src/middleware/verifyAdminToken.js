@@ -11,13 +11,12 @@ const verifyToken = (req, res, next) => {
                 return res.send({invalidToken:"unverified user"});
             }
         }
-        catch(err){
-            // console.log(err.message);   
-            return res.send({invalidToken:"unverified user"});
+        catch(err){ 
+            return res.status(401).send({invalidToken:"unverified user"});
         }
     }
     else{
-        return res.send({invalidToken:"unauthorized access"});
+        return res.status(401).send({invalidToken:"unauthorized access"});
     }
 }
 

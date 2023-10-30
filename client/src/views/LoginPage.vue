@@ -41,7 +41,6 @@ export default{
         ...mapActions('admin',['login']),
 
         handleLogin(){
-            // this.$router.push('/home')
             const response = this.login(this.user);
             response.then((res)=>this.errMessage = res)
             this.clearForm();

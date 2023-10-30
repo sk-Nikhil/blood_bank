@@ -12,7 +12,6 @@ const axiosInstance = axios.create({
 axiosInstance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token'); // Replace with your token storage method
-    console.log(token)
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -27,7 +26,6 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => {
         if(response.data.invalidToken){
-            localStorage.removeItem('authToken');
             router.replace('/login');
             store.dispatch('admin/logout')
             return false;

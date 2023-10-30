@@ -3,7 +3,7 @@ const generateToken = require('../middleware/generateToken');
 const passport = require('passport');
 
 async function login(req,res,next){
-    passport.authenticate('login',{session:false},  (err, user)=>{
+    passport.authenticate('login',  (err, user)=>{
         if(err || !user){
             res.send({failure:"Invalid usrename of password"});
             return;

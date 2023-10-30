@@ -1,4 +1,3 @@
-// const secretKey = 'thisisthefirsttokeniammakingformyproject'
 const jwt = require('jsonwebtoken');
 
 const generateToken = (user) => {

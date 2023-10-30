@@ -9,12 +9,16 @@
             <li class="nav-item">
                 <router-link to="/piechart" class="nav-link" active-class="active">PieChart</router-link>
             </li>
+
+            <li class="nav-item" v-if="getRole==='admin'">
+                <router-link to="/enquiries" class="nav-link" active-class="active">Enquiries</router-link>
+            </li>
         </div>
         <div style="display: flex; align-items: center;" v-if="getLoginStatus">
             <!-- notification bell -->
             <!-- if any user send blood enquiry -->
-            <div>
-                <router-link to="/admin_home" v-if="getRole==='admin'">
+            <div v-if="getTotalPendingEnquiries>0" v-tooltip="{content: 'This tooltip is on the top', placement: 'top'}">
+                <router-link to="/enquiries" v-if="getRole==='admin'">
                     <i class="fa-solid fa-bell">
                         <div id="notification">{{ getTotalPendingEnquiries }}</div>
                     </i>
@@ -63,15 +67,19 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import AddDonor from './AddDonor.vue'
+import AddDonor from './AddDonor.vue';
+import VTooltip from 'v-tooltip';           //tooltip to hover over bell icon
 
 export default {
+    directives: {
+        'tooltip': VTooltip,
+    },
     components:{
         AddDonor
     },
     data() {
         return {
-
+            pendingQueries:0
         }
     },
     methods: {
@@ -79,7 +87,7 @@ export default {
         ...mapActions(['changeAddformStatus']),
         showAllEnquiries(){
             this.setAllEnquiries()
-            // this.$router.push('/enquiies')
+            this.$router.push('/enquiries')
         },
         showPendingEnquiries(){
             this.setAllPendingEnquiries()
@@ -89,6 +97,11 @@ export default {
         ...mapGetters('admin', ['getLoginStatus', 'getRole', 'getTotalPendingEnquiries']),
         ...mapGetters(['getAddFormStatus']),
     },
+    created(){
+        this.$watch(() => this.getTotalPendingEnquiries, (newValue) => {
+            this.pendingQueries = newValue
+        });
+    }
 }
 </script>
 
@@ -162,5 +175,9 @@ export default {
     font-size:1rem;
     color:grey;
 }
-
+.v-tooltip {
+  background-color: #333;
+  color: #fff;
+  border-radius: 4px;
+}
 </style>

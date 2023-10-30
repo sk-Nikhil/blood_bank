@@ -46,10 +46,10 @@ async function removeDonor(id) {
   }
 };
 
-async function updateDonor(id, address, contact, last_donated) {
+async function updateDonor(_id, address, contact, last_donated) {
   try {
     return await Donor.findOneAndUpdate(
-      { id },
+      { _id },
       { address, contact, last_donated }
     );
   } 
@@ -58,6 +58,7 @@ async function updateDonor(id, address, contact, last_donated) {
   }
 };
 
+// for piechart data
 async function countBloodGroups() {
   try {
     const result = await Donor.aggregate([

@@ -61,8 +61,16 @@ export default {
             this.changeAddformStatus()
             this.addDonor({id:this.generateRandomId(this.form.name), ...this.form, last_donated })
             .then((response)=>{
-                this.notify(response)
-                this.countGroups()
+                console.log(response)
+                if(response.error){
+                    this.notify(response.error)
+                }
+                else{
+                    this.notify(response)
+                    this.countGroups()
+                }
+            }).catch((err)=>{
+                console.log(err)
             })
         },
 

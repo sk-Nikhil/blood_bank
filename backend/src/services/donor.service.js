@@ -54,10 +54,10 @@ async function removeDonor(id){
 };
 
 async function updateDonor(donorData){
-    const {id, address, contact} = {...donorData};
+    const {_id, address, contact} = {...donorData};
     const d = new Date();
     const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
-    return await donorRepository.updateDonor(id, address, contact, last_donated);
+    return await donorRepository.updateDonor(_id, address, contact, last_donated);
 };
 
 async function countBloodGroups(){

@@ -5,6 +5,7 @@ import PieChart from "./components/BloodGroupChart.vue";
 import PageNotFound from "./views/PageNotFound.vue";
 import SignupPage from "./views/SignupPage.vue";
 import UserHomePage from "./views/userHomePage.vue";
+import EnquiriesPage from './views/EnquiredUserPage.vue'
 import store from "./store";
 
 const routes = [
@@ -43,6 +44,12 @@ const routes = [
   {
     path: "/signup",
     component: SignupPage,
+  },
+
+  {
+    path:"/enquiries",
+    component:EnquiriesPage,
+    meta: { requiresAuth: true, role:'admin' },
   },
 
   { path: "/:catchAll(.*)", component: PageNotFound },

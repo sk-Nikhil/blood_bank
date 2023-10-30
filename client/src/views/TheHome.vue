@@ -55,6 +55,7 @@ import 'vue3-toastify/dist/index.css';
 import EditDonor from '../components/updateDonor.vue';
 
 export default {
+   
     components: {
         EditDonor,
     },
@@ -76,24 +77,37 @@ export default {
         ...mapActions('admin', ['setTotalPendingEnquiries']),
 
         handleInput() {
-            this.setSearchTerm(this.searchTerm)
+            this.setSearchTerm(this.searchTerm);
             this.setDonors(this.getCurrPage)
+            .then(response=>{
+                if(response.error){
+                    this.notify(response.error)
+                }
+            })
         },
         handleRemovedDonor(id){
             this.removeDonor(id)
             .then(response=>{
-                this.countGroups()
-                this.notify(response)
+                console.log(response)
+                if(response.error){
+                    this.notify(response.error)
+                }
+                else{
+                    this.countGroups()
+                    this.notify(response.data)
+                }
             })
         }
     },
 
     created() {
-        this.setDonors(this.getCurrPage);
-        this.setTotalPendingEnquiries()
-    },
-    beforeCreate(){
-        // this.countGroups()
+        this.setDonors(this.getCurrPage)
+        .then(response=>{
+            if(response.error){
+                this.notify(response.error);
+            }
+        })
+        this.setTotalPendingEnquiries();
     },
     setup() {
         const notify = (msg) => {
@@ -223,4 +237,5 @@ td {
     font:inherit;
     color:#e3e3e3;
   }
+
 </style>

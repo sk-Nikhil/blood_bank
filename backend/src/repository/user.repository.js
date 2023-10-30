@@ -12,7 +12,12 @@ async function addEnquiry(data){
 }
 
 async function getEnquiries(){
-
+    try{
+        return await UserEnquiry.find({})
+    }
+    catch(err){
+        throw Error(err)
+    }
 }
 
 module.exports = {

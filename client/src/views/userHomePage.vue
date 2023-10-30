@@ -36,7 +36,8 @@
 
             <div class="form-group">
                 <label for="message">Message</label>
-                <textarea name="message" id="message" placeholder="Add Your Message Here..." v-model="formData.message" required></textarea>
+                <textarea name="message" id="message" placeholder="Add Your Message Here..." v-model="formData.message"
+                    required></textarea>
             </div>
 
             <button type="submit">Submit</button>
@@ -48,11 +49,13 @@
 </template>
   
 <script>
-import { toast } from 'vue3-toastify';
+import { toast } from 'vue3-toastify';      //vue-toastify for notification
 import 'vue3-toastify/dist/index.css';
 import mapboxgl from 'mapbox-gl';
+import axios from 'axios';
 import { mapActions } from 'vuex';
 export default {
+
     data() {
         return {
             formData: {
@@ -60,21 +63,27 @@ export default {
                 email: '',
                 bloodGroup: '',
                 location: '',
-                message:''
+                message: ''
             },
             lat: 0,
             long: 0,
-            showMap:false
+            showMap: false
 
         };
     },
     methods: {
-        ...mapActions('user',['addEnquiry']),
+        ...mapActions('user', ['addEnquiry']),
         async submitForm() {
-            const response = await this.addEnquiry(this.formData);
-            console.log(response)
-            if(response.status === 200)
-                this.notify("your enquiry has been submitted, you will hear soon from us.")
+            await this.addEnquiry({ ...this.formData, location: `${this.lat}, ${this.long}` })
+            .then((response)=>{
+                console.log(response)
+                if(response.error){
+                    this.notify(response.error)
+                }
+                else{
+                    this.notify("your enquiry has been submitted, you will hear soon from us.")
+                }
+            })
             this.clearForm();
         },
 
@@ -87,7 +96,7 @@ export default {
         },
 
         openMap() {
-            this.showMap=true
+            this.showMap = true
             // Initialize Mapbox map
             mapboxgl.accessToken = 'pk.eyJ1IjoibmlraGlsMDEwNyIsImEiOiJjbGxvem9kNXMwMWxhM21uenoxOXlqdHIzIn0.eReXmdOGFGFhWAvj5-1NHA';
             const map = new mapboxgl.Map({
@@ -98,15 +107,15 @@ export default {
             });
 
             map.on('click', (e) => {
-                this.showMap=false
+                this.showMap = false
                 const coordinates = e.lngLat;
-                this.formData.location = `Lat: ${coordinates.lat.toFixed(4)}, Long: ${coordinates.lng.toFixed(4)}`;
+                this.lat = coordinates.lat
+                this.long = coordinates.lng
+                this.formData.location = this.fetchAddress(this.lat, this.long)
                 // Close the map after selecting the location
                 map.remove();
             });
         },
-
-
 
         getCurrentLocation() {
             if ("geolocation" in navigator) {
@@ -138,7 +147,32 @@ export default {
             } else {
                 this.formData.location = "Geolocation is not available in this browser.";
             }
-        }
+        },
+
+        fetchAddress(lat, long) {
+            const accessToken = 'pk.eyJ1IjoibmlraGlsMDEwNyIsImEiOiJjbGxvem9kNXMwMWxhM21uenoxOXlqdHIzIn0.eReXmdOGFGFhWAvj5-1NHA';
+            const coordinates = long + ',' + lat;
+
+            axios
+                .get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${coordinates}.json`, {
+                    params: {
+                        access_token: accessToken,
+                    },
+                })
+                .then((response) => {
+                    const place = response.data.features[0];
+                    if (place) {
+                        this.formData.location = place.place_name;
+                    } else {
+                        this.formData.location = 'Address not found';
+                    }
+                })
+                .catch((error) => {
+                    console.error(error);
+                    this.formData.location = 'Error fetching address';
+                });
+            return this.formData.location
+        },
 
     },
     mounted() {
@@ -166,7 +200,7 @@ export default {
     border-radius: 5px;
     max-width: 400px;
     width: 100%;
-    margin: .2vw 5vw 0 0;
+    margin: 2vw 5vw 0 0;
     text-align: center;
 }
 
@@ -210,8 +244,9 @@ button {
     height: 400px;
 }
 
-#location{
+#location {
     cursor: pointer;
 }
+
 </style>
   

@@ -7,15 +7,10 @@ const cors = require('cors');
 const dotenv= require('dotenv');                                //dotenv
 const router = require('./router.js');                          //routes
 require('./db/mongoose.js');                                    //mongoose connection
-const passport = require('passport')                            //passport
+const passport = require('passport');                            //passport
 const initializePassport = require('./passport.config.js')      //passport config
 
 dotenv.config();
-const corsOptions  = {
-    origin:true,
-    credential:true,                               
-}
-
 app.use(express.json());
 app.use(session({ secret: 'your-secret-key', resave: false, saveUninitialized: false }));
 app.use(passport.initialize());                                 //initializing passport

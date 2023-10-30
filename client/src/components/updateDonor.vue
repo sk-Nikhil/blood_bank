@@ -53,7 +53,14 @@ export default {
 
         handleEditForm(donor) {
             this.updateDonor(donor)
-                .then(response => this.notify(response))
+                .then(response => {
+                    if(response.error){
+                        this.notify(response.error)
+                    }
+                    else{
+                        this.notify(response.data)
+                    }
+                })
         }
 
     },
