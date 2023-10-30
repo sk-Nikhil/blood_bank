@@ -29,8 +29,8 @@ async function addEnquiry(req,res){
 
 async function getEnquiries(req,res){
     try{
-        // const enquiries = await userService.getEnquiries();
-        const enquiries=[]  
+        const enquiries = await userService.getEnquiries();
+        // const enquiries=[]  
         if(enquiries.length == 0){
             return res.status(204).send()
         }
