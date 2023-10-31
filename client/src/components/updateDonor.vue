@@ -9,8 +9,8 @@
                 <label for="name">Name:</label>
                 <input type="text" id="name" name="name" v-model="donor.name" disabled>
 
-                <label for="blood_group">Blood Group:</label>
-                <select id="blood_group" name="blood_group" v-model="donor.blood_group" disabled>
+                <label for="bloodGroup">Blood Group:</label>
+                <select id="bloodGroup" name="bloodGroup" v-model="donor.bloodGroup" disabled>
                     <option value="A+">A+</option>
                     <option value="B+">B+</option>
                     <option value="AB+">AB+</option>
@@ -51,16 +51,12 @@ export default {
         ...mapActions('donor', ['updateDonor']),
         ...mapActions(['disableEdit']),
 
-        handleEditForm(donor) {
-            this.updateDonor(donor)
-                .then(response => {
-                    if(response.error){
-                        this.notify(response.error)
-                    }
-                    else{
-                        this.notify(response.data)
-                    }
-                })
+        async handleEditForm(donor) {
+            const response = await this.updateDonor(donor);
+            if (response.error)
+                this.notify(response.error);
+            else
+                this.notify(response.data);
         }
 
     },

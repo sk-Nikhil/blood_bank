@@ -74,16 +74,8 @@ export default {
     methods: {
         ...mapActions('user', ['addEnquiry']),
         async submitForm() {
-            await this.addEnquiry({ ...this.formData, location: `${this.lat}, ${this.long}` })
-            .then((response)=>{
-                console.log(response)
-                if(response.error){
-                    this.notify(response.error)
-                }
-                else{
-                    this.notify("your enquiry has been submitted, you will hear soon from us.")
-                }
-            })
+            const response = await this.addEnquiry({ ...this.formData, location: `${this.lat}, ${this.long}` })
+            this.notify(response)
             this.clearForm();
         },
 
@@ -93,6 +85,7 @@ export default {
             this.formData.bloodGroup = '';
             this.formData.location = '';
             this.formData.message = '';
+            this.getCurrentLocation()
         },
 
         openMap() {
@@ -247,6 +240,5 @@ button {
 #location {
     cursor: pointer;
 }
-
 </style>
   

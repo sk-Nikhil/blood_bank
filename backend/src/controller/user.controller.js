@@ -1,32 +1,17 @@
 const userService = require('../services/user.service.js');
-const Joi = require('joi');
 
 async function addEnquiry(req,res){
-    const schema = Joi.object().keys({
-        name:Joi.string().regex(/^[a-zA-Z]+$/).required().messages({
-            'string.pattern.base': 'Name should not contain numbers or special characters',
-        }),
-        email: Joi.string().email({ minDomainSegments: 1, tlds: { allow: ['com'] } }),
-        bloodGroup:Joi.string().required(),
-        location:Joi.string().required(),
-        message:Joi.string().required(),
-    })
-
-    if (schema.validate(req.body).error) {
-        console.log(schema.validate(req.body).error.details);
-        return res.status(422).send({error:schema.validate(req.body).error.details});
-    }
-
     try{
         await userService.addEnquiry(req.body);
-        res.send()
+        return res.send();
     }
     catch(err){
         console.log(err.message);
-        return res.send({error:err.message})
+        return res.status(500).send({error:"unable to process your request"})
     }
 }
 
+// getEnquiries right now has not been used anywhere and it does nothing, its just a prototype, to be updated for further operations
 async function getEnquiries(req,res){
     try{
         const enquiries = await userService.getEnquiries();
@@ -38,7 +23,7 @@ async function getEnquiries(req,res){
     }
     catch(err){
         console.log(err.message);
-        return res.send({error:err.message})
+        return res.status(500).send({error:"unable to fetch your requested data"})
     }
 }
 

@@ -83,18 +83,16 @@ export default {
             // Handle rejection logic here
         },
     },
-    created(){
-        this.setEnquiries()
-        .then(response=>{
-            if(response.status == 204){
-                this.notify("no enquiries are present")
-            }
-        })
+    created() {
+        const response = this.setEnquiries()
+        if (response.status == 204) {
+            this.notify("no enquiries are present")
+        }
         this.$watch(() => this.getEnquiries, (newValue) => {
-            if(newValue){
+            if (newValue) {
                 this.enquiries = newValue
             }
-            else{
+            else {
                 this.enquiries = []
             }
         });

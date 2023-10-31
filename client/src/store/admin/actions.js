@@ -4,22 +4,29 @@ const router = require('../../routes');
 
 export default{
     async login(context, payload){
-        const response = await axios.post(`${url}/login`, payload);
-        if(response.data.success){
-            const token = response.data.success.token;
-            localStorage.setItem('token', token);
-            context.dispatch('updateLoginStatus', true);
-
-            context.dispatch('updateRole',response.data.success.role)
-            if(response.data.success.role === 'admin')
-                router.default.replace({name:"admin_home"});
+        try{
+            const response = await axios.post(`${url}/login`, payload);
+            if(response.data.success){
+                const token = response.data.success.token;
+                localStorage.setItem('token', token);
+                context.dispatch('updateLoginStatus', true);
+    
+                context.dispatch('updateRole',response.data.success.role)
+                if(response.data.success.role === 'admin')
+                    router.default.replace({name:"admin_home"});
+                else{
+                    router.default.replace({name:'user_home'});
+                }
+            }
             else{
-                router.default.replace({name:'user_home'});
+                router.default.replace('/login');
+                return response.data.failure;
             }
         }
-        else{
-            router.default.replace('/login');
-            return response.data.failure;
+        catch(err){
+            if(err.response.data.error){
+                return err.response.data.error
+            }
         }
     },
 

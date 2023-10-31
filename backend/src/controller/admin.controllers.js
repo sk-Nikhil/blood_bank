@@ -1,24 +1,4 @@
 const adminService = require('../services/admin.service.js')
-const generateToken = require('../middleware/generateToken');
-const passport = require('passport');
-
-async function login(req,res,next){
-    passport.authenticate('login',  (err, user)=>{
-        if(err || !user){
-            res.send({failure:"Invalid usrename of password"});
-            return;
-        }
-        req.login(user, {session:false}, (err)=>{
-            if(err){
-                console.log(err);
-                return res.send(err);
-            }
-            const successToken = generateToken(user);
-            return res.send({"success":successToken});
-        })
-    })
-    (req,res,next);
-}
 
 async function signup(req,res){
     try{
@@ -31,6 +11,7 @@ async function signup(req,res){
     }
 }
 
+// get both pending and approved enquiries
 async function getAllEnquiries(req,res){
     try{
         const response = await adminService.getAllEnquiries();
@@ -45,7 +26,7 @@ async function getAllEnquiries(req,res){
 async function getPendingEnquiries(req,res){
     try{
         const response = await adminService.getPendingEnquiries();
-        res.status(500).send(response);
+        res.send(response);
     }
     catch(err){
         console.log(err.message);
@@ -64,7 +45,6 @@ async function getTotalPendingEnquiries(req,res){
     }
 }
 module.exports = {
-    login,
     signup,
     getAllEnquiries,
     getPendingEnquiries,

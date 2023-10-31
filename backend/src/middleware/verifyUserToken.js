@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 
+// not implemented till now, to be used in future
 const verifyToken = (req, res, next) => {
     const token = req.headers.authorization.split(' ')[1];
     if(token) {

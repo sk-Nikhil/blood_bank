@@ -6,6 +6,7 @@ export default {
         try{
             const response = await axiosInstance.get(`/donors?page=${page}&searchTerm=${context.state.searchTerm}`);
             context.commit('setDonors', response.data);
+            return response;
         }
         catch(err){
             return {error:err.message}
@@ -51,17 +52,12 @@ export default {
     async updateDonor(context, payload){
         context.rootState.editDonor = false;
         const d = new Date();
-        const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
-        const donor = {...payload, last_donated};
-        var updateResponse = null;
+        const lastDonated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+        const donor = {...payload, lastDonated};
         try{
-            await axiosInstance.put('/donor', {_id:payload._id, address:payload.address, contact:payload.contact})
-            .then(response=>{
-                context.commit('updateDonor', donor);
-                updateResponse = response.data;
-            })
-            
-            return updateResponse;
+            const response = await axiosInstance.put(`/donor/${payload._id}`, {address:payload.address, contact:payload.contact})
+            context.commit('updateDonor', donor);
+            return response.data;
         }
         catch(err){
             return {error:err.response.data.error[0].message}

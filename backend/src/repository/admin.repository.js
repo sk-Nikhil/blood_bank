@@ -12,7 +12,7 @@ async function addAdmin(admin){
     }
 }
 
-async function ifAdminExits(email){
+async function isAdminExits(email){
     try{
         const admin = await Admin.findOne({email})
         if(admin) {
@@ -54,7 +54,7 @@ async function getTotalPendingEnquiries(){
 
 module.exports = {
     addAdmin,
-    ifAdminExits,
+    isAdminExits,
     getAllEnquiries,
     getPendingEnquiries,
     getTotalPendingEnquiries

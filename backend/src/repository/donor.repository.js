@@ -6,13 +6,27 @@ async function addDonor(donor) {
     return donor.name;
   }
   catch (err) {
-    console.log(err.message)
     throw Error(err);
   }
 };
 
-async function getTotalDonors() {
+function getSearchQuery(query){
+  return {
+    $or: [
+      { name: { $regex: query.searchTerm, $options: 'i' } },
+      { bloodGroup: { $regex: query.searchTerm, $options: 'i' } },
+      { address: { $regex: query.searchTerm, $options: 'i' } },
+      { contact: { $regex: query.searchTerm, $options: 'i' } },
+      { lastDonated: { $regex: query.searchTerm, $options: 'i' } },
+    ],
+  }
+}
+async function getTotalDonors(query) {
+  const searchQuery = getSearchQuery(query);
   try {
+    if (query.searchTerm !== '') {
+      return await Donor.find(searchQuery).countDocuments();
+    }
     return await Donor.countDocuments();
   }
   catch (err) {
@@ -21,16 +35,7 @@ async function getTotalDonors() {
 };
 
 async function getDonors(skip, limit, query) {
-  const searchQuery = {
-    $or: [
-      { name: { $regex: query.searchTerm, $options: 'i' } },
-      { bloodGroup: { $regex: query.searchTerm, $options: 'i' } },
-      { address: { $regex: query.searchTerm, $options: 'i' } },
-      { contact: { $regex: query.searchTerm, $options: 'i' } },
-      { lastDonated: { $regex: query.searchTerm, $options: 'i' } },
-    ],
-  };
-  console.log(query)
+  const searchQuery = getSearchQuery(query)
   try {
     if (query.searchTerm !== '') {
       return await Donor.find(searchQuery).skip(skip).limit(limit);
@@ -54,11 +59,11 @@ async function removeDonor(id) {
   }
 };
 
-async function updateDonor(_id, address, contact, last_donated) {
+async function updateDonor(_id, address, contact, lastDonated) {
   try {
     return await Donor.findOneAndUpdate(
       { _id },
-      { address, contact, last_donated }
+      { address, contact, lastDonated }
     );
   }
   catch (err) {
@@ -67,12 +72,12 @@ async function updateDonor(_id, address, contact, last_donated) {
 };
 
 // for piechart data
-async function countBloodGroups() {
+async function countDistinctBloodGroups() {
   try {
     const result = await Donor.aggregate([
       {
         $group: {
-          _id: '$blood_group',
+          _id: '$bloodGroup',
           count: { $sum: 1 }
         }
       }
@@ -90,5 +95,5 @@ module.exports = {
   getDonors,
   removeDonor,
   updateDonor,
-  countBloodGroups,
+  countDistinctBloodGroups,
 };

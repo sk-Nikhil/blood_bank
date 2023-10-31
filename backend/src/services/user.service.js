@@ -5,9 +5,11 @@ async function addEnquiry(data){
     return userRepository.addEnquiry(enquiryData)
 }
 
+// to be updated not in use, does nothing right now
 async function getEnquiries(){
     return await userRepository.getEnquiries()
 }
+
 module.exports = {
     addEnquiry,
     getEnquiries

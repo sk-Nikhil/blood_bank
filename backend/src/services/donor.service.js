@@ -14,11 +14,11 @@ async function getDonors(query){
     const skip = (page - 1) * limit;
 
     try{
-        const totalDonors = await donorRepository.getTotalDonors();
+        const totalDonors = await donorRepository.getTotalDonors(query);
         const donorsFound = await donorRepository.getDonors(skip, limit, query);
         const donors = {
             donorsFound, 
-            currentPage: donorsFound.length === 0 ? 0 :page,
+            currentPage: donorsFound.length === 0 ? 1 :page,
             totalPages: Math.ceil(totalDonors / limit),
         };
         return donors;
@@ -36,12 +36,12 @@ async function removeDonor(id){
 async function updateDonor(donorData){
     const {_id, address, contact} = {...donorData};
     const d = new Date();
-    const last_donated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
-    return await donorRepository.updateDonor(_id, address, contact, last_donated);
+    const lastDonated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+    return await donorRepository.updateDonor(_id, address, contact, lastDonated);
 };
 
-async function countBloodGroups(){
-    return await donorRepository.countBloodGroups();
+async function countDistinctBloodGroups(){
+    return await donorRepository.countDistinctBloodGroups();
 };
 
 module.exports = {
@@ -49,5 +49,5 @@ module.exports = {
     getDonors,
     removeDonor,
     updateDonor,
-    countBloodGroups
+    countDistinctBloodGroups
 };

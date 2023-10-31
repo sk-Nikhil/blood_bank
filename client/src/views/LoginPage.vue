@@ -40,9 +40,9 @@ export default{
     methods:{
         ...mapActions('admin',['login']),
 
-        handleLogin(){
-            const response = this.login(this.user);
-            response.then((res)=>this.errMessage = res)
+        async handleLogin(){
+            const response = await this.login(this.user);
+            this.errMessage = response
             this.clearForm();
         },
         clearForm(){

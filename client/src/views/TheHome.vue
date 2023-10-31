@@ -20,7 +20,7 @@
             </thead>
             <tbody>
                 <tr v-for="(donor,index) in getDonors" :key="donor.id">
-                    <td>{{ getCurrPage+ index }}</td>
+                    <td>{{ (getCurrPage-1)*5+ index+1 }}</td>
                     <td>{{ donor.name }}</td>
                     <td>{{ donor.bloodGroup }}</td>
                     <td>{{ donor.address }}</td>
