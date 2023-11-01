@@ -39,7 +39,7 @@ function updateDonorValidation(req,res,next){
         _id: Joi.string().alphanum().required(),
     })
     if(paramValidation.validate(req.params).error){
-        console.log(schema.validate(req.params).error.details);
+        console.log(paramValidation.validate(req.params).error.details);
         return res.status(422).send({ error: paramValidation.validate(req.params).error.details }); //if any validation error
     }
 

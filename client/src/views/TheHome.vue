@@ -1,4 +1,80 @@
 <template>
+    <v-container>
+        <h1>Home Page</h1>
+
+        <!-- Search Bar -->
+        <v-text-field v-model="search" label="Search" />
+
+        <!-- Vuetify Table -->
+        <v-data-table :headers="headers" :items="items" :items-per-page="itemsPerPage">
+            <!-- <template v-slot:item.actions="{ item }">
+                <v-btn @click="editItem(item)">Edit</v-btn>
+                <v-btn @click="deleteItem(item)">Delete</v-btn>
+            </template> -->
+        </v-data-table>
+    </v-container>
+</template>
+  
+<script>
+import { defineComponent } from 'vue';
+// import { VDataTable } from '../../vuetify/lib/labs/VDataTable';
+import { VDataTable } from 'vuetify/lib/labs';
+export default defineComponent({
+    components: {
+        VDataTable,
+    },
+    data() {
+        return {
+            search: '',
+            itemsPerPage: 10,
+            items: [
+                {
+                    id: 1,
+                    name: 'John Doe',
+                    bloodGroup: 'A+',
+                    address: '123 Main St',
+                    contact: '555-123-4567',
+                    lastDonated: '2023-01-15',
+                },
+                {
+                    id: 2,
+                    name: 'Jane Smith',
+                    bloodGroup: 'B-',
+                    address: '456 Elm St',
+                    contact: '555-987-6543',
+                    lastDonated: '2023-02-20',
+                },
+                // Add more items here
+            ],
+            headers: [
+                { text: 'ID', value: 'id' },
+                { text: 'Name', value: 'name' },
+                { text: 'Blood Group', value: 'bloodGroup' },
+                { text: 'Address', value: 'address' },
+                { text: 'Contact', value: 'contact' },
+                { text: 'Last Donated', value: 'lastDonated' },
+            ],
+        };
+    },
+    methods: {
+        editItem(item) {
+            // Handle edit action
+            console.log('Edit item:', item);
+        },
+        deleteItem(item) {
+            // Handle delete action
+            console.log('Delete item:', item);
+        },
+    },
+    mounted(){
+        console.log(this.items, this.headers)
+    }
+});
+</script>
+  
+
+
+<!-- <template>
     <div id="container">
         <form class="search">
             <input type="text" placeholder="Search" class="searchinput" name="search" v-model="searchTerm" @input="handleInput()" />
@@ -33,7 +109,6 @@
                         </div>
                     </td>
                 </tr>
-                <!-- Add more rows as needed -->
             </tbody>
         </table>
         <div class="pagination">
@@ -225,4 +300,4 @@ td {
     color:#e3e3e3;
   }
 
-</style>
+</style> -->
