@@ -1,7 +1,7 @@
 <template>
   <div>
     <the-header></the-header>
-    <router-view></router-view>
+    <router-view class="router-view"></router-view>
     <the-footer></the-footer>
   </div>
   </template>
@@ -30,7 +30,13 @@
     padding:0;
     box-sizing: border-box;
   }
-  ::-webkit-scrollbar{
-    display: none;
+
+  .router-view{
+    margin-bottom: 10vh;
   }
+
+  ::-webkit-scrollbar{
+    display:none;
+  }
+ 
   </style>

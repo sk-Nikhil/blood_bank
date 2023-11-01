@@ -1,5 +1,5 @@
 <template>
-    <div class="footer">
+    <div class="footer" style="margin-top: 10vh;">
         <p>&copy; 2023 Argusoft private ltd</p>
         <p>
             <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
@@ -17,17 +17,15 @@
 
         /* Style the footer container */
         .footer {
-            /* position:absolute; */
-            bottom:0;
+            position:fixed;
+            bottom:0px;
             left:0;
             background-color: #333;
             color: white;
             text-align: center;
-            padding:0;
-            margin:0;
+            padding:1% 0;
+            margin-top:100vh;
             width:100%;
-            height:10%;
-            margin-top: 90vh;
         }
 
         /* Style footer links */

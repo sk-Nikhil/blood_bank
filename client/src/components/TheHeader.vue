@@ -1,11 +1,97 @@
 <template>
+    <v-app class="my-app-margin">
+        <v-navigation-drawer app right v-model="sideBarOpen">
+            <!-- Sidebar content goes here -->
+            <!-- You can add links, menus, or any other content -->
+        </v-navigation-drawer>
+        <v-app-bar app color="primary" left>
+            <v-content>
+                <!-- <v-tab to="/admin_home">Home</v-tab>
+                <v-tab to="/piechart">PieChart</v-tab>
+                <v-tab to="/enquiries">Enquiries</v-tab> -->
+                <v-tabs v-model="activeTab">
+                    <v-tab v-for="(tab, index) in tabs" :to="'/'+tab.routes" :key="index">
+                        {{ tab.label }}
+                    </v-tab>
+                </v-tabs>
+            </v-content>
+
+            <v-spacer></v-spacer>
+            <!-- Place your header content here -->
+            <!-- For example: -->
+            <v-btn icon @click="showNotifications">
+                <v-icon>mdi-bell</v-icon>
+            </v-btn>
+            <v-btn @click="handleButtonClick" color="white" dark>
+                My Button
+            </v-btn>
+            <v-btn icon @click="toggleSidebar">
+                <v-icon>mdi-menu</v-icon>
+            </v-btn>
+        </v-app-bar>
+
+    </v-app>
+</template>
+  
+<script>
+import {mapActions, mapGetters} from 'vuex'
+export default {
+    data() {
+        return {
+            sideBarOpen: false,
+            activeTab:null,
+            tabs:[
+                {label:"Home", routes:"admin_home"},
+                {label:"PieChart", routes:"piechart"},
+                {label:"Enquiries", routes:"enquiries"}
+            ]
+        }
+    },
+    methods: {
+        ...mapActions('admin', ['logout','setAllEnquiries', 'setAllPendingEnquiries' ]),
+        ...mapActions(['changeAddformStatus']),
+        toggleSidebar() {
+            this.sideBarOpen = !this.sideBarOpen
+        },
+        showNotifications() {
+            // Handle notification logic
+        },
+        handleButtonClick() {
+            // Handle button click action
+        },
+        showAllEnquiries(){
+            this.setAllEnquiries()
+            this.$router.push('/enquiries')
+        },
+        showPendingEnquiries(){
+            this.setAllPendingEnquiries()
+        }
+    },
+    computed: {
+        ...mapGetters('admin', ['getLoginStatus', 'getRole', 'getTotalPendingEnquiries']),
+        ...mapGetters(['getAddFormStatus']),
+    },
+};
+</script>
+  
+<style scoped>
+.my-app-margin {
+    margin: -310px;
+    /* Adjust the margin size as needed */
+}
+</style>
+  
+  
+
+
+<!-- <template>
     <ul class="nav nav-tabs d-flex justify-content-between align-items-center">
         <div style="display: flex;" v-if="getLoginStatus">
-            <!-- redirect to default home page of user or admin -->
+            
             <li class="nav-item">
                 <router-link :to="getRole === 'admin'?'/admin_home':'/user_home'" class="nav-link" active-class="active">Home</router-link>
             </li>
-            <!-- piechart contains data of units of blood packages with that blood group present -->
+            
             <li class="nav-item">
                 <router-link to="/piechart" class="nav-link" active-class="active">PieChart</router-link>
             </li>
@@ -15,8 +101,7 @@
             </li>
         </div>
         <div style="display: flex; align-items: center;" v-if="getLoginStatus">
-            <!-- notification bell -->
-            <!-- if any user send blood enquiry -->
+
             <div v-if="getTotalPendingEnquiries>0" v-tooltip="{content: 'This tooltip is on the top', placement: 'top'}">
                 <router-link to="/enquiries" v-if="getRole==='admin'">
                     <i class="fa-solid fa-bell">
@@ -24,14 +109,12 @@
                     </i>
                 </router-link>
             </div>
-            <!-- button to add donor -->
             <li class="nav-item">
                 <router-link to="" v-if="getRole==='admin'" class="nav-link" active-class="" @click="changeAddformStatus">
                     Add Donor
                 </router-link>
             </li>
 
-            <!-- bars, on click opens right-side-bar which contains button line logout, profile -->
             <div class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasRight"
                 aria-controls="offcanvasRight"><i class="fa-solid fa-bars"></i></div>
 
@@ -45,7 +128,7 @@
                         <div>
                             <router-link :to="getRole === 'admin'?'/admin_home':'/user_home'">Home</router-link>
                         </div>
-                        <!-- pending enquiries will only be visible to admin and all enquiries will contain enquiries of all users -->
+                        
                         <div v-if="getRole==='admin'">
                             <div>
                                 <router-link to="/admin_home" @click="showAllEnquiries()">Show All Enquiries</router-link>
@@ -55,13 +138,12 @@
                             </div>
                         </div>
                     </div>
-                    <!-- logout button -->
+
                     <li id="logout"><a @click="logout()">Logout</a></li>
                 </div>
             </div>
         </div>
     </ul>
-    <!-- add donor form component -->
     <add-donor v-if="getAddFormStatus"></add-donor>
 </template>
 
@@ -180,4 +262,4 @@ export default {
   color: #fff;
   border-radius: 4px;
 }
-</style>
+</style> -->

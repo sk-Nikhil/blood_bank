@@ -33,8 +33,10 @@ axiosInstance.interceptors.response.use(
         return response;
     },
     (error) => {
-      if (error) {
+      if (error.response.status === 401) {
         console.error('Invalid token error:', error);
+        router.replace('/login')
+        store.dispatch('admin/logout')
         return Promise.reject(error);
       } else {
         // Handle other types of errors (e.g., network errors) here
