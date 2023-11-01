@@ -9,8 +9,8 @@ async function addDonor(userData){
 }
 
 async function getDonors(query){
+    const limit = parseInt(query.numberOfRecords);
     const page = parseInt(query.page) || 1;
-    const limit =5;
     const skip = (page - 1) * limit;
 
     try{
@@ -36,7 +36,7 @@ async function removeDonor(id){
 async function updateDonor(donorData){
     const {_id, address, contact} = {...donorData};
     const d = new Date();
-    const lastDonated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
+    const lastDonated = `${d.getDate()}/${d.getMonth()+1}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`;
     return await donorRepository.updateDonor(_id, address, contact, lastDonated);
 };
 

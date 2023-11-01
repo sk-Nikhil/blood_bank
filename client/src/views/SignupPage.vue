@@ -45,9 +45,9 @@ export default {
     methods: {
         ...mapActions('admin', ['signup']),
 
-        handleSignup() {
+        async handleSignup() {
             // this.$router.push('/home')
-            const response = this.login(this.user);
+            const response = await this.login(this.user);
             response.then((res) => this.errMessage = res)
             this.clearForm();
             this.notify("You have successfully registered with us")

@@ -13,7 +13,7 @@ export default {
     },
 
     removeDonor(state, id) {
-        const index = state.donors.findIndex((donor) => donor.id === id);
+        const index = state.donors.findIndex((donor) => donor._id === id);
         state.donors.splice(index, 1);
     },
 

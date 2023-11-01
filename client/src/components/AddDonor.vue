@@ -1,37 +1,30 @@
 <template>
     <div>
-        <div id="backdrop" @click="changeAddformStatus"></div>
-        <div class="form-container">
-            <h2>Donor Registration</h2>
-            <div id="close" @click="changeAddformStatus()">close</div>
-            <form @submit.prevent="addDonors()">
-                <label for="name">Name:</label>
-                <input type="text" id="name" name="name" required v-model="form.name">
-
-                <label for="blood_group">Blood Group:</label>
-                <select id="blood_group" name="blood_group" required v-model="form.bloodGroup">
-                    <option value="A+">A+</option>
-                    <option value="B+">B+</option>
-                    <option value="AB+">AB+</option>
-                    <option value="O+">O+</option>
-                    <option value="A-">A-</option>
-                    <option value="B-">B-</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O-">O-</option>
-                </select>
-
-                <label for="address">Address:</label>
-                <input type="text" id="address" name="address" required v-model="form.address">
-
-                <label for="contact">Contact:</label>
-                <input type="tel" id="contact" name="contact" pattern="[0-9]{10}" required v-model="form.contact">
-
-                <input type="submit" value="Submit">
-            </form>
-        </div>
+        <v-dialog v-model="dialog" max-width="500px" persistent>
+            <v-card>
+                <v-card-title>
+                    Registration Form
+                </v-card-title>
+                <v-card-text>
+                    <v-form @submit.prevent="submitForm" ref="form">
+                        <v-text-field v-model="form.name" label="Name" :rules="nameRule" required></v-text-field>
+                        <v-text-field v-model="form.address" label="Address" :rules="addressRule" required></v-text-field>
+                        <v-text-field v-model="form.contact" label="Contact" :rules="contactRule" required></v-text-field>
+                        <v-select v-model="form.bloodGroup" :items="bloodGroups" label="Blood Group" :rules="bloodGroupRule"
+                            required></v-select>
+                    </v-form>
+                </v-card-text>
+                
+                <v-card-actions>
+                    <v-btn @click="closeDialog">Close</v-btn>
+                    <v-btn color="primary" @click="submitForm" :disabled="isFormValid">Submit</v-btn>
+                </v-card-actions>
+                
+            </v-card>
+        </v-dialog>
     </div>
 </template>
-
+  
 <script>
 import { mapActions } from 'vuex';
 import { toast } from 'vue3-toastify';
@@ -39,31 +32,61 @@ import 'vue3-toastify/dist/index.css';
 export default {
     data() {
         return {
+            dialog: true,
             form: {
                 name: '',
-                bloodGroup: '',
                 address: '',
-                contact: ''
+                contact: '',
+                bloodGroup: '',
             },
-
-            last_donated: new Date()
-        }
+            bloodGroups: ['A+', 'B+', 'O+', 'AB+', 'A-', 'B-', 'O-', 'AB-'],
+            nameRule: [(v) => !!v || 'Name is required', (v) => (v && v.length >= 3) || 'Name must be at least 3 characters'],
+            addressRule: [(v) => !!v || 'Address is required', (v) => (v && v.length >= 8) || 'Address must be at least 8 characters'],
+            contactRule: [(v) => !!v || 'Contact is required', (v) => /^[0-9]{10}$/.test(v) || 'Invalid contact number'],
+            bloodGroupRule: [(v) => !!v || 'Blood Group is required'],
+        };
     },
     computed: {
+        isFormValid() {
+            return this.$refs.form;
+        },
     },
     methods: {
         ...mapActions(['changeAddformStatus']),
         ...mapActions('donor', ['addDonor']),
         ...mapActions(['countGroups']),
-        async addDonors() {
-            const d = new Date()
-            const lastDonated = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()} ${d.getHours()}:${d.getMinutes()}`
+
+        async addDonorData() {
             this.changeAddformStatus()
-            const response = await this.addDonor({...this.form, lastDonated });
+            const response = await this.addDonor({ ...this.form });
             this.notify(response)
             this.countGroups()
         },
-    },
+        openDialog() {
+            this.dialog = true;
+        },
+        closeDialog() {
+            this.changeAddformStatus()
+            this.dialog = false;
+            this.resetForm();
+        },
+        resetForm() {
+            this.form.name = '';
+            this.form.address = '';
+            this.form.contact = '';
+            this.form.bloodGroup = '';
+            this.$refs.form.resetValidation(); // Reset form validation
+        },
+        async submitForm() {
+            const isValid = await this.$refs.form.validate()
+            console.log(isValid)
+            if (isValid.valid) {
+                this.addDonorData()
+                this.closeDialog()
+            }
+        },
+
+    },  
     setup() {
         const notify = (msg) => {
             toast(msg, {
@@ -72,84 +95,11 @@ export default {
         }
         return { notify };
     },
-}
+};
 </script>
 
-
-<style scoped>
-form {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    text-align: left;
-    margin-top:5%;
-}
-
-/* Style the form container */
-.form-container {
-    position: absolute;
-    top: 13%;
-    left: 50%;
-    transform: translate(-50%);
-    width: 400px;
-    margin: 20px auto;
-    padding: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    background-color: #f9f9f9;
-    z-index: 99;
-}
-
-/* Style form labels */
-label {
-    font-weight: bold;
-}
-
-/* Style form input fields */
-input[type="text"],
-input[type="tel"],
-select {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-/* Style the submit button */
-input[type="submit"] {
-    background-color: #333;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    float:right;
-}
-
-/* Style the submit button on hover */
-input[type="submit"]:hover {
-    background-color: #555;
-}
-
-#backdrop {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    z-index: 9;
-    background-color: rgba(0, 0, 0, 0.3);
-}
-
-#close{
-    position:absolute;
-    right:1%;
-    top:1%;
-    color:red;
-}
-
-#close:hover{
-    cursor:pointer
+<style>
+v-card-actions{
+    float:right
 }
 </style>

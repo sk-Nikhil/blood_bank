@@ -1,7 +1,7 @@
 
 export default {
     getDonors(state){
-        return state.donors.slice(0,5);
+        return state.donors;
     },
     getCurrPage(state){
         return state.currentPage;

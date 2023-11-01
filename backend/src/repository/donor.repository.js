@@ -2,8 +2,8 @@ const Donor = require("../models/donors.js");
 
 async function addDonor(donor) {
   try {
-    await donor.save();
-    return donor.name;
+    const response = await donor.save();
+    return {id:response._id, name:response.name};
   }
   catch (err) {
     throw Error(err);

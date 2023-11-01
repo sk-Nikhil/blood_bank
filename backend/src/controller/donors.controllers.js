@@ -2,8 +2,8 @@ const donorService = require("../services/donor.service.js");
 
 async function addDonor(req, res) {
     try {
-        const name = await donorService.addDonor(req.body);
-        return res.status(200).send({ data: `Donor ${name} added successfully` });
+        const donor = await donorService.addDonor(req.body);
+        return res.status(200).send({ data: `Donor ${donor.name} added successfully`, id:donor.id });
     }
     catch (err) {
         console.log(err.message);

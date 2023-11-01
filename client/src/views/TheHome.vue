@@ -1,76 +1,129 @@
+<!-- eslint-disable vue/valid-v-slot -->
 <template>
     <v-container>
-        <h1>Home Page</h1>
+        <h1>Donors Records</h1>
 
         <!-- Search Bar -->
-        <v-text-field v-model="search" label="Search" />
+        <v-text-field v-model="searchTerm" label="Search" class="float-right" style="width:300px"
+            @input="initializeDonors()" />
 
         <!-- Vuetify Table -->
-        <v-data-table :headers="headers" :items="items" :items-per-page="itemsPerPage">
-            <!-- <template v-slot:item.actions="{ item }">
-                <v-btn @click="editItem(item)">Edit</v-btn>
-                <v-btn @click="deleteItem(item)">Delete</v-btn>
-            </template> -->
+        <v-data-table :headers="headers" :items="getDonors" v-model:items-per-page="itemsPerPage" class="hover-table">
+            <template v-slot:header>
+                <thead>
+                    <tr>
+                        <th v-for="header in headers" :key="header.value">
+                            {{ header.text }}
+                        </th>
+                    </tr>
+                </thead>
+            </template>
+            <template v-slot:item.actions="{ item }">
+                <td>
+                    <v-btn @click="changeEditStatus(item)">Edit</v-btn>
+                    <v-btn @click="deleteDonor(item._id)">Delete</v-btn>
+                    <!-- Add more buttons or customize as needed -->
+                </td>
+            </template>
         </v-data-table>
+
+        <!-- <v-pagination v-model="currentPage" :length="totalPages">
+        </v-pagination> -->
+        <edit-donor v-if="getEditStatus"></edit-donor>
     </v-container>
 </template>
   
 <script>
-import { defineComponent } from 'vue';
-// import { VDataTable } from '../../vuetify/lib/labs/VDataTable';
-import { VDataTable } from 'vuetify/lib/labs';
-export default defineComponent({
+import { mapGetters, mapActions } from 'vuex';
+import { toast } from 'vue3-toastify';
+import 'vue3-toastify/dist/index.css';
+import EditDonor from '../components/updateDonor.vue'
+export default {
     components: {
-        VDataTable,
+        EditDonor
     },
     data() {
         return {
-            search: '',
-            itemsPerPage: 10,
-            items: [
-                {
-                    id: 1,
-                    name: 'John Doe',
-                    bloodGroup: 'A+',
-                    address: '123 Main St',
-                    contact: '555-123-4567',
-                    lastDonated: '2023-01-15',
-                },
-                {
-                    id: 2,
-                    name: 'Jane Smith',
-                    bloodGroup: 'B-',
-                    address: '456 Elm St',
-                    contact: '555-987-6543',
-                    lastDonated: '2023-02-20',
-                },
-                // Add more items here
-            ],
+            searchTerm: '',
+            itemsPerPage: 5,
+            items: [],
             headers: [
-                { text: 'ID', value: 'id' },
+                { text: 'ID', value: '_id' },
                 { text: 'Name', value: 'name' },
                 { text: 'Blood Group', value: 'bloodGroup' },
                 { text: 'Address', value: 'address' },
                 { text: 'Contact', value: 'contact' },
                 { text: 'Last Donated', value: 'lastDonated' },
+                { text: 'Actions', value: 'actions' }
             ],
+
+            currentPage: 1,
+            totalPages: 0,
+            hoverClass: 'hover-row'
         };
     },
-    methods: {
-        editItem(item) {
-            // Handle edit action
-            console.log('Edit item:', item);
-        },
-        deleteItem(item) {
-            // Handle delete action
-            console.log('Delete item:', item);
-        },
+    watch: {
+        itemsPerPage(value) {
+            this.initializeDonors(value)
+        }
     },
-    mounted(){
-        console.log(this.items, this.headers)
-    }
-});
+    computed: {
+        ...mapGetters('donor', ['getCurrPage', 'getTotalPages', 'filteredDonors', 'getDonors']),
+        ...mapGetters(['getEditStatus']),
+        ...mapGetters('admin', ['getLoginStatus'])
+    },
+    methods: {
+        ...mapActions('donor', ['setDonors', 'removeDonor', 'setSearchTerm', 'sortDonors']),
+        ...mapActions(['changeEditStatus']),
+        ...mapActions(['countGroups']),
+        ...mapActions('admin', ['setTotalPendingEnquiries']),
+
+        handlePageChange(newPage) {
+            console.log(newPage)
+        },
+
+        async deleteDonor(id) {
+            const response = await this.removeDonor(id);
+            this.notify(response)
+            this.countGroups()
+        },
+
+        async initializeDonors() {
+            const response = await this.setDonors({ numberOfRecords: this.itemsPerPage, searchTerm: this.searchTerm })
+            if (!response.error) {
+                this.currentPage = response.data.currentPage
+                this.totalPages = response.data.totalPages
+                return
+            }
+            this.notify("unexpected error occured")
+        }
+    },
+
+    created() {
+        this.initializeDonors()
+        this.setTotalPendingEnquiries();
+    },
+    setup() {
+        const notify = (msg) => {
+            toast(msg, {
+                autoClose: 1000,
+            }); // ToastOptions
+        }
+        return { notify };
+    },
+};
 </script>
+
+<style> 
+.v-data-table {
+     background-color: red;
+     color: black;
+}
+.hover-table .hover-row:hover {
+  background-color: #f5f5f5; /* Define the background color when hovered */
+  cursor: pointer; /* Add a pointer cursor on hover */
+}
+</style>
   
 
 
@@ -82,163 +135,14 @@ export default defineComponent({
                 <i class="fa-solid fa-magnifying-glass"></i>
             </button>
         </form>
-        <table>
-            <thead>
-                <tr>
-                    <th @click="sortDonors('id')">donor_id</th>
-                    <th @click="sortDonors('name')">Name</th>
-                    <th @click="sortDonors('bloodGroup')">Blood Group</th>
-                    <th @click="sortDonors('address')">Address</th>
-                    <th @click="sortDonors('contact')">Contact</th>
-                    <th @click="sortDonors('lastDonated')">Last Donated</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(donor,index) in getDonors" :key="donor.id">
-                    <td>{{ (getCurrPage-1)*5+ index+1 }}</td>
-                    <td>{{ donor.name }}</td>
-                    <td>{{ donor.bloodGroup }}</td>
-                    <td>{{ donor.address }}</td>
-                    <td>{{ donor.contact }}</td>
-                    <td>{{ donor.lastDonated }}</td>
-                    <td>
-                        <div id="action">
-                            <button class="action" style="background-color: green;" @click="changeEditStatus(donor)">Edit</button>
-                            <button class="action" style="background-color: red;" @click="handleRemovedDonor(donor._id)">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <div class="pagination">
-            <button @click="setDonors(getCurrPage - 1)" :disabled="getCurrPage <= 1">Previous</button>
-            <span>Page {{ getCurrPage }} of {{ getTotalPages }}</span>
-            <button @click="setDonors(getCurrPage + 1)" :disabled="getCurrPage === getTotalPages">Next</button>
-        </div>
-
-
     </div>
 
-    <edit-donor v-if="getEditStatus"></edit-donor>
 </template>
-
-<script>
-import { mapGetters, mapActions } from 'vuex';
-import { toast } from 'vue3-toastify';
-import 'vue3-toastify/dist/index.css';
-import EditDonor from '../components/updateDonor.vue';
-
-export default {
-   
-    components: {
-        EditDonor,
-    },
-    data() {
-        return {
-            donors: [],
-            searchTerm: '',
-        }
-    },
-    computed: {
-        ...mapGetters('donor', ['getCurrPage', 'getTotalPages', 'filteredDonors', 'getDonors']),
-        ...mapGetters(['getEditStatus' ]),
-        ...mapGetters('admin', ['getLoginStatus'])
-    },
-    methods: {
-        ...mapActions('donor', ['setDonors', 'removeDonor', 'setSearchTerm', 'sortDonors']),
-        ...mapActions(['changeEditStatus']),
-        ...mapActions(['countGroups']),
-        ...mapActions('admin', ['setTotalPendingEnquiries']),
-
-        async handleInput() {
-            this.setSearchTerm(this.searchTerm);
-            const response = await this.setDonors(this.getCurrPage, this.searchTerm);
-            if(response.error){
-                this.notify("unexpected error occured")
-            }
-        },
-        async handleRemovedDonor(id){
-            const response = await this.removeDonor(id);
-            this.notify(response)
-            this.countGroups()
-        }
-    },
-
-    async created() {
-        const response = await this.setDonors(this.getCurrPage)
-        console.log(response)
-        
-        this.setTotalPendingEnquiries();
-    },
-    setup() {
-        const notify = (msg) => {
-            toast(msg, {
-                autoClose: 1000,
-            }); // ToastOptions
-        }
-        return { notify };
-    },
-}
-</script>
 
 <style scoped>
 #container{
     width:70%;
     margin: 6% auto 15%;
-}
-table {
-    padding: 0;
-    width:100%;
-    border-collapse: collapse;
-    margin: 2px auto;
-}
-
-th {
-    background-color: #333;
-    color: white;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px;
-}
-
-th:hover{
-    cursor:pointer
-}
-tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
-
-td {
-    padding: 10px;
-    border: 1px solid #ddd;
-}
-
-#addButton{
-    float:right;
-    clear: both;
-    margin:1%;
-    padding:8px 15px;
-    border-radius:10px;
-    background-color: rgb(97, 130, 228);
-    font-weight: 700;
-}
-
-.pagination{
-    display: flex;
-    align-items: center;
-    float:right;
-    margin-top: 10px;
-}
-
-.pagination span{
-    margin:0 10px;
-}
-
-.pagination button{
-    padding:8px 15px;
-    border-radius:10px;
-    background-color: #ccc;
 }
 
 .action{

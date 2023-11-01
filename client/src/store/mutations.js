@@ -3,6 +3,7 @@ export default {
         state.showAddForm = state.showAddForm === true ? false : true;
     },
     changeEditStatus(state, payload){
+        console.log(state.editDonor)
         state.editDonor = state.editDonor === true ? false : true;
         state.donorToBeUpdated = payload;
     },

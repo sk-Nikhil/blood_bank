@@ -2,8 +2,8 @@
     <v-container>
         <v-row justify="center">
             <v-col cols="12" sm="8" md="5">
-                <v-card elevation="2">
-                    <v-card-title class="headline text-center">Login</v-card-title>
+                <v-card elevation="4">
+                    <v-card-title class="headline text-center">{{$t('login')}}</v-card-title>
                     <v-card-text>
                         <v-form @submit.prevent="handleLogin()">
                             <v-text-field label="Username" v-model="username" :rules="usernameRules" @blur="v$.username.$touch()"
@@ -73,6 +73,7 @@ export default {
             const response = await this.login({ username: this.username, password: this.password });
             this.errMessage = response;
             this.clearForm()
+            // this.v$.$touch()
         },
 
         // togglePasswordVisibility() {
@@ -83,5 +84,8 @@ export default {
             this.password = "";
         },
     },
+    created(){
+        this.$i18n.locale='fr'
+    }
 };
 </script>
