@@ -60,10 +60,12 @@ export default {
         try {
             const response = await axiosInstance.put(`/donor/${payload._id}`, { address: payload.address, contact: payload.contact })
             context.commit('updateDonor', donor);
-            return response.data;
+            return response.data.data;
+
         }
         catch (err) {
-            return { error: err.response.data.error[0].message }
+            console.log(err.response.data)
+            return err.response.data.error[0].message
         }
 
     },
