@@ -1,41 +1,40 @@
+
 <template>
-    <div class="footer" style="margin-top: 10vh;">
-        <p>&copy; 2023 Argusoft private ltd</p>
-        <p>
-            <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a>
-        </p>
-    </div>  
+    <div class="footer">
+        <div class="bg-teal d-flex justify-center align-center px-4 w-100">
+            <strong>Get connected with us on social networks!</strong>
+
+
+            <a href="https://in.linkedin.com/showcase/life-argusoft/" target="_blank">
+                <v-btn class="mx-4" icon="mdi-facebook" aize="small" variant="plain"></v-btn>
+            </a>
+            <a href="https://twitter.com/argusoft" target="_blank">
+                <v-btn class="mx-4" icon="mdi-twitter" aize="small" variant="plain"></v-btn>
+            </a>
+            <a href="https://www.facebook.com/argusoft/posts/d41d8cd9/3615088178538302/" target="_blank">
+                <v-btn class="mx-4" icon="mdi-linkedin" aize="small" variant="plain"></v-btn>
+            </a>
+        </div>
+
+        <div class="py-2 bg-black text-center w-100">
+            {{ new Date().getFullYear() }} —
+            <strong> Argusoft || All Rights Reserved</strong>
+        </div>
+    </div>
 </template>
 
 <style scoped>
-        /* Reset some default styles */
-        *{
-            margin: 0;
-            padding: 0;
-            box-sizing:border-box;
-        }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
 
-        /* Style the footer container */
-        .footer {
-            position:fixed;
-            bottom:0px;
-            left:0;
-            background-color: #333;
-            color: white;
-            text-align: center;
-            padding:1% 0;
-            margin-top:100vh;
-            width:100%;
-        }
+a {
+    color: aquamarine
+}
 
-        /* Style footer links */
-        .footer a {
-            color: white;
-            text-decoration: none;
-        }
-
-        /* Style footer links on hover */
-        .footer a:hover {
-            text-decoration: underline;
-        }
-    </style>
+.footer{
+    margin-top: 50vh;
+}
+</style>

@@ -45,15 +45,25 @@ export default{
     },
 
     async setTotalPendingEnquiries(context){
-        const response = await axios.get('http://localhost:3000/getTotalPendingEnquiries');
-        context.commit('setTotalPendingEnquiries', response.data.data);
+        try{
+            const response = await axios.get('http://localhost:3000/getTotalPendingEnquiries');
+            context.commit('setTotalPendingEnquiries', response.data.data);
+        }
+        catch(err){
+            console.log(err)
+        }
     },
 
     // set enquiries in store
-    async setAllEnquiries(context){
-        const enquiries = await axios.get(`${url}/getAllEnquiries`)
-        console.log(enquiries)
-        context.commit('setEnquiries', enquiries.data)
+    async setAllEnquiries(context, payload){
+        try{
+            const enquiries = await axios.get(`${url}/getAllEnquiries?page=${payload.page}&itemsPerPage=${payload.itemsPerPage}`)
+            context.commit('setEnquiries', enquiries.data.enquiries)
+            return enquiries.data.totalEnquiries;
+        }
+        catch(err){
+            return err
+        }
     },
 
     async setAllPendingEnquiries(context){

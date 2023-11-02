@@ -13,8 +13,9 @@ async function signup(req,res){
 
 // get both pending and approved enquiries
 async function getAllEnquiries(req,res){
+    console.log(req.query)
     try{
-        const response = await adminService.getAllEnquiries();
+        const response = await adminService.getAllEnquiries(req.query);
         res.send(response);
     }
     catch(err){

@@ -1,79 +1,63 @@
+<!-- eslint-disable vue/valid-v-slot -->
 <template>
-    <div>
-        <table class="table table-bordered">
-            <thead>
-                <tr>
-                    <th @click="sortBy('name')">Name</th>
-                    <th @click="sortBy('contact_email')">Contact Email</th>
-                    <th @click="sortBy('blood_requirement')">Blood Requirement</th>
-                    <th @click="sortBy('message')">Message</th>
-                    <th @click="sortBy('location')">Location</th>
-                    <th @click="sortBy('status')">Status</th>
-                    <th>Action</th>
-                    <th @click="sortBy('action_date')">Action Date</th>
-                    <th @click="sortBy('action_by')">Action By</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="entry in sortedEntries" :key="entry.id">
-                    <td>{{ entry.name }}</td>
-                    <td>{{ entry.user_id }}</td>
-                    <td>{{ entry.blood_group }}</td>
-                    <td>{{ entry.message }}</td>
-                    <td>{{ entry.location }}</td>
-                    <td>{{ entry.status }}</td>
-                    <td>
-                        <button @click="approveEntry(entry.id)">Approve</button>
-                        <button @click="rejectEntry(entry.id)">Reject</button>
-                    </td>
-                    <td>{{ entry.action_date }}</td>
-                    <td>{{ entry.action_by }}</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+    <v-container>
+        <h1>{{ $t('donorsRecords') }}</h1>
+
+        <!-- Vuetify Table -->
+        <v-data-table-server 
+            v-model:items-per-page="itemsPerPage" 
+            :headers="headers" 
+            :items-length="totalEnquiries"
+            :items="getAllEnquiries" 
+            :loading="loading" 
+            item-value="name" 
+            class="elevation-1"
+            @update:options="initializeEnquiries">
+            <template v-slot:item.actions>
+                <td>
+                    <v-btn>Approve</v-btn>
+                    <v-btn>Reject</v-btn>
+                </td>
+            </template>
+        </v-data-table-server>
+        <edit-donor v-if="getEditStatus"></edit-donor>
+    </v-container>
 </template>
-  
+
+
 <script>
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters, mapActions } from 'vuex';
 import { toast } from 'vue3-toastify';
 import 'vue3-toastify/dist/index.css';
+import EditDonor from '../components/updateDonor.vue'
 export default {
+    components: {
+        EditDonor
+    },
     data() {
         return {
-            enquiries: [], // Your data goes here
-            sortKey: '', // For sorting
-            sortOrders: {
-                name: 1,
-                contact_email: 1,
-                blood_requirement: 1,
-                message: 1,
-                location: 1,
-                status: 1,
-                action_date: 1,
-                action_by: 1,
-            },
+            enquiries: [],
+            totalEnquiries:10,
+            itemsPerPage:5,
+            loading:false,
+            
+            headers: [
+                { title: 'ID', key: '_id', sortable: false,  },
+                { title: 'email', key: 'user_id', sortable: false },
+                { title: 'Blood Group', key: 'blood_group', sortable: false },
+                { title: 'Message', key: 'message', sortable: false },
+                { title: 'Status', key: 'status', sortable: false },
+                { title: 'Enquiry Date', key: 'enquiry_date', sortable: false },
+                { title: 'Actions', key: 'actions', sortable: false }
+            ],
         };
     },
-    computed: {
-        ...mapGetters('user', ['getEnquiries']),
 
-        sortedEntries() {
-            const key = this.sortKey;
-            const order = this.sortOrders[key] || 1;
-            return this.enquiries.slice().sort((a, b) => {
-                a = a[key];
-                b = b[key];
-                return (a === b ? 0 : a > b ? 1 : -1) * order;
-            });
-        },
+    computed: {
+        ...mapGetters('admin', ['getAllEnquiries']),
     },
     methods: {
-        ...mapActions('user', ['setEnquiries']),
-        sortBy(key) {
-            this.sortKey = key;
-            this.sortOrders[key] = this.sortOrders[key] * -1;
-        },
+        ...mapActions('admin',['setAllEnquiries']),
         approveEntry(id) {
             // Handle approval logic here
             console.log(id)
@@ -82,21 +66,20 @@ export default {
             console.log(id)
             // Handle rejection logic here
         },
-    },
-    created() {
-        const response = this.setEnquiries()
-        if (response.status == 204) {
-            this.notify("no enquiries are present")
+
+        async initializeEnquiries({page, itemsPerPage}){
+            this.loading = true
+            console.log(page, itemsPerPage)
+            const totalEnquiries = await this.setAllEnquiries({page, itemsPerPage})
+            this.loading=false
+            this.totalEnquiries = totalEnquiries
+            if(typeof this.totalEnquiries !== 'number'){
+                this.notify("unable to fetch enquiries")
+            }
         }
-        this.$watch(() => this.getEnquiries, (newValue) => {
-            if (newValue) {
-                this.enquiries = newValue
-            }
-            else {
-                this.enquiries = []
-            }
-        });
+
     },
+
     setup() {
         const notify = (msg) => {
             toast(msg, {
@@ -107,8 +90,8 @@ export default {
     },
 };
 </script>
-  
+
 <style>
-/* Add your custom styling here or use Bootstrap classes */
+
 </style>
   

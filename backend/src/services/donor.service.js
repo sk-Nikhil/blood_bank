@@ -9,8 +9,6 @@ async function addDonor(userData){
 }
 
 async function getDonors(query){
-
-    console.log(query   )
     const limit = parseInt(query.itemsPerPage);
     const page = parseInt(query.page) || 1;
     const skip = (page - 1) * limit;

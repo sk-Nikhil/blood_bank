@@ -26,18 +26,21 @@
   
   <style>
   *{
-    margin:0;
+    /* margin:0;
     padding:0;
-    box-sizing: border-box;
+    box-sizing: border-box; */
   }
 
   .router-view{
-    width:95vw;
+    /* width:95vw; */
     margin-bottom: 10vh;
   }
 
   ::-webkit-scrollbar{
     display:none;
   }
+
+  iframe#webpack-dev-server-client-overlay{display:none!important}
+
  
   </style>

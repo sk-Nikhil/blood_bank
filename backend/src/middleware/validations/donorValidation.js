@@ -58,12 +58,13 @@ function updateDonorValidation(req,res,next){
 
 function getDonorsValidation(req,res,next){
     const schema = Joi.object().keys({
-        page:Joi.string().required(),
+        page:Joi.string().required().custom(sanitizeContent),
+        itemsPerPage:Joi.string().required().custom(sanitizeContent),
         // this will validate even if search term is empty
         // if search term is empty it will fetch donors records
         // if search term will be present it will filter out donors based on searchTerm
-
-        searchTerm: Joi.string().alphanum().allow('', null).custom(sanitizeContent)
+        searchTerm: Joi.string().alphanum().allow('', null).custom(sanitizeContent),
+        sortBy:Joi.string().alphanum().allow('',null).custom(sanitizeContent)
     })
 
     if (schema.validate(req.query).error) {

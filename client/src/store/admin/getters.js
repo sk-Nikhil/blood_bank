@@ -7,5 +7,8 @@ export default{
     },
     getTotalPendingEnquiries(state){
         return state.pendingEnquiries
+    },
+    getAllEnquiries(state){
+        return state.enquiries;
     }
 }

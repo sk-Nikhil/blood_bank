@@ -19,8 +19,18 @@ async function addAdmin(admin){
     }
 }
 
-async function getAllEnquiries(){
-    return await adminRepository.getAllEnquiries()
+async function getAllEnquiries(query){
+    const limit = parseInt(query.itemsPerPage);
+    const page = parseInt(query.page) || 1;
+    const skip = (page - 1) * limit;
+    try{
+        const totalEnquiries = await adminRepository.getTotalEnquiries()
+        const enquiries = await adminRepository.getAllEnquiries(skip, limit)
+        return {totalEnquiries, enquiries}
+    }
+    catch(err){
+        return err
+    }
 }
 
 async function getPendingEnquiries(){

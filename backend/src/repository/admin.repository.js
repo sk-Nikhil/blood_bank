@@ -25,9 +25,18 @@ async function isAdminExits(email){
     }
 }
 
-async function getAllEnquiries(){
+async function getTotalEnquiries(){
     try{
-        return await UserEnquiry.find({});
+        return await UserEnquiry.find().countDocuments()
+    }
+    catch(err){
+        throw Error(err)
+    }
+}
+
+async function getAllEnquiries(skip, limit){
+    try{
+        return await UserEnquiry.find().skip(skip).limit(limit);
     }
     catch(err){
         throw Error(err);
@@ -57,5 +66,6 @@ module.exports = {
     isAdminExits,
     getAllEnquiries,
     getPendingEnquiries,
-    getTotalPendingEnquiries
+    getTotalPendingEnquiries,
+    getTotalEnquiries
 }

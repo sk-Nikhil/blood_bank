@@ -12,10 +12,10 @@ import { loadFonts } from './plugins/webfontloader'
 loadFonts()
 
 const i18n = createI18n({
-  locale: 'en', // Set the default locale
+  locale: 'english', // Set the default locale
   messages: {
-    en: require('./locales/en.json'), // Load English translations
-    fr: require('./locales/fr.json'), // Load French translations
+    english: require('./locales/en.json'), // Load English translations
+    french: require('./locales/fr.json'), // Load French translations
     // Add more languages as needed
   },
 });

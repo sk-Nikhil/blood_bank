@@ -39,13 +39,13 @@ export default {
             currentPage: 1,
             loading: false,
             headers: [
-                { title: 'ID', key: '_id', sortable:false },
-                { title: 'Name', key: 'name', sortable:false },
-                { title: 'Blood Group', key: 'bloodGroup', sortable:false },
-                { title: 'Address', key: 'address', sortable:false },
-                { title: 'Contact', key: 'contact', sortable:false },
-                { title: 'Last Donated', key: 'lastDonated', sortable:false },
-                { title: 'Actions', key: 'actions', sortable:false }
+                { title: 'ID', key: '_id', sortable: false, },
+                { title: 'Name', key: 'name', sortable: false },
+                { title: 'Blood Group', key: 'bloodGroup', sortable: false },
+                { title: 'Address', key: 'address', sortable: false },
+                { title: 'Contact', key: 'contact', sortable: false },
+                { title: 'Last Donated', key: 'lastDonated', sortable: false },
+                { title: 'Actions', key: 'actions', sortable: false }
             ],
         };
     },
@@ -63,7 +63,7 @@ export default {
         ...mapActions('donor', ['setDonors', 'removeDonor', 'setSearchTerm', 'sortDonors']),
         ...mapActions(['changeEditStatus']),
         ...mapActions(['countGroups']),
-        ...mapActions('admin', ['setTotalPendingEnquiries']),
+        ...mapActions('admin', ['setTotalPendingEnquiries', 'setAllEnquiries']),
 
         handlePageChange(newPage) {
             console.log(newPage)
