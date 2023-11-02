@@ -1,34 +1,23 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
     <v-container>
-        <h1>Donors Records</h1>
-
+        <h1>{{ $t('donorsRecords') }}</h1>
         <!-- Search Bar -->
+
         <v-text-field v-model="searchTerm" label="Search" class="float-right" style="width:300px"
-            @input="initializeDonors()" />
+            @input="initializeDonors('1', itemsPerPage, '')" />
 
         <!-- Vuetify Table -->
-        <v-data-table :headers="headers" :items="getDonors" v-model:items-per-page="itemsPerPage" class="hover-table">
-            <template v-slot:header>
-                <thead>
-                    <tr>
-                        <th v-for="header in headers" :key="header.value">
-                            {{ header.text }}
-                        </th>
-                    </tr>
-                </thead>
-            </template>
+        <v-data-table-server v-model:items-per-page="itemsPerPage" :headers="headers" :items-length="totalDonors"
+            :items="getDonors" :loading="loading" :search="searchTerm" item-value="name" class="elevation-1"
+            @update:options="initializeDonors">
             <template v-slot:item.actions="{ item }">
                 <td>
                     <v-btn @click="changeEditStatus(item)">Edit</v-btn>
                     <v-btn @click="deleteDonor(item._id)">Delete</v-btn>
-                    <!-- Add more buttons or customize as needed -->
                 </td>
             </template>
-        </v-data-table>
-
-        <!-- <v-pagination v-model="currentPage" :length="totalPages">
-        </v-pagination> -->
+        </v-data-table-server>
         <edit-donor v-if="getEditStatus"></edit-donor>
     </v-container>
 </template>
@@ -46,20 +35,18 @@ export default {
         return {
             searchTerm: '',
             itemsPerPage: 5,
-            items: [],
-            headers: [
-                { text: 'ID', value: '_id' },
-                { text: 'Name', value: 'name' },
-                { text: 'Blood Group', value: 'bloodGroup' },
-                { text: 'Address', value: 'address' },
-                { text: 'Contact', value: 'contact' },
-                { text: 'Last Donated', value: 'lastDonated' },
-                { text: 'Actions', value: 'actions' }
-            ],
-
+            totalDonors: 0,
             currentPage: 1,
-            totalPages: 0,
-            hoverClass: 'hover-row'
+            loading: false,
+            headers: [
+                { title: 'ID', key: '_id', sortable:false },
+                { title: 'Name', key: 'name', sortable:false },
+                { title: 'Blood Group', key: 'bloodGroup', sortable:false },
+                { title: 'Address', key: 'address', sortable:false },
+                { title: 'Contact', key: 'contact', sortable:false },
+                { title: 'Last Donated', key: 'lastDonated', sortable:false },
+                { title: 'Actions', key: 'actions', sortable:false }
+            ],
         };
     },
     watch: {
@@ -84,15 +71,20 @@ export default {
 
         async deleteDonor(id) {
             const response = await this.removeDonor(id);
+            console.log(this.currentPage)
+            this.initializeDonors({ page: this.currentPage, itemsPerPage: this.itemsPerPage, sortBy: '' })
             this.notify(response)
             this.countGroups()
         },
 
-        async initializeDonors() {
-            const response = await this.setDonors({ numberOfRecords: this.itemsPerPage, searchTerm: this.searchTerm })
+        async initializeDonors({ page, itemsPerPage, sortBy }) {
+            this.currentPage = page
+            console.log(page, itemsPerPage)
+            this.loading = true
+            const response = await this.setDonors({ page, itemsPerPage, sortBy, searchTerm: this.searchTerm })
             if (!response.error) {
-                this.currentPage = response.data.currentPage
-                this.totalPages = response.data.totalPages
+                this.totalDonors = response.data.totalDonors
+                this.loading = false
                 return
             }
             this.notify("unexpected error occured")
@@ -100,7 +92,6 @@ export default {
     },
 
     created() {
-        this.initializeDonors()
         this.setTotalPendingEnquiries();
     },
     setup() {
@@ -114,94 +105,14 @@ export default {
 };
 </script>
 
-<style> 
-.v-data-table {
+<style> .v-data-table {
      background-color: red;
      color: black;
-}
-.hover-table .hover-row:hover {
-  background-color: #f5f5f5; /* Define the background color when hovered */
-  cursor: pointer; /* Add a pointer cursor on hover */
-}
+ }
+
+ .hover-table .hover-row:hover {
+     background-color: #f5f5f5;
+     cursor: pointer;
+ }
 </style>
   
-
-
-<!-- <template>
-    <div id="container">
-        <form class="search">
-            <input type="text" placeholder="Search" class="searchinput" name="search" v-model="searchTerm" @input="handleInput()" />
-            <button type="button" class="searchbutton">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </button>
-        </form>
-    </div>
-
-</template>
-
-<style scoped>
-#container{
-    width:70%;
-    margin: 6% auto 15%;
-}
-
-.action{
-    padding:5px 10px;
-    margin:0 2px;
-    border-radius: 8px;
-    color:white;
-}
-
-#action{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-
-.search{
-    display: inline-flex;
-    float: right;
-    background-color: #501566;
-    color:white;
-    padding:10px;
-    border-radius: 4px;
-    border:1px solid black;
-    margin-bottom:5px;
-  }
-
-  .search :is(input, button){
-    background:transparent;
-    color:inherit;
-    border:none;
-    outline:none;
-  }
-
-  .searchinput{
-    width:0;
-    transition:width 0.5s;
-  }
-
-  .searchbutton{
-    display: grid;
-    place-items: center;
-    width:25px;
-    height:25px;
-    cursor:pointer;
-    transition:color 0.25s;
-  }
-
-  .searchbutton:hover{
-    color:#e3e3e3;
-  }
-
-  .search:focus-within input{
-    width:200px;
-  }
-
-  ::placeholder{
-    font:inherit;
-    color:#e3e3e3;
-  }
-
-</style> -->

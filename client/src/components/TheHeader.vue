@@ -1,76 +1,107 @@
 <template>
     <v-app class="my-app-margin">
-        <v-navigation-drawer app right v-model="sideBarOpen">
-            <!-- Sidebar content goes here -->
-            <!-- You can add links, menus, or any other content -->
+        <v-navigation-drawer app location="right" expand-on-hover rail permanent v-if="getLoginStatus">
+            <v-list>
+                <v-list-item prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg" title="Admin">
+                </v-list-item>
+                <v-list density="compact" nav>
+                    <v-list-item prepend-icon="mdi-home" title="Home" value="home"
+                        :to="getRole === 'admin' ? '/admin_home' : '/user_home'">
+                    </v-list-item>
+                    <v-list-item prepend-icon="mdi-account-multiple" title="Show All Enquiries" value="show_all_enquiries"
+                        to="/enquiries" @click="showAllEnquiries()">
+                    </v-list-item>
+                    <v-list-item prepend-icon="mdi-account" title="Show Pending Enquiries" value="show_pending_enquiries"
+                        to="/enquiries" @click="showPendingEnquiries()">
+                    </v-list-item>
+
+                    <v-list-item prepend-icon="mdi-translate">
+                        <v-select v-model="locale" :items="langs" label="Select Language" required></v-select>
+                    </v-list-item>
+
+                </v-list>
+            </v-list>
+            <v-divider></v-divider>
+
+            <v-list-item prepend-icon="mdi-logout" title="Logout" value="logout" @click="logout()"></v-list-item>
+
         </v-navigation-drawer>
-        <v-app-bar app color="primary" left>
-            <v-content>
-                <!-- <v-tab to="/admin_home">Home</v-tab>
-                <v-tab to="/piechart">PieChart</v-tab>
-                <v-tab to="/enquiries">Enquiries</v-tab> -->
+
+        <v-app-bar app color="primary" right>
+            <div v-if="getLoginStatus">
                 <v-tabs v-model="activeTab">
-                    <v-tab v-for="(tab, index) in tabs" :to="'/'+tab.routes" :key="index">
-                        {{ tab.label }}
-                    </v-tab>
+                    <v-tab :to="getRole === 'admin' ? '/admin_home' : '/user_home'">Home</v-tab>
+                    <v-tab to="/Piechart">Piechart</v-tab>
+                    <v-tab v-if="getRole === 'admin'" to="/enquiries">Enquiries</v-tab>
                 </v-tabs>
-            </v-content>
+            </div>
 
             <v-spacer></v-spacer>
-            <!-- Place your header content here -->
-            <!-- For example: -->
-            <v-btn icon @click="showNotifications">
-                <v-icon>mdi-bell</v-icon>
-            </v-btn>
-            <v-btn @click="handleButtonClick" color="white" dark>
-                My Button
-            </v-btn>
-            <v-btn icon @click="toggleSidebar">
-                <v-icon>mdi-menu</v-icon>
-            </v-btn>
+            <div v-if="getLoginStatus">
+                <v-btn icon @click="showNotifications">
+                    <v-icon>mdi-bell</v-icon>
+                </v-btn>
+                <v-btn @click="changeAddformStatus()" color="white" dark>
+                    Add Donor
+                </v-btn>
+            </div>
         </v-app-bar>
 
     </v-app>
+    <add-donor v-if="getAddFormStatus"></add-donor>
 </template>
   
 <script>
-import {mapActions, mapGetters} from 'vuex'
+import { mapActions, mapGetters } from 'vuex';
+import AddDonor from './AddDonor.vue';
 export default {
+    components: {
+        AddDonor
+    },
     data() {
         return {
-            sideBarOpen: false,
-            activeTab:null,
-            tabs:[
-                {label:"Home", routes:"admin_home"},
-                {label:"PieChart", routes:"piechart"},
-                {label:"Enquiries", routes:"enquiries"}
-            ]
+            activeTab: null,
+            tabs: [
+                { label: "Home", routes: "admin_home" },
+                { label: "PieChart", routes: "piechart" },
+                { label: "Enquiries", routes: "enquiries" }
+            ],
+            menu: true,
+            locale: '',
+            langs: ["english", "french"]
         }
     },
     methods: {
-        ...mapActions('admin', ['logout','setAllEnquiries', 'setAllPendingEnquiries' ]),
+        ...mapActions('admin', ['logout', 'setAllEnquiries', 'setAllPendingEnquiries']),
         ...mapActions(['changeAddformStatus']),
-        toggleSidebar() {
-            this.sideBarOpen = !this.sideBarOpen
-        },
         showNotifications() {
             // Handle notification logic
         },
-        handleButtonClick() {
-            // Handle button click action
-        },
-        showAllEnquiries(){
+        showAllEnquiries() {
             this.setAllEnquiries()
             this.$router.push('/enquiries')
         },
-        showPendingEnquiries(){
+        showPendingEnquiries() {
             this.setAllPendingEnquiries()
-        }
+        },
+        selectOption(option) {
+            // Implement the action here
+            this.$i18n.locale='fr'
+            console.log(`Selected ${option}`);
+        },
     },
     computed: {
         ...mapGetters('admin', ['getLoginStatus', 'getRole', 'getTotalPendingEnquiries']),
         ...mapGetters(['getAddFormStatus']),
     },
+    created() {
+        this.$watch(() => this.getTotalPendingEnquiries, (newValue) => {
+            this.pendingQueries = newValue
+        });
+    },
+    beforeUnmount() {
+        this.sideBarOpen = false
+    }
 };
 </script>
   
@@ -78,6 +109,12 @@ export default {
 .my-app-margin {
     margin: -310px;
     /* Adjust the margin size as needed */
+}
+
+.btn-no-border {
+    display: block !important;
+    border: none !important;
+    color: red
 }
 </style>
   

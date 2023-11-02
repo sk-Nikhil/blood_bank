@@ -35,6 +35,7 @@ async function getTotalDonors(query) {
 };
 
 async function getDonors(skip, limit, query) {
+  console.log(query)
   const searchQuery = getSearchQuery(query)
   try {
     if (query.searchTerm !== '') {

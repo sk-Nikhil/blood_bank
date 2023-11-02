@@ -32,6 +32,7 @@
   }
 
   .router-view{
+    width:95vw;
     margin-bottom: 10vh;
   }
 

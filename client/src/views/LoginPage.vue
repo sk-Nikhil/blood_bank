@@ -84,8 +84,5 @@ export default {
             this.password = "";
         },
     },
-    created(){
-        this.$i18n.locale='fr'
-    }
 };
 </script>

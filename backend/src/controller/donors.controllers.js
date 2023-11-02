@@ -12,6 +12,7 @@ async function addDonor(req, res) {
 }
 
 async function getDonors(req, res) {
+    console.log("controller",req.query.sortBy.key)
     try {
         const donor = await donorService.getDonors(req.query);
         return res.status(200).send(donor);

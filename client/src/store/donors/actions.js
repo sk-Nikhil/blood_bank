@@ -3,8 +3,9 @@ import axiosInstance from '../../service/axios.service.js';
 
 export default {
     async setDonors(context, payload) {
+        console.log(payload)
         try {
-            const response = await axiosInstance.get(`/donors?numberOfRecords=${payload.numberOfRecords}&searchTerm=${payload.searchTerm}`);
+            const response = await axiosInstance.get(`/donors?page=${payload.page}&itemsPerPage=${payload.itemsPerPage}&searchTerm=${payload.searchTerm}&sortBy=${payload.sortBy}`);
             context.commit('setDonors', response.data);
             return response;
         }
@@ -35,7 +36,8 @@ export default {
         }
     },
 
-    async removeDonor(context, payload) {
+    async removeDonor(context, payload, $event) {
+        console.log($event)
         console.log(payload)
         try {
             const response = await axiosInstance.delete(`/donor/${payload}`);
