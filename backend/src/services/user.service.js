@@ -1,5 +1,6 @@
 const userRepository = require('../repository/user.repository.js');
 const Admin = require('../models/admin.js')
+const bcrypt = require('bcryptjs')
 
 async function addUser(user){
     console.log(user)

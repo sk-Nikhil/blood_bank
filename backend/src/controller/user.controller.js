@@ -3,6 +3,7 @@ const userService = require('../services/user.service.js');
 async function signup(req,res){
     try{
         const response = await userService.addUser(req.body);
+        console.log(response)
         res.send(response);
     }
     catch(err){

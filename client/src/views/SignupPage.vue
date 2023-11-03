@@ -57,14 +57,11 @@ export default {
         ...mapActions('admin', ['signup']),
 
         async handleSignup() {
-            console.log(this.v$)
-            this.v$.$touch();
-            if (this.v$.$invalid) {
-                return;
-            }
             const response = await this.signup(this.user);
+            console.log(response)
             if (typeof response === 'string') {
                 this.notify(response)
+                
             }
             else {
                 this.notify("Something went wrong unable to signup")

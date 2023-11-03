@@ -1,6 +1,4 @@
-const Admin = require('../models/admin.js');
 const adminRepository = require('../repository/admin.repository.js');
-const bcrypt = require('bcryptjs')
 
 async function getAllEnquiries(query){
     const limit = parseInt(query.itemsPerPage);

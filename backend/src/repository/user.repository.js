@@ -16,10 +16,11 @@ async function isUserExits(email){
 
 
 async function addUser(user){
+    const userData = new Admin({...user})   //registered  user and admin are stored in Admin collection
     try{
-        const User = await user.save();
-        return User;
-        // return "User has been added successfully";
+        await userData.save();
+        // return User;
+        return "User has been added successfully";
     }
     catch(err){
         throw Error(err);
