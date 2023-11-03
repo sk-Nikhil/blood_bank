@@ -37,11 +37,9 @@ export default{
             const response = await axios.post(`${url}/signup`, payload);
             console.log(response)
             if(response.data){
-                setTimeout(()=>{
-                    router.default.replace("/login");
-                },1000)
+
+                return response.data;
             }
-            return response.data;
         }
         catch(error){
             console.log(error)

@@ -29,6 +29,7 @@ import { toast } from 'vue3-toastify';
 import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import 'vue3-toastify/dist/index.css';
+import router from '../routes'
 export default {
     data() {
         return {
@@ -64,13 +65,16 @@ export default {
         async handleSignup() {
             const response = await this.signup(this.user);
             if (typeof response === 'string') {
+                setTimeout(()=>{
+                    router.replace('/')
+                },1000)
                 this.notify(response)
                 this.errMessage = this.response
             }
             else {
                 this.notify("Something went wrong unable to signup")
             }
-            this.clearForm();
+            // this.clearForm();
         },
         clearForm() {
             this.user.name = ''
