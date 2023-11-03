@@ -4,12 +4,17 @@
         <h1>{{ $t('donorsRecords') }}</h1>
         <!-- Search Bar -->
 
-        <v-text-field v-model="searchTerm" label="Search" class="float-right" style="width:300px"
-            @input="initializeDonors('1', itemsPerPage, '')" />
+        <v-text-field v-model="searchTerm" label="Search" class="float-right" style="width:300px" />
 
         <!-- Vuetify Table -->
-        <v-data-table-server v-model:items-per-page="itemsPerPage" :headers="headers" :items-length="totalDonors"
-            :items="getDonors.slice(0,itemsPerPage)" :loading="loading" :search="searchTerm" item-value="name" class="elevation-1"
+        <v-data-table-server 
+            v-model:items-per-page="itemsPerPage" 
+            :headers="headers" 
+            :items-length="totalDonors"
+            :items="getDonors.slice(0, itemsPerPage)" 
+            :loading="loading" 
+            item-value="name"
+            class="elevation-1" 
             @update:options="initializeDonors">
             <template v-slot:item.actions="{ item }">
                 <td>
@@ -52,6 +57,13 @@ export default {
     watch: {
         itemsPerPage(value) {
             this.initializeDonors(value)
+        },
+        searchTerm(){
+            const timeout = setTimeout(()=>{
+                if(timeout)
+                    clearTimeout(timeout)
+                this.initializeDonors('1', this.itemsPerPage, '')
+            },1000)
         }
     },
     computed: {
@@ -99,28 +111,27 @@ export default {
 };
 </script>
 
-<style scoped> 
- /* Style the pagination controls */
-.v-data-footer {
-  background-color: red;
-}
+<style scoped> /* Style the pagination controls */
+ .v-data-table {
+     background-color: rgb(245, 236, 236);
+ }
 
-/* Style the table header */
-.v-data-table-header {
-  background-color: #2196F3;
-  color: #fff;
-  font-weight: bold;
-}
+ /* Style the table header */
+ .v-data-table-header {
+     background-color: #2196F3;
+     color: #fff;
+     font-weight: bold;
+ }
 
-/* Style the table rows */
-.v-data-table-row {
-  background-color: red;
-  color: #333;
-}
+ /* Style the table rows */
+ .v-data-table-row {
+     background-color: red;
+     color: #333;
+ }
 
-/* Style the table rows on hover */
-.v-data-table-row:hover {
-  background-color: red;
-}
+ /* Style the table rows on hover */
+ .v-data-table-row:hover {
+     background-color: red;
+ }
 </style>
   
