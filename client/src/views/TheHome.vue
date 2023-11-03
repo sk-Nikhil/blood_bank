@@ -13,8 +13,8 @@
             @update:options="initializeDonors">
             <template v-slot:item.actions="{ item }">
                 <td>
-                    <v-btn @click="changeEditStatus(item)">Edit</v-btn>
-                    <v-btn @click="deleteDonor(item._id)">Delete</v-btn>
+                    <v-btn @click="changeEditStatus(item)" color="green" class="mr-2">Edit</v-btn>
+                    <v-btn @click="deleteDonor(item._id)" color="red">Delete</v-btn>
                 </td>
             </template>
         </v-data-table-server>
@@ -99,14 +99,28 @@ export default {
 };
 </script>
 
-<style> .v-data-table {
-     background-color: red;
-     color: black;
- }
+<style scoped> 
+ /* Style the pagination controls */
+.v-data-footer {
+  background-color: red;
+}
 
- .hover-table .hover-row:hover {
-     background-color: #f5f5f5;
-     cursor: pointer;
- }
+/* Style the table header */
+.v-data-table-header {
+  background-color: #2196F3;
+  color: #fff;
+  font-weight: bold;
+}
+
+/* Style the table rows */
+.v-data-table-row {
+  background-color: red;
+  color: #333;
+}
+
+/* Style the table rows on hover */
+.v-data-table-row:hover {
+  background-color: red;
+}
 </style>
   

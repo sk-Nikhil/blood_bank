@@ -2,7 +2,7 @@
     <v-app class="my-app-margin">
         <v-navigation-drawer app location="right" expand-on-hover rail value="false" v-if="getLoginStatus">
             <v-list>
-                <v-list-item prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg" title="Admin">
+                <v-list-item prepend-icon="mdi-account" :title="getRole.toUpperCase()">
                 </v-list-item>
                 <v-list density="compact" nav>
                     <v-list-item prepend-icon="mdi-home" title="Home" value="home"
@@ -71,7 +71,7 @@ export default {
             ],
             menu: true,
             locale: '',
-            locales: ["english", "french", "german"]
+            locales: ["English", "French", "German"]
         }
     },
     methods: {
@@ -90,7 +90,7 @@ export default {
     },
     watch: {
         locale(value) {
-            this.$i18n.locale = value
+            this.$i18n.locale = value.toLowerCase()
         }
     },
     computed: {
