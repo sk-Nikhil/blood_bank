@@ -5,9 +5,8 @@ import PieChart from "./components/BloodGroupChart.vue";
 import PageNotFound from "./views/PageNotFound.vue";
 import SignupPage from "./views/SignupPage.vue";
 import UserHomePage from "./views/userHomePage.vue";
-import EnquiriesPage from './views/EnquiredUserPage.vue'
+import EnquiriesPage from './views/EnquiredUserPage.vue';
 import store from "./store";
-
 const routes = [
   {
     path: "/",
@@ -20,6 +19,11 @@ const routes = [
     component: LoginComponent,
   },
 
+  {
+    path:"/signup",
+    component:SignupPage
+  }
+  ,
   {
     path: "/admin_home",
     name: "admin_home",
@@ -80,7 +84,7 @@ router.beforeEach((to, from, next) => {
       next('/pagenotfound')
     }
     // if user or admin is logged in and visits the login page he will be redirected to their respective home page
-    else if ((to.path === "/" || to.path==='/login') && store.getters["admin/getLoginStatus"]) {
+    else if ((to.path === "/" || to.path==='/login' || to.path==='/signup') && store.getters["admin/getLoginStatus"]) {
       if(store.getters["admin/getRole"] === 'admin')
         next({name:"admin_home"});
       else

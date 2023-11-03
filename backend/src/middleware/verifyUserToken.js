@@ -6,8 +6,9 @@ const verifyToken = (req, res, next) => {
     if(token) {
         try{
             const decodedToken = jwt.verify(token, process.env.SECRET_KEY);
-            if(decodedToken.role === 'user')
+            if(decodedToken.role === 'user'){
                 next()
+            }
             else{
                 return res.status(401).send({invalidToken:"unverified user"});
             }

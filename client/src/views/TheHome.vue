@@ -9,7 +9,7 @@
 
         <!-- Vuetify Table -->
         <v-data-table-server v-model:items-per-page="itemsPerPage" :headers="headers" :items-length="totalDonors"
-            :items="getDonors" :loading="loading" :search="searchTerm" item-value="name" class="elevation-1"
+            :items="getDonors.slice(0,itemsPerPage)" :loading="loading" :search="searchTerm" item-value="name" class="elevation-1"
             @update:options="initializeDonors">
             <template v-slot:item.actions="{ item }">
                 <td>

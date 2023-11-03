@@ -26,9 +26,9 @@
   
   <style>
   *{
-    /* margin:0;
+    margin:0;
     padding:0;
-    box-sizing: border-box; */
+    box-sizing: border-box;
   }
 
   .router-view{
@@ -40,7 +40,4 @@
     display:none;
   }
 
-  iframe#webpack-dev-server-client-overlay{display:none!important}
-
- 
   </style>

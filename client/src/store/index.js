@@ -7,7 +7,7 @@ import donorModule from "./donors/index";
 import adminModule from './admin/index'
 import userModule from './user/index'
 import createPersistedState from 'vuex-persistedstate';
-import Cookies from 'js-cookie';
+// import Cookies from 'js-cookie';
 
 
 const store = createStore({
@@ -29,18 +29,19 @@ const store = createStore({
     actions:rootActions,
     getters:rootGetters,
     plugins: [
-        createPersistedState({
-          key: 'your-app-key', // Change to a unique key for your app
-          paths: [
-            'admin.role', 
-            'admin.loggedIn',
-          ],
-          storage: {
-            getItem: (key) => Cookies.get(key), // Use secure cookies
-            setItem: (key, value) => Cookies.set(key, value, { expires: 1, secure: true }),
-            removeItem: (key) => Cookies.remove(key),
-          },
-        }),
+        // createPersistedState({
+        //   key: 'your-app-key', // Change to a unique key for your app
+        //   paths: [
+        //     'admin.role', 
+        //     'admin.loggedIn',
+        //   ],
+        //   storage: {
+        //     getItem: (key) => Cookies.get(key), // Use secure cookies
+        //     setItem: (key, value) => Cookies.set(key, value, { expires: 1, secure: true }),
+        //     removeItem: (key) => Cookies.remove(key),
+        //   },
+        // }),
+        createPersistedState({storage:window.sessionStorage})
       ],
 })
 

@@ -11,7 +11,7 @@ const axiosInstance = axios.create({
 // Add an interceptor to include the token in the request headers
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token'); // Replace with your token storage method
+    const token = sessionStorage.getItem('token'); // Replace with your token storage method
     if (token) {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
@@ -26,6 +26,7 @@ axiosInstance.interceptors.request.use(
 axiosInstance.interceptors.response.use(
     (response) => {
         if(response.data.invalidToken){
+          sessionStorage.clear()
             router.replace('/login');
             store.dispatch('admin/logout')
             return false;
@@ -34,6 +35,7 @@ axiosInstance.interceptors.response.use(
     },
     (error) => {
       if (error.response.status === 401) {
+        sessionStorage.clear()
         console.error('Invalid token error:', error);
         router.replace('/login')
         store.dispatch('admin/logout')

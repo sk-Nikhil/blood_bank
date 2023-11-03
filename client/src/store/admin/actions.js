@@ -4,11 +4,13 @@ const router = require('../../routes');
 
 export default{
     async login(context, payload){
+        console.log(payload)
         try{
             const response = await axios.post(`${url}/login`, payload);
             if(response.data.success){
                 const token = response.data.success.token;
-                localStorage.setItem('token', token);
+                sessionStorage.setItem('token', token)
+                // localStorage.setItem('token', token);
                 context.dispatch('updateLoginStatus', true);
     
                 context.dispatch('updateRole',response.data.success.role)
@@ -23,15 +25,27 @@ export default{
                 return response.data.failure;
             }
         }
-        catch(err){
-            if(err.response.data.error){
-                return err.response.data.error
+        catch(error){
+            if(error.response.data.error){
+                return error.response.data.error
             }
         }
     },
 
+    async signup(context, payload){
+        try{
+            const response = await axios.post(`${url}/signup`, payload);
+            console.log(response)
+            return response.data;
+        }
+        catch(error){
+            console.log(error)
+            return error.response.data.error[0].message
+        }
+    },
+
     logout(context){
-        localStorage.removeItem('token');
+        sessionStorage.clear()
         context.dispatch('updateLoginStatus', false);
         router.default.replace('/');
     },

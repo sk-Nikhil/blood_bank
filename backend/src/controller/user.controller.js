@@ -1,5 +1,16 @@
 const userService = require('../services/user.service.js');
 
+async function signup(req,res){
+    try{
+        const response = await userService.addUser(req.body);
+        res.send(response);
+    }
+    catch(err){
+        console.log(err.message);
+        res.status(500).send(err.message);
+    }
+}
+
 async function addEnquiry(req,res){
     try{
         await userService.addEnquiry(req.body);
@@ -29,5 +40,6 @@ async function getEnquiries(req,res){
 
 module.exports={
     addEnquiry,
-    getEnquiries
+    getEnquiries,
+    signup
 }

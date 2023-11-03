@@ -63,7 +63,7 @@ function getDonorsValidation(req,res,next){
         // this will validate even if search term is empty
         // if search term is empty it will fetch donors records
         // if search term will be present it will filter out donors based on searchTerm
-        searchTerm: Joi.string().alphanum().allow('', null).custom(sanitizeContent),
+        searchTerm: Joi.allow('', null).custom(sanitizeContent),
         sortBy:Joi.string().alphanum().allow('',null).custom(sanitizeContent)
     })
 

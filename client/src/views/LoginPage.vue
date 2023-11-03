@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container class="v-container">
         <v-row justify="center">
             <v-col cols="12" sm="8" md="5">
                 <v-card elevation="4">
@@ -12,6 +12,7 @@
                                 :type="showPassword ? 'text' : 'password'" @click:append="showPassword = !showPassword"
                                 required></v-text-field>
                             <v-card-text style="color:red" v-if="errMessage === '' ? false : true">{{ errMessage }}</v-card-text>
+                            <v-text>not registered yet? <router-link to="/signup">Register</router-link></v-text>
                             <v-btn class="ma-2 float-right" color="primary" type="submit">Login</v-btn>
                         </v-form>
                     </v-card-text>
@@ -85,3 +86,12 @@ export default {
     },
 };
 </script>
+
+<style scoped>
+.v-container{
+    position: absolute;
+    left:50%;
+    top:50%;
+    transform: translate(-50%, -80%);
+}
+</style>

@@ -13,7 +13,6 @@ async function login(req,res,next){
                 return res.send(err);
             }
             const successToken = generateToken(user);
-            req.session.token = successToken;
 
             return res.send({"success":successToken});
         })

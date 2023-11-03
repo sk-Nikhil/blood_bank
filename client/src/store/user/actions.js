@@ -1,9 +1,9 @@
-// import axiosInstance from '../../service/axios.service.js'
+import axiosInstance from '../../service/axios.service.js'
 import axios from 'axios'
 export default{
     async addEnquiry(context, data){
         try{
-            const response = await axios.post('http://localhost:3000/addEnquiry', data);
+            const response = await axiosInstance.post('http://localhost:3000/addEnquiry', data);
             console.log(response)
             if(response.data.error)
                 return response.data.error;

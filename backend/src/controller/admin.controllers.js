@@ -1,16 +1,5 @@
 const adminService = require('../services/admin.service.js')
 
-async function signup(req,res){
-    try{
-        const response = await adminService.addAdmin(req.body);
-        res.send(response);
-    }
-    catch(err){
-        console.log(err.message);
-        res.status(500).send(err.message);
-    }
-}
-
 // get both pending and approved enquiries
 async function getAllEnquiries(req,res){
     console.log(req.query)
@@ -46,7 +35,6 @@ async function getTotalPendingEnquiries(req,res){
     }
 }
 module.exports = {
-    signup,
     getAllEnquiries,
     getPendingEnquiries,
     getTotalPendingEnquiries

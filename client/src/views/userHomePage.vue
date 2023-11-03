@@ -35,6 +35,7 @@ import 'vue3-toastify/dist/index.css';
 import mapboxgl from 'mapbox-gl';
 import axios from 'axios';
 import { mapActions } from 'vuex';
+import axiosInstance from '@/service/axios.service';
 export default {
 
     data() {
@@ -149,6 +150,9 @@ export default {
             return this.formData.location
         },
 
+    },
+    created(){
+        axiosInstance.get('/')
     },
     mounted() {
         this.getCurrentLocation();
