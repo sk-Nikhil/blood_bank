@@ -188,9 +188,6 @@ export default {
     margin: 10px 0;
 }
 
-.custom-textarea{
-    /* height:50px; */
-}
 #backdrop {
     position: absolute;
     left: 50%;

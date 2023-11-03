@@ -15,8 +15,8 @@ async function isUserExits(email){
 }
 
 
-async function addUser(user){
-    const userData = new Admin({...user})   //registered  user and admin are stored in Admin collection
+async function addUser(user, password){
+    const userData = new Admin({...user, password, role:"user"})   //registered  user and admin are stored in Admin collection
     try{
         await userData.save();
         // return User;

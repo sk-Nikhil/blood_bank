@@ -3,15 +3,13 @@ const Admin = require('../models/admin.js')
 const bcrypt = require('bcryptjs')
 
 async function addUser(user){
-    console.log(user)
     try{
         // check if user exists with the given email or not
         // if it exists return a custom message and if not add the user data
         const userExists = await userRepository.isUserExits(user.email);
         if(!userExists){
             const hashedPassword = await bcrypt.hash(user.password, 10);
-            const userData = new Admin({...user,password:hashedPassword});
-            return await userRepository.addUser({...userData, role:"user"});
+            return await userRepository.addUser(user, hashedPassword);
         }
         return "email is already registered with us";
     }

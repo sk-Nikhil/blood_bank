@@ -12,7 +12,7 @@
                                 :type="showPassword ? 'text' : 'password'" @click:append="showPassword = !showPassword"
                                 required></v-text-field>
                             <v-card-text style="color:red" v-if="errMessage === '' ? false : true">{{ errMessage }}</v-card-text>
-                            <!-- <v-text>not registered yet? <router-link to="/signup">Register</router-link></v-text> -->
+                            <v-text>not registered yet? <router-link to="/signup">Register</router-link></v-text>
                             <v-btn class="ma-2 float-right" color="primary" type="submit">Login</v-btn>
                         </v-form>
                     </v-card-text>
@@ -58,7 +58,6 @@ export default {
             return this.v$.username.$error? (this.v$.username.required.$invalid ? ['Email is required'] : ['Invalid email format']): []
         },
         passwordRules() {
-        
             return this.v$.password.$invalid? ['Password is required']:[]
         },
     },
@@ -73,12 +72,8 @@ export default {
             const response = await this.login({ username: this.username, password: this.password });
             this.errMessage = response;
             this.clearForm()
-            // this.v$.$touch()
         },
 
-        // togglePasswordVisibility() {
-        //   this.showPassword = !this.showPassword;
-        // },
         clearForm() {
             this.username = "";
             this.password = "";

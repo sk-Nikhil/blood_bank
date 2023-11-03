@@ -8,12 +8,11 @@
                         <v-form @submit.prevent="handleSignup()">
                             <v-text-field label="Name" v-model="user.name" @blur="v$.name.$touch()" :rules="nameRules"
                                 required></v-text-field>
-                            <v-text-field label="Email" v-model="user.email" @blur="v$.email.$touch()" :rules="emailRules" required></v-text-field>
-                            <v-text-field label="Password" v-model="user.password" :rules="passwordRules"
+                            <v-text-field label="Email" v-model="user.email" :rules="emailRules" required></v-text-field>
+                            <v-text-field label="Password" v-model="user.password" type="password" :rules="passwordRules"
                                 required></v-text-field>
 
-                            <v-card-text style="color:red" v-if="errMessage === '' ? false : true">{{ errMessage
-                            }}</v-card-text>
+                            <v-card-text style="color:red">{{ errMessage}}</v-card-text>
                             <v-text>already have an account? <router-link to="/login">Login</router-link></v-text>
                             <v-btn class="ma-2 float-right" color="primary" type="submit">Signup</v-btn>
                         </v-form>
@@ -40,8 +39,8 @@ export default {
             },
             errMessage: '',
             nameRules: [(v) => !!v || 'Password is required'],
-            emailRules: [(v) => !!v || "Username is required", (v) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(v) ||
-                    "Invalid email format"],
+            // emailRules: [(v) => !!v || "Username is required", (v) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(v) ||
+            //         "Invalid email format"],
 
             passwordRules: [(v) => !!v || 'Password is required', (v) => (v && v.length >= 6) || 'Address must be at least 6 characters'],
         }
@@ -53,15 +52,20 @@ export default {
             password: { required },
         };
     },
+    computed:{
+        emailRules() {
+            return this.v$.email.$error? (this.v$.email.required.$invalid ? ['Email is required'] : ['Invalid email format']): []
+        },
+        
+    },
     methods: {
         ...mapActions('admin', ['signup']),
 
         async handleSignup() {
             const response = await this.signup(this.user);
-            console.log(response)
             if (typeof response === 'string') {
                 this.notify(response)
-                
+                this.errMessage = this.response
             }
             else {
                 this.notify("Something went wrong unable to signup")
