@@ -44,10 +44,10 @@ export default{
         context.commit('updateRole', payload)
     },
 
-    async setTotalPendingEnquiries(context){
+    async countTotalPendingEnquiries(context){
         try{
             const response = await axios.get('http://localhost:3000/getTotalPendingEnquiries');
-            context.commit('setTotalPendingEnquiries', response.data.data);
+            context.commit('countTotalPendingEnquiries', response.data.data);
         }
         catch(err){
             console.log(err)

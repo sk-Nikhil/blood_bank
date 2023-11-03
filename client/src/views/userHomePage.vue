@@ -1,51 +1,32 @@
 <template>
-    <div class="enquiry-form">
+    <v-container class="enquiry-form">
         <h2>Enquiry Form</h2>
         <form @submit.prevent="submitForm">
-            <div class="form-group">
-                <label for="name">Name</label>
-                <input type="text" id="name" v-model="formData.name" required>
-            </div>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" id="email" v-model="formData.email" required>
-            </div>
+            <v-text-field v-model="formData.name" label="Name" required></v-text-field>
+            <v-text-field v-model="formData.email" label="Email" required></v-text-field>
+            <v-select v-model="formData.bloodGroup" :items="bloodGroups" label="select bloodgroup" required></v-select>
 
             <div class="form-group">
-                <label for="bloodGroup">Blood Group</label>
-                <select id="bloodGroup" v-model="formData.bloodGroup" required>
-                    <option value="" disabled>Select a blood group</option>
-                    <option value="A+">A+</option>
-                    <option value="B+">B+</option>
-                    <option value="AB+">AB+</option>
-                    <option value="O+">O+</option>
-                    <option value="A-">A-</option>
-                    <option value="B-">B-</option>
-                    <option value="AB-">AB-</option>
-                    <option value="O-">O-</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label for="location">Location</label>
                 <div id="location" style="display: inline; margin-left: 10px;" @click="getCurrentLocation">
                     <i class="fa-solid fa-location-dot"></i>
                 </div>
-                <input type="text" id="location" v-model="formData.location" @click="openMap" readonly>
+                <!-- <input type="text" id="location" v-model="formData.location" @click="openMap" readonly> -->
+                <v-text-field prepend-icon="" v-model="formData.location" @click="openMap" readonly="" label="Location"></v-text-field>
             </div>
 
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <label for="message">Message</label>
                 <textarea name="message" id="message" placeholder="Add Your Message Here..." v-model="formData.message"
                     required></textarea>
-            </div>
+            </div> -->
+            <v-textarea v-model="formData.message" counter max="100" rows="2" auto-grow label="enter your message" class="custom-textarea" required></v-textarea>
 
-            <button type="submit">Submit</button>
+            <v-btn color="primary" type="submit" class="float-right">Submit</v-btn>
         </form>
-    </div>
-    <div id="backdrop">
-        <div id="map" v-show="showMap" class="map"></div>
-    </div>
+        <div id="backdrop">
+            <div id="map" v-show="showMap" class="map"></div>
+        </div>
+    </v-container>
 </template>
   
 <script>
@@ -65,6 +46,7 @@ export default {
                 location: '',
                 message: ''
             },
+            bloodGroups:['A+','A-','B+','B-','O+','O-','AB+','AB-'],
             lat: 0,
             long: 0,
             showMap: false
@@ -193,7 +175,7 @@ export default {
     border-radius: 5px;
     max-width: 400px;
     width: 100%;
-    margin: 2vw 5vw 0 0;
+    margin: -3vw 5vw 2vw 0;
     text-align: center;
 }
 
@@ -202,29 +184,9 @@ export default {
     margin: 10px 0;
 }
 
-label {
-    font-weight: bold;
+.custom-textarea{
+    /* height:50px; */
 }
-
-input,
-textarea,
-select {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-}
-
-button {
-    background-color: #007BFF;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    /* margin-top: px; */
-}
-
 #backdrop {
     position: absolute;
     left: 50%;

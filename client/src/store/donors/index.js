@@ -7,10 +7,8 @@ export default{
     state(){
         return{
             donors:[],
-            currentPage:0,
-            totalPages:0,
-            searchTerm:'',
-            sortBy:null
+            totalDonors:0,
+            itemsPerPage:0
         }
     },
     mutations:donorMutations,

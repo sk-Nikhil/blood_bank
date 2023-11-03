@@ -35,6 +35,6 @@ a {
 }
 
 .footer{
-    margin-top: 50vh;
+    margin-top: 70vh;
 }
 </style>

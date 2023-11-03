@@ -66,7 +66,6 @@ export default {
 
         async handleLogin() {
             this.v$.$touch();
-            console.log(this.v$.username.required.$invalid )
             if (this.v$.$invalid) {
                 return;
             }

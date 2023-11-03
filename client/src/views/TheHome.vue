@@ -55,23 +55,18 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('donor', ['getCurrPage', 'getTotalPages', 'filteredDonors', 'getDonors']),
+        ...mapGetters('donor', ['filteredDonors', 'getDonors']),
         ...mapGetters(['getEditStatus']),
         ...mapGetters('admin', ['getLoginStatus'])
     },
     methods: {
-        ...mapActions('donor', ['setDonors', 'removeDonor', 'setSearchTerm', 'sortDonors']),
+        ...mapActions('donor', ['setDonors', 'removeDonor']),
         ...mapActions(['changeEditStatus']),
         ...mapActions(['countGroups']),
-        ...mapActions('admin', ['setTotalPendingEnquiries', 'setAllEnquiries']),
-
-        handlePageChange(newPage) {
-            console.log(newPage)
-        },
+        ...mapActions('admin', ['countTotalPendingEnquiries']),
 
         async deleteDonor(id) {
             const response = await this.removeDonor(id);
-            console.log(this.currentPage)
             this.initializeDonors({ page: this.currentPage, itemsPerPage: this.itemsPerPage, sortBy: '' })
             this.notify(response)
             this.countGroups()
@@ -79,7 +74,6 @@ export default {
 
         async initializeDonors({ page, itemsPerPage, sortBy }) {
             this.currentPage = page
-            console.log(page, itemsPerPage)
             this.loading = true
             const response = await this.setDonors({ page, itemsPerPage, sortBy, searchTerm: this.searchTerm })
             if (!response.error) {
@@ -92,7 +86,7 @@ export default {
     },
 
     created() {
-        this.setTotalPendingEnquiries();
+        this.countTotalPendingEnquiries();
     },
     setup() {
         const notify = (msg) => {

@@ -94,11 +94,12 @@ export default {
         }
     },
     computed: {
-        ...mapGetters('admin', ['getLoginStatus', 'getRole', 'getTotalPendingEnquiries']),
+        ...mapGetters('admin', ['getLoginStatus', 'getRole', 'countTotalPendingEnquiries']),
         ...mapGetters(['getAddFormStatus']),
     },
     created() {
-        this.$watch(() => this.getTotalPendingEnquiries, (newValue) => {
+        this.$watch(() => this.countTotalPendingEnquiries, (newValue) => {
+            console.log(newValue)
             this.pendingQueries = newValue
         });
     },

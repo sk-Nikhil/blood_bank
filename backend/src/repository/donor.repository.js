@@ -25,10 +25,6 @@ async function getTotalDonors(query) {
   const searchQuery = getSearchQuery(query);
   try {
     if (query.searchTerm !== '') {
-      const count = await Donor.findById(query.searchTerm).countDocuments()
-      if(count){
-        return count
-      }
       return await Donor.find(searchQuery).countDocuments();
     }
     return await Donor.countDocuments();
@@ -42,9 +38,6 @@ async function getDonors(skip, limit, query) {
   const searchQuery = getSearchQuery(query)
   try {
     if (query.searchTerm !== '') {
-      const donor = await Donor.findById(query.searchTerm)
-      if(donor)
-        return [donor]
       return await Donor.find(searchQuery).skip(skip).limit(limit);
     }
     else {

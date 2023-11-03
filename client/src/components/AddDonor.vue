@@ -41,7 +41,7 @@ export default {
             },
             bloodGroups: ['A+', 'B+', 'O+', 'AB+', 'A-', 'B-', 'O-', 'AB-'],
             nameRule: [(v) => !!v || 'Name is required', (v) => (v && v.length >= 3) || 'Name must be at least 3 characters'],
-            addressRule: [(v) => !!v || 'Address is required', (v) => (v && v.length >= 8) || 'Address must be at least 8 characters'],
+            addressRule: [(v) => !!v || 'Address is required', (v) => (v && v.length >= 3) || 'Address must be at least 3 characters'],
             contactRule: [(v) => !!v || 'Contact is required', (v) => /^[0-9]{10}$/.test(v) || 'Invalid contact number'],
             bloodGroupRule: [(v) => !!v || 'Blood Group is required'],
         };

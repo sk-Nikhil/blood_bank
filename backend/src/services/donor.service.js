@@ -17,8 +17,7 @@ async function getDonors(query){
         const totalDonors = await donorRepository.getTotalDonors(query);
         const donorsFound = await donorRepository.getDonors(skip, limit, query);
         const donors = {
-            donorsFound, 
-            currentPage: donorsFound.length === 0 ? 1 :page,
+            donorsFound,
             totalDonors,
         };
         return donors;

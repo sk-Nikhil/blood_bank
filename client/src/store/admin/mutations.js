@@ -5,7 +5,7 @@ export default{
     updateRole(state, payload){
         state.role = payload
     },
-    setTotalPendingEnquiries(state, payload){
+    countTotalPendingEnquiries(state, payload){
         state.pendingEnquiries = payload
     },
     setEnquiries(state, payload){
