@@ -16,7 +16,7 @@ const i18n = createI18n({
   messages: {
     english: require('./locales/en.json'), // Load English translations
     french: require('./locales/fr.json'), // Load French translations
-    // Add more languages as needed
+    german: require('./locales/german.json') // Load German translation
   },
 });
 

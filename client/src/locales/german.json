@@ -1,0 +1,13 @@
+{
+    "login":"Login Formular",
+    "register":"Anmeldeformular",
+    "donorsRecords":"Spenderaufzeichnungen",
+    "home":"Heim",
+    "piechart":"Kuchendiagramm",
+    "enquiries":"Anfragen",
+    "addDonor":"Spender hinzufügen",
+    "enquiriesRecords":"Anfragenaufzeichnungen",
+    "addDonorDetails":"Spenderdetails hinzufügen",
+    "updateDonorDetails":"Spenderdetails aktualisieren"
+
+}

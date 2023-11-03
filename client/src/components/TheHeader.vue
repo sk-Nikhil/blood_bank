@@ -28,14 +28,14 @@
         <v-app-bar app color="primary" right>
             <div v-if="getLoginStatus">
                 <v-tabs v-model="activeTab">
-                    <v-tab :to="getRole === 'admin' ? '/admin_home' : '/user_home'">Home</v-tab>
-                    <v-tab to="/Piechart">Piechart</v-tab>
-                    <v-tab v-if="getRole === 'admin'" to="/enquiries">Enquiries</v-tab>
+                    <v-tab :to="getRole === 'admin' ? '/admin_home' : '/user_home'">{{$t('home')}}</v-tab>
+                    <v-tab to="/Piechart">{{$t('piechart')}}</v-tab>
+                    <v-tab v-if="getRole === 'admin'" to="/enquiries">{{$t('enquiries')}}</v-tab>
                 </v-tabs>
             </div>
 
             <v-spacer></v-spacer>
-            <div class="v-select">
+            <div>
                 <v-select class="v-select" prepend-icon="mdi-translate" v-model="locale" :items="locales" label="Select Language"
                     required></v-select>
             </div>
@@ -45,7 +45,7 @@
                     <v-icon>mdi-bell</v-icon>
                 </v-btn>
                 <v-btn @click="changeAddformStatus()" color="white" dark>
-                    Add Donor
+                    {{ $t('addDonor') }}
                 </v-btn>
             </div>
         </v-app-bar>
@@ -71,7 +71,7 @@ export default {
             ],
             menu: true,
             locale: '',
-            locales: ["english", "french"]
+            locales: ["english", "french", "german"]
         }
     },
     methods: {
@@ -118,6 +118,8 @@ export default {
     color: red
 }
 .v-select{
-    width:200px
+    width:200px;
+    max-height: 50px;   
+    overflow: scroll;
 }
 </style>

@@ -3,7 +3,7 @@
         <v-dialog v-model="dialog" max-width="500px" persistent>
             <v-card>
                 <v-card-title class="text-center">
-                    Update Donor Details
+                    {{ $t('updateDonorDetails') }}
                 </v-card-title>
                 <v-card-text>
                     <v-form @submit.prevent="submitForm" ref="form">

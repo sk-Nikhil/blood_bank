@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/valid-v-slot -->
 <template>
     <v-container>
-        <h1>{{ $t('donorsRecords') }}</h1>
+        <h1>{{ $t('enquiriesRecords') }}</h1>
 
         <!-- Vuetify Table -->
         <v-data-table-server 

@@ -3,5 +3,12 @@
     "welcome": "Bienvenue sur notre site web.",
     "login": "Formulaire de connexion",
     "register": "Formulaire d'inscription",
-    "donorsRecords":"Dossiers des donateurs"
+    "donorsRecords":"Dossiers des donateurs",
+    "home":"Maison",
+    "piechart":"diagramme circulaire",
+    "enquiries":"demandes de renseignements",
+    "addDonor":"Ajouter un donateur",
+    "enquiriesRecords":"Dossiers de demandes de renseignements",
+    "addDonorDetails":"Ajouter les détails du donateur",
+    "updateDonorDetails":"Mettre à jour les détails du donateur"
 }

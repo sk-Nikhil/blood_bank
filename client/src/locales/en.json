@@ -3,5 +3,12 @@
     "welcome": "Welcome to our website.",
     "login":"Login Form",
     "register":"Registration Form",
-    "donorsRecords":"Donors Records"
+    "donorsRecords":"Donors Records",
+    "home":"Home",
+    "piechart":"PieChart",
+    "enquiries":"Enquiries",
+    "addDonor":"Add Donor",
+    "enquiriesRecords":"Enquiries Records",
+    "addDonorDetails":"Add Donor Details",
+    "updateDonorDetails":"Update Donor Details"
 }
