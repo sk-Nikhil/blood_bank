@@ -45,7 +45,7 @@ export default {
                 { title: 'ID', key: '_id', sortable: false,  },
                 { title: 'email', key: 'user_id', sortable: false },
                 { title: 'Blood Group', key: 'blood_group', sortable: false },
-                { title: 'Message', key: 'message', sortable: false },
+                { title: 'Message', key: 'message', sortable: false,},
                 { title: 'Status', key: 'status', sortable: false },
                 { title: 'Enquiry Date', key: 'enquiry_date', sortable: false },
                 { title: 'Actions', key: 'actions', sortable: false }

@@ -3,12 +3,14 @@ import { createI18n } from 'vue-i18n';
 import App from './App.vue'
 import store from './store'
 import 'bootstrap/dist/css/bootstrap.css'; 
-import 'bootstrap/dist/js/bootstrap.bundle';
-import 'bootstrap/dist/js/bootstrap.js';
+// import 'bootstrap/dist/js/bootstrap.bundle';
+// import 'bootstrap/dist/js/bootstrap.js';
 import 'vuetify/dist/vuetify.css';
 import routes from './routes.js'  
 import vuetify from './plugins/vuetify'
 import { loadFonts } from './plugins/webfontloader'
+import { Quasar } from 'quasar'
+import quasarUserOptions from './quasar-user-options'
 loadFonts()
 
 const i18n = createI18n({
@@ -20,7 +22,7 @@ const i18n = createI18n({
   },
 });
 
-const app = createApp(App)
+const app = createApp(App).use(Quasar, quasarUserOptions)
 app.use(i18n)
 app.use(vuetify)
 app.use(store)
