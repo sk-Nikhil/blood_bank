@@ -1,5 +1,35 @@
 <template>
     <div class="my-app-margin">
+
+        <v-navigation-drawer v-model="drawer" app location="left" permanent  v-if="getLoginStatus">
+            <v-list>
+                <v-list-item to="/addDonor" prepend-icon="mdi-plus" :title="$t('addDonor')" ></v-list-item>
+            </v-list>
+        </v-navigation-drawer>
+
+        <v-app-bar app color="primary" right>
+            <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+            <div v-if="getLoginStatus">
+                <v-tabs v-model="activeTab">
+                    <v-tab :to="getRole === 'admin' ? '/admin_home' : '/user_home'">{{$t('home')}}</v-tab>
+                    <v-tab to="/Piechart">{{$t('piechart')}}</v-tab>
+                    <v-tab v-if="getRole === 'admin'" to="/enquiries">{{$t('enquiries')}}</v-tab>
+                </v-tabs>
+            </div>
+
+            <v-spacer></v-spacer>
+            <div>
+                <v-select class="v-select" prepend-icon="mdi-translate" v-model="locale" :items="locales" label="Select Language"
+                    required></v-select>
+            </div>
+
+            <div v-if="getLoginStatus && getRole === 'admin'">
+                <v-btn icon @click="showNotifications">
+                    <v-icon>mdi-bell</v-icon>
+                </v-btn>
+            </div>
+        </v-app-bar>
+
         <v-navigation-drawer app location="right" expand-on-hover rail value="false" v-if="getLoginStatus">
             <v-list>
                 <v-list-item prepend-icon="mdi-account" :title="getRole.toUpperCase()">
@@ -25,30 +55,9 @@
 
         </v-navigation-drawer>
 
-        <v-app-bar app color="primary" right>
-            <div v-if="getLoginStatus">
-                <v-tabs v-model="activeTab">
-                    <v-tab :to="getRole === 'admin' ? '/admin_home' : '/user_home'">{{$t('home')}}</v-tab>
-                    <v-tab to="/Piechart">{{$t('piechart')}}</v-tab>
-                    <v-tab v-if="getRole === 'admin'" to="/enquiries">{{$t('enquiries')}}</v-tab>
-                </v-tabs>
-            </div>
+        
 
-            <v-spacer></v-spacer>
-            <div>
-                <v-select class="v-select" prepend-icon="mdi-translate" v-model="locale" :items="locales" label="Select Language"
-                    required></v-select>
-            </div>
-
-            <div v-if="getLoginStatus && getRole === 'admin'">
-                <v-btn icon @click="showNotifications">
-                    <v-icon>mdi-bell</v-icon>
-                </v-btn>
-                <v-btn @click="changeAddformStatus()" color="white" dark>
-                    {{ $t('addDonor') }}
-                </v-btn>
-            </div>
-        </v-app-bar>
+        
 
     </div>
     <add-donor v-if="getAddFormStatus"></add-donor>
@@ -71,12 +80,12 @@ export default {
             ],
             menu: true,
             locale: '',
-            locales: ["English", "French", "German"]
+            locales: ["English", "French", "German"],
+            drawer:false
         }
     },
     methods: {
         ...mapActions('admin', ['logout', 'setAllEnquiries', 'setAllPendingEnquiries']),
-        ...mapActions(['changeAddformStatus']),
         showNotifications() {
             // Handle notification logic
         },

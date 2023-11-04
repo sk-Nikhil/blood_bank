@@ -43,7 +43,7 @@ export default {
             // emailRules: [(v) => !!v || "Username is required", (v) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(v) ||
             //         "Invalid email format"],
 
-            passwordRules: [(v) => !!v || 'Password is required', (v) => (v && v.length >= 6) || 'Address must be at least 6 characters'],
+            passwordRules: [(v) => !!v || 'Password is required', (v) => (v && v.length >= 6) || 'Password must be at least 6 characters'],
         }
     },
     validations() {

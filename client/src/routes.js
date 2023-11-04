@@ -6,6 +6,7 @@ import PageNotFound from "./views/PageNotFound.vue";
 import SignupPage from "./views/SignupPage.vue";
 import UserHomePage from "./views/userHomePage.vue";
 import EnquiriesPage from './views/EnquiredUserPage.vue';
+import AddDonor from './components/AddDonor.vue'
 import store from "./store";
 const routes = [
   {
@@ -20,39 +21,46 @@ const routes = [
   },
 
   {
-    path:"/signup",
+    path:"/signup",             //signup page by default for user only
     component:SignupPage
   }
   ,
   {
     path: "/admin_home",
     name: "admin_home",
-    component: HomeComponent,
+    component: HomeComponent,   //admin's home page
     meta: { requiresAuth: true, role:'admin' },
   },
 
   {
     path: "/user_home",
     name: "user_home",
-    component: UserHomePage,
+    component: UserHomePage,   //user;s home page
     meta:{requiresAuth:true, role:'user'}
   },
 
   {
     path: "/piechart",
     name: "piechart",
-    component: PieChart,
+    component: PieChart,      //piechart shows available blood groups and their numbers
     meta: { requiresAuth: true },
   },
 
   {
+    path:"/addDonor",
+    name:"addDonor",
+    component: AddDonor,
+    meta:{requiresAuth:true, role:'admin'}
+  },
+
+  {
     path: "/signup",
-    component: SignupPage,
+    component: SignupPage,    //contains signup page
   },
 
   {
     path:"/enquiries",
-    component:EnquiriesPage,
+    component:EnquiriesPage,    //contains enquiries of all users whether it is pending or approved
     meta: { requiresAuth: true, role:'admin' },
   },
 

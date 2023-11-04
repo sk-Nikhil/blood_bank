@@ -33,11 +33,6 @@
     box-sizing: border-box;
   }
 
-  .router-view{
-    /* width:95vw; */
-    margin-bottom: 10vh;
-  }
-
   ::-webkit-scrollbar{
     display:none;
   }

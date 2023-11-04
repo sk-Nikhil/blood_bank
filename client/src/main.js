@@ -3,8 +3,8 @@ import { createI18n } from 'vue-i18n';
 import App from './App.vue'
 import store from './store'
 import 'bootstrap/dist/css/bootstrap.css'; 
-import 'bootstrap/dist/js/bootstrap.bundle';
-import 'bootstrap/dist/js/bootstrap.js';
+// import 'bootstrap/dist/js/bootstrap.bundle';
+// import 'bootstrap/dist/js/bootstrap.js';
 import 'vuetify/dist/vuetify.css';
 import routes from './routes.js'  
 import vuetify from './plugins/vuetify'

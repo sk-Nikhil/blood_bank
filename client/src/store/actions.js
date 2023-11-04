@@ -1,9 +1,6 @@
 import axiosInstance from '@/service/axios.service';
 
 export default {
-    changeAddformStatus(context){
-        context.commit('changeAddformStatus');
-    },
     changeEditStatus(context, payload){
         context.commit('changeEditStatus', payload);
     },
