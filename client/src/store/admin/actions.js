@@ -4,7 +4,6 @@ const router = require('../../routes');
 
 export default{
     async login(context, payload){
-        console.log(payload)
         try{
             const response = await axios.post(`${url}/login`, payload);
             if(response.data.success){

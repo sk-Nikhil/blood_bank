@@ -1,5 +1,5 @@
 <template>
-    <v-app class="my-app-margin">
+    <div class="my-app-margin">
         <v-navigation-drawer app location="right" expand-on-hover rail value="false" v-if="getLoginStatus">
             <v-list>
                 <v-list-item prepend-icon="mdi-account" :title="getRole.toUpperCase()">
@@ -50,7 +50,7 @@
             </div>
         </v-app-bar>
 
-    </v-app>
+    </div>
     <add-donor v-if="getAddFormStatus"></add-donor>
 </template>
   
@@ -108,7 +108,7 @@ export default {
   
 <style scoped>
 .my-app-margin {
-    margin: -310px;
+    /* margin: -310px; */
     /* Adjust the margin size as needed */
 }
 

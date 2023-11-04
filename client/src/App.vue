@@ -1,9 +1,11 @@
 <template>
-  <div>
+  <v-app>
     <the-header></the-header>
-    <router-view class="router-view"></router-view>
-    <the-footer></the-footer>
-  </div>
+    <v-main class="d-flex align-center">
+      <router-view class="router-view"></router-view>
+    </v-main>
+      <the-footer></the-footer>
+  </v-app>
   </template>
   
   <script>

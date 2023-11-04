@@ -65,11 +65,16 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
+  const token = sessionStorage.getItem('token');
   const storedRoute = localStorage.getItem("storedRoute");
   if (storedRoute === to.path) {
     // Allow the page refresh, no route change
     next();
   } else {
+    if(!token){
+      // if token is get expired and user tries to send a request
+      next('/login')
+    }
     // Set the stored route in local storage
     localStorage.setItem("storedRoute", to.path);
     if (to.meta.requiresAuth && !store.getters["admin/getLoginStatus"]) {
