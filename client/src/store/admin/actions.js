@@ -1,3 +1,4 @@
+import axiosInstance from '@/service/axios.service';
 import axios from 'axios';
 const url = "http://localhost:3000";
 const router = require('../../routes');
@@ -87,5 +88,23 @@ export default{
         const enquiries = await axios.get(`${url}/getPendingEnquiries`)
         console.log(enquiries)
         context.commit('setEnquiries', enquiries.data)
+    },
+
+
+    async updateEnquiry(content, payload){
+        const {id, action} = payload;
+        const response = await axiosInstance.put(`/enquiry?_id=${id}&action=${action}`);
+        console.log(response);
+    },
+
+    // donor record page
+    approveUserRequest(context, payload){
+        context.dispatch('updateEnquiry',{id:payload, action:"approve"});
+        context.commit('approveUserRequest', payload);
+    },
+
+    rejectUserRequest(context, payload){
+        context.dispatch('updateEnquiry', {id:payload,action:"reject"});
+        context.commit('rejectUserRequest', payload);
     }
 }

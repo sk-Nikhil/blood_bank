@@ -49,6 +49,7 @@ export default {
                 contact: '',
                 bloodGroup: '',
             },
+            errMessage:'',
             showPreview: false,
             checkbox: '',
 
@@ -95,10 +96,19 @@ export default {
 
         async addDonorData() {
             const response = await this.addDonor(this.donor);
-            this.notify(response);
-            this.countGroups();
-            this.resetForm();
-            this.$router.replace('/donors')
+            if(response.validationError)
+                this.errMessage = response.validationError
+            else if(response.success){
+                this.notify(`successfully added donor ${this.donor.name}`);
+                this.countGroups();
+                setTimeout(()=>{
+                    this.$router.replace('/donors')
+                    this.resetForm();
+                },1000)
+            }
+            else{
+                this.notify("something went wrong, unable to add donor please try later")
+            }
         },
 
         resetForm() {

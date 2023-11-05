@@ -15,7 +15,7 @@ function addDonorValidation(req,res,next){
 
     if (schema.validate(req.body).error) {
         console.log(schema.validate(req.body).error.details);
-        return res.status(422).send({ error: schema.validate(req.body).error.details });
+        return res.status(422).send({ validationError: schema.validate(req.body).error.details });
     }
     next();
 }

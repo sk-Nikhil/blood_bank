@@ -13,10 +13,10 @@
             item-value="name" 
             class="elevation-1"
             @update:options="initializeEnquiries">
-            <template v-slot:item.actions>
+            <template v-slot:item.actions="{ item }">
                 <td>
-                    <v-btn color="success">Approve</v-btn>
-                    <v-btn color="danger">Reject</v-btn>
+                    <v-btn color="success" @click="approveRequest(item._id)" :disabled="item.status === 'approved'" v-if="item.status !== 'rejected'">{{item.status === 'approved' ? 'Approved':'Approve'}}</v-btn>
+                    <v-btn color="danger" @click="rejectRequest(item._id)" :disabled="item.status === 'rejected'" v-if="item.status!=='approved'">{{item.status === 'rejected' ? 'Rejected':'Reject'}}</v-btn>
                 </td>
             </template>
         </v-data-table-server>
@@ -57,25 +57,24 @@ export default {
         ...mapGetters('admin', ['getAllEnquiries']),
     },
     methods: {
-        ...mapActions('admin',['setAllEnquiries']),
-        approveEntry(id) {
-            // Handle approval logic here
-            console.log(id)
+        ...mapActions('admin',['setAllEnquiries', 'approveUserRequest', 'rejectUserRequest']),
+        approveRequest(id) {
+            this.approveUserRequest(id)
         },
-        rejectEntry(id) {
-            console.log(id)
+        rejectRequest(id) {
+            this.rejectUserRequest(id)
             // Handle rejection logic here
         },
 
         async initializeEnquiries({page, itemsPerPage}){
             this.loading = true
-            console.log(page, itemsPerPage)
             const totalEnquiries = await this.setAllEnquiries({page, itemsPerPage})
             this.loading=false
-            this.totalEnquiries = totalEnquiries
             if(typeof this.totalEnquiries !== 'number'){
                 this.notify("unable to fetch enquiries")
             }
+            else
+                this.totalEnquiries = totalEnquiries
         }
 
     },

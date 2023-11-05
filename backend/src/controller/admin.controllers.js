@@ -12,6 +12,16 @@ async function getAllEnquiries(req,res){
     }
 }
 
+async function updateEnquiry(req,res){
+    try{
+        const response = await adminService.updateEnquiry(req.query);
+        res.send("action triggered successfully");
+    }
+    catch(error){
+        res.status(500).send(error)
+    }
+}
+
 async function getPendingEnquiries(req,res){
     try{
         const response = await adminService.getPendingEnquiries();
@@ -36,5 +46,6 @@ async function getTotalPendingEnquiries(req,res){
 module.exports = {
     getAllEnquiries,
     getPendingEnquiries,
-    getTotalPendingEnquiries
+    getTotalPendingEnquiries,
+    updateEnquiry
 }

@@ -20,9 +20,11 @@ export default {
         const donor = {...payload, lastDonated}
         try {
             const response = await axiosInstance.post('/donor', donor);
+            if(response.data.validationError)
+                return {validationError:response.data.validationError}
             if (response.data) {
                 context.commit('addDonor', { ...donor, _id: response.data.id});
-                return response.data.data;
+                return {success:response.data.data};
             }
         }
         catch (err) {
@@ -30,7 +32,7 @@ export default {
                 return err.message;
             }
             else {
-                return err.response.data.error[0].message;
+                return {validationError:err.response.data.error[0].message};
             }
         }
     },
