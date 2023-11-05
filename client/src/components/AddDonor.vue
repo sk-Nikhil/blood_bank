@@ -109,10 +109,9 @@ export default {
             this.$refs.form.resetValidation(); // Reset form validation
         },
         async submitForm() {
-            const isValid = await this.isValidForm
-            console.log(isValid)
+            const isValid = await this.isValidForm;
             if (isValid.valid) {
-                this.addDonorData()
+                this.addDonorData();
             }
         },
 

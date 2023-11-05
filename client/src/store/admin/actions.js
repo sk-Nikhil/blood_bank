@@ -6,10 +6,9 @@ export default{
     async login(context, payload){
         try{
             const response = await axios.post(`${url}/login`, payload);
-            if(response.data.success){
+            if(!response.data.validationError){
                 const token = response.data.success.token;
-                sessionStorage.setItem('token', token)
-                // localStorage.setItem('token', token);
+                sessionStorage.setItem('token', token);
                 context.dispatch('updateLoginStatus', true);
     
                 context.dispatch('updateRole',response.data.success.role)
@@ -18,16 +17,19 @@ export default{
                 else{
                     router.default.replace({name:'homepage'});
                 }
+                return {"validationSuccess":""};
             }
             else{
-                router.default.replace('/login');
-                return response.data.failure;
+                return {"validationError":response.data.validationError};
             }
         }
         catch(error){
-            console.log(error)
-            if(error.response.data.error){
-                return error.response.data.error
+            if(error.response.data.validationError){
+                return {"validationError":error.response.data.validationError};
+            }
+            else{
+                console.log(error);
+                return {"validationError":"we got some error please try after sometime"};
             }
         }
     },

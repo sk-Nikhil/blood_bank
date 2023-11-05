@@ -13,7 +13,7 @@ function loginValidation(req, res, next) {
     if(loginSchema.validate(req.body).error) {
         console.log(loginSchema.validate(req.body).error.details);
         // sending custom error as user need not to know about validation error
-        return res.status(422).send({ error: "Invalid username of password" });
+        return res.status(422).send({ "validationError": "Invalid username or password" });
     }
     next()
 }

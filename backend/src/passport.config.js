@@ -5,12 +5,11 @@ const Admin = require('./models/admin.js');
 const initializePassport = (passport)=>{
     passport.use('login',new LocalStrategy(
         async (email, password, done) => {
-            const user = await Admin.findOne({email});
-            if(user == null){
-                return done(null, false);
-            }
-
             try {
+                const user = await Admin.findOne({email});
+                if(user == null){
+                    return done(null, false);
+                }
                 if(await bcrypt.compare(password, user.password)){
                     return done(null, {_id:user._id, role:user.role});
                 }
@@ -19,7 +18,7 @@ const initializePassport = (passport)=>{
                 }
             }
             catch (error) {
-                console.log(error.message)
+                console.log(error.message);
                 return done(error);
             }
         }

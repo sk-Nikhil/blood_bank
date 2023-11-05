@@ -3,15 +3,16 @@
         <v-row justify="center">
             <v-col cols="12" sm="8" md="5">
                 <v-card elevation="4">
-                    <v-card-title class="headline text-center">{{$t('login')}}</v-card-title>
+                    <v-card-title class="headline text-center">{{ $t('login') }}</v-card-title>
                     <v-card-text>
-                        <v-form @submit.prevent="handleLogin()">
-                            <v-text-field label="Username" v-model="username" :rules="usernameRules" @blur="v$.username.$touch()"
-                                required ></v-text-field>
+                        <v-form @submit.prevent="handleLogin()" ref="form">
+                            <v-text-field label="Username" v-model="username" :rules="usernameRules"
+                                @blur="v$.username.$touch()" @input="errMessage = ''" required></v-text-field>
                             <v-text-field label="Password" v-model="password" :rules="passwordRules"
                                 :type="showPassword ? 'text' : 'password'" @click:append="showPassword = !showPassword"
-                                required></v-text-field>
-                            <v-card-text style="color:red" v-if="errMessage === '' ? false : true">{{ errMessage }}</v-card-text>
+                                @input="errMessage = ''" required></v-text-field>
+                            <v-card-text style="color:red" v-if="errMessage === '' ? false : true">{{ errMessage
+                            }}</v-card-text>
                             <v-text>not registered yet? <router-link to="/signup">Register</router-link></v-text>
                             <v-btn class="ma-2 float-right" color="primary" type="submit">Login</v-btn>
                         </v-form>
@@ -37,14 +38,14 @@ export default {
             password: "",
             showPassword: false,
             errMessage: "",
-            //   usernameRules: [
-            //     (v) => !!v || "Username is required",
-            //     (v) =>
-            //       /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(v) ||
-            //       "Invalid email format",
-            //   ],
-
-            //   passwordRules: [(v) => !!v || "password is required"],
+            usernameRules: [
+                (v) => !!v || 'Email is required',
+                (v) => /.+@.+\..+/.test(v) || 'Email must be valid',
+                (v) => /@.*\.com$/.test(v) || 'Email must have the domain .com'
+            ],
+            passwordRules:[
+                (v) => !!v || 'Password is required'
+            ]
         };
     },
     validations() {
@@ -54,39 +55,37 @@ export default {
         };
     },
     computed: {
-        usernameRules() {
-            return this.v$.username.$error? (this.v$.username.required.$invalid ? ['Email is required'] : ['Invalid email format']): []
-        },
-        passwordRules() {
-            return this.v$.password.$invalid? ['Password is required']:[]
+        isValidForm() {
+            return this.$refs.form.validate();
         },
     },
     methods: {
         ...mapActions("admin", ["login"]),
 
         async handleLogin() {
-            this.v$.$touch();
-            if (this.v$.$invalid) {
-                return;
+            const isValid = await this.isValidForm
+            if (isValid.valid) {
+                const response = await this.login({ username: this.username, password: this.password });
+                if (response.validationError)
+                    this.errMessage = response.validationError;
+                this.clearForm()
             }
-            const response = await this.login({ username: this.username, password: this.password });
-            this.errMessage = response;
-            this.clearForm()
         },
 
         clearForm() {
             this.username = "";
             this.password = "";
+            this.$refs.form.resetValidation();
         },
     },
 };
 </script>
 
 <style scoped>
-.v-container{
+.v-container {
     position: absolute;
-    left:50%;
-    top:50%;
+    left: 50%;
+    top: 50%;
     transform: translate(-50%, -80%);
 }
 </style>
