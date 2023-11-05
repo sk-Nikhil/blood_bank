@@ -37,15 +37,13 @@ export default{
     async signup(context, payload){
         try{
             const response = await axios.post(`${url}/signup`, payload);
-            console.log(response)
-            if(response.data){
-
-                return response.data;
+            if(response.data.duplicacyError){
+                return {"duplicacyError":response.data.duplicacyError};
             }
+            return {"signupSuccess":""};
         }
         catch(error){
-            console.log(error)
-            return error.response.data.error[0].message
+            return {error:error.response.data.error[0].message}
         }
     },
 

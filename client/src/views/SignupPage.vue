@@ -5,16 +5,16 @@
                 <v-card elevation="4">
                     <v-card-title class="headline text-center">{{ $t('register') }}</v-card-title>
                     <v-card-text>
-                        <v-form @submit.prevent="handleSignup()">
-                            <v-text-field label="Name" v-model="user.name" @blur="v$.name.$touch()" :rules="nameRules"
-                                required></v-text-field>
-                            <v-text-field label="Email" v-model="user.email" :rules="emailRules" required></v-text-field>
+                        <v-form @submit.prevent="handleSignup()" ref="form">
+                            <v-text-field label="Name" v-model="user.name" :rules="nameRules"
+                                @input="errMessage=''" required></v-text-field>
+                            <v-text-field label="Email" v-model="user.email" :rules="emailRules" @input="errMessage=''" required></v-text-field>
                             <v-text-field label="Password" v-model="user.password" type="password" :rules="passwordRules"
-                                required></v-text-field>
+                            @input="errMessage=''" required></v-text-field>
 
-                            <v-card-text style="color:red">{{ errMessage}}</v-card-text>
+                            <v-card-text style="color:red" v-if="errMessage === '' ? false:true">{{ errMessage}}</v-card-text>
                             <v-text>already have an account? <router-link to="/login">Login</router-link></v-text>
-                            <v-btn class="ma-2 float-right" color="primary" type="submit">Signup</v-btn>
+                            <v-btn class="ma-2 float-right" size="large" color="primary" type="submit">Signup</v-btn>
                         </v-form>
                     </v-card-text>
                 </v-card>
@@ -40,6 +40,11 @@ export default {
             },
             errMessage: '',
             nameRules: [(v) => !!v || 'Password is required'],
+            emailRules: [
+                (v) => !!v || 'Email is required',
+                (v) => /.+@.+\..+/.test(v) || 'Email must be valid',
+                (v) => /@.*\.com$/.test(v) || 'Email must have the domain .com'
+            ],
             // emailRules: [(v) => !!v || "Username is required", (v) => /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/.test(v) ||
             //         "Invalid email format"],
 
@@ -54,8 +59,8 @@ export default {
         };
     },
     computed:{
-        emailRules() {
-            return this.v$.email.$error? (this.v$.email.required.$invalid ? ['Email is required'] : ['Invalid email format']): []
+        isValidForm(){
+           return this.$refs.form.validate();
         },
         
     },
@@ -63,18 +68,23 @@ export default {
         ...mapActions('admin', ['signup']),
 
         async handleSignup() {
-            const response = await this.signup(this.user);
-            if (typeof response === 'string') {
-                setTimeout(()=>{
-                    router.replace('/')
-                },1000)
-                this.notify(response)
-                this.errMessage = this.response
+            const isValid = await this.isValidForm
+            if(isValid.valid){
+                const response = await this.signup(this.user);
+                if (response.duplicacyError) {
+                    setTimeout(()=>{
+                        this.clearForm();
+                        router.replace('/')
+                    },1000);
+                    this.notify(response.duplicacyError)
+                }
+                else if(response.error){
+                    this.errMessage = response.error
+                }
+                else {
+                    this.errMessage = "signup failed, due to some error we faced, please try later"
+                }
             }
-            else {
-                this.notify("Something went wrong unable to signup")
-            }
-            // this.clearForm();
         },
         clearForm() {
             this.user.name = ''
@@ -95,67 +105,4 @@ export default {
 </script>
     
 <style scoped>
-.v-container {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -80%);
-}
-
-/* * {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Raleway, sans-serif;
-
-}
-
-#container {
-    margin-top: 5vw;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-form {
-    width: 30vw;
-    min-height: 50vh;
-    padding: 2vw 3vw;
-    box-shadow: 0px 0px 24px #c8c6de;
-}
-
-label {
-    margin-bottom: 0.5vw;
-}
-
-.form-group {
-    margin-bottom: 1vw;
-}
-
-input {
-    padding: 5px 10px;
-}
-
-#error {
-    color: red
-}
-
-.error {
-    color: red;
-    margin-top: -10px;
-}
-
-
-#heading {
-    text-align: center;
-    margin-bottom: 2vw;
-}
-
-#heading h1 {
-    font-weight: 600
-}
-
-button {
-    padding: 8px 15px;
-    float: right;
-} */</style>
+</style>

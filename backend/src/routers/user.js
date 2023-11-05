@@ -7,7 +7,7 @@ const verifyToken = require('../middleware/verifyUserToken.js');
 router.get('/', verifyToken, (req,res)=>{
     res.send()
 })
-router.post('/signup', userController.signup)
+router.post('/signup',userValidation.signupValidation, userController.signup)
 router.post('/addEnquiry', verifyToken, userValidation.addEnquiryValidation, userController.addEnquiry);
 router.get('/getEnquiries', userController.getEnquiries);
 

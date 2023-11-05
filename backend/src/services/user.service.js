@@ -11,7 +11,7 @@ async function addUser(user){
             const hashedPassword = await bcrypt.hash(user.password, 10);
             return await userRepository.addUser(user, hashedPassword);
         }
-        return "email is already registered with us";
+        return {"duplicacyError":"email is already registered with us"};
     }
     catch(err){
         return err
