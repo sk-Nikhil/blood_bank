@@ -1,5 +1,6 @@
 <template>
-    <v-container class="d-flex justify-center" style="margin-top:7%; width:100%">
+    <v-container class="d-flex justify-center">
+        <v-card class="d-flex justify-center py-5" style="width:70%">
         <transition name="fade" mode="out-in">
             <div class="preview" v-if="showPreview">
                 <h5>Name : {{ donor.name }}</h5>
@@ -15,20 +16,21 @@
                 required></v-text-field>
             <v-text-field v-model="donor.address" label="Address" :rules="addressRules" required></v-text-field>
             <v-text-field v-model="donor.contact" label="Contact" :rules="contactRules" required></v-text-field>
-            <v-select v-model="donor.bloodGroup" :items="bloodGroups" label="Item" :rules="bloodGroupRules"
+            <v-select v-model="donor.bloodGroup" :items="bloodGroups" label="blood group" :rules="bloodGroupRules"
                 required></v-select>
             <v-checkbox v-model="checkbox" label="show preview" disabled></v-checkbox>
 
             <div class="float-right">
-                <v-btn @click="resetForm()">
+                <v-btn @click="resetForm()" color="secondary" size="large">
                     clear
                 </v-btn>
-                <v-btn class="me-4" type="submit">
+                <v-btn class="ml-3" type="submit" color="success" size="large" variant="elevated">
                     submit
                 </v-btn>
             </div>
 
         </v-form>
+    </v-card>
     </v-container>
 </template>
   
@@ -93,8 +95,10 @@ export default {
 
         async addDonorData() {
             const response = await this.addDonor(this.donor);
-            this.notify(response)
-            this.countGroups()
+            this.notify(response);
+            this.countGroups();
+            this.resetForm();
+            this.$router.replace('/donors')
         },
 
         resetForm() {

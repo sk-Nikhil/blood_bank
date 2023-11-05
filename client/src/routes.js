@@ -1,5 +1,6 @@
 import { createWebHistory, createRouter } from "vue-router";
-import HomeComponent from "./views/TheHome.vue";
+import AdminDashboard from './views/AdminDashboard.vue';
+import DonorsRecords from "./views/DonorsRecords.vue";
 import LoginComponent from "./views/LoginPage.vue";
 import PieChart from "./components/BloodGroupChart.vue";
 import PageNotFound from "./views/PageNotFound.vue";
@@ -23,18 +24,22 @@ const routes = [
   {
     path:"/signup",             //signup page by default for user only
     component:SignupPage
-  }
-  ,
+  },
   {
-    path: "/admin_home",
-    name: "admin_home",
-    component: HomeComponent,   //admin's home page
+    path:'/dashboard',
+    component:AdminDashboard,
+    meta:{requiredAuth:true, role:'admin'}
+  },
+  {
+    path: "/donors",
+    name: "donors",
+    component: DonorsRecords,   //admin's home page
     meta: { requiresAuth: true, role:'admin' },
   },
 
   {
-    path: "/user_home",
-    name: "user_home",
+    path: "/homepage",
+    name: "homepage",
     component: UserHomePage,   //user;s home page
     meta:{requiresAuth:true, role:'user'}
   },
@@ -99,9 +104,9 @@ router.beforeEach((to, from, next) => {
     // if user or admin is logged in and visits the login page he will be redirected to their respective home page
     else if ((to.path === "/" || to.path==='/login' || to.path==='/signup') && store.getters["admin/getLoginStatus"]) {
       if(store.getters["admin/getRole"] === 'admin')
-        next({name:"admin_home"});
+        next({name:"donors"});
       else
-        next({name:"user_home"});
+        next({name:"homepage"});
     }
     else {
       next(true);

@@ -4,20 +4,20 @@
     <v-main class="d-flex align-center">
       <router-view class="router-view"></router-view>
     </v-main>
-      <the-footer></the-footer>
+      <!-- <the-footer></the-footer> -->
   </v-app>
   </template>
   
   <script>
   import TheHeader from './components/TheHeader.vue'
-  import TheFooter from './components/TheFooter.vue'
+  // import TheFooter from './components/TheFooter.vue'
   
   export default {
     name: 'App',
   
     components: {
       TheHeader,
-      TheFooter
+      // TheFooter
     },
   
     data: () => ({

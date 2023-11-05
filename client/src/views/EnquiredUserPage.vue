@@ -15,8 +15,8 @@
             @update:options="initializeEnquiries">
             <template v-slot:item.actions>
                 <td>
-                    <v-btn>Approve</v-btn>
-                    <v-btn>Reject</v-btn>
+                    <v-btn color="success">Approve</v-btn>
+                    <v-btn color="danger">Reject</v-btn>
                 </td>
             </template>
         </v-data-table-server>
@@ -45,7 +45,7 @@ export default {
                 { title: 'ID', key: '_id', sortable: false,  },
                 { title: 'email', key: 'user_id', sortable: false },
                 { title: 'Blood Group', key: 'blood_group', sortable: false },
-                { title: 'Message', key: 'message', sortable: false },
+                { title: 'Message', key: 'message',class:"header-cell", sortable: false },
                 { title: 'Status', key: 'status', sortable: false },
                 { title: 'Enquiry Date', key: 'enquiry_date', sortable: false },
                 { title: 'Actions', key: 'actions', sortable: false }
@@ -92,6 +92,19 @@ export default {
 </script>
 
 <style>
+.header-cell {
+  position: relative;
+}
 
+.header-cell > div {
+  max-width: 150px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+}
 </style>
   

@@ -1,5 +1,5 @@
 <template>
-    <div class="my-app-margin">
+    <v-container class="my-app-margin">
 
         <v-navigation-drawer v-model="drawer" app location="left" permanent  v-if="getLoginStatus">
             <v-list>
@@ -11,17 +11,19 @@
             <v-app-bar-nav-icon variant="text" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
             <div v-if="getLoginStatus">
                 <v-tabs v-model="activeTab">
-                    <v-tab :to="getRole === 'admin' ? '/admin_home' : '/user_home'">{{$t('home')}}</v-tab>
+                    <v-tab v-if="getRole === 'admin'" to="/dashboard">{{ $t('dashboard') }}</v-tab>
+                    <v-tab v-if="getRole === 'user'" to="/homepage">{{ $t('home') }}</v-tab>
+                    <v-tab v-if="getRole === 'admin'" :to="getRole === 'admin' ? '/donors' : '/user_home'">{{$t('donorsRecords')}}</v-tab>
                     <v-tab to="/Piechart">{{$t('piechart')}}</v-tab>
                     <v-tab v-if="getRole === 'admin'" to="/enquiries">{{$t('enquiries')}}</v-tab>
                 </v-tabs>
             </div>
 
             <v-spacer></v-spacer>
-            <div>
+            <v-tab>
                 <v-select class="v-select" prepend-icon="mdi-translate" v-model="locale" :items="locales" label="Select Language"
                     required></v-select>
-            </div>
+            </v-tab>
 
             <div v-if="getLoginStatus && getRole === 'admin'">
                 <v-btn icon @click="showNotifications">
@@ -36,7 +38,7 @@
                 </v-list-item>
                 <v-list density="compact" nav>
                     <v-list-item prepend-icon="mdi-home" title="Home" value="home"
-                        :to="getRole === 'admin' ? '/admin_home' : '/user_home'">
+                        :to="getRole === 'admin' ? '/dashboard' : '/homepage'">
                     </v-list-item>
                     <div v-if="getRole === 'admin'">
                         <v-list-item prepend-icon="mdi-account-multiple" title="Show All Enquiries" value="show_all_enquiries"
@@ -54,22 +56,12 @@
             <v-list-item prepend-icon="mdi-logout" title="Logout" value="logout" @click="logout()"></v-list-item>
 
         </v-navigation-drawer>
-
-        
-
-        
-
-    </div>
-    <add-donor v-if="getAddFormStatus"></add-donor>
+    </v-container>
 </template>
   
 <script>
 import { mapActions, mapGetters } from 'vuex';
-import AddDonor from './AddDonor.vue';
 export default {
-    components: {
-        AddDonor
-    },
     data() {
         return {
             activeTab: null,

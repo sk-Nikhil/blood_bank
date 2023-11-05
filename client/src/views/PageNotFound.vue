@@ -22,9 +22,9 @@
     },
     created(){
       if(this.getRole === 'admin')
-        this.page = 'admin_home'
+        this.page = 'donors'
       else if(this.getRole === 'user')
-          this.page = 'user_home'
+          this.page = 'homepage'
       else
         this.page='login'
 
@@ -43,6 +43,8 @@
   /* Scoped CSS for the NotFound component */
   
   .not-found {
+    width:100vw;
+    height:100vh;
     text-align: center;
     padding: 20px;
   }

@@ -14,9 +14,9 @@ export default{
     
                 context.dispatch('updateRole',response.data.success.role)
                 if(response.data.success.role === 'admin')
-                    router.default.replace({name:"admin_home"});
+                    router.default.replace('/dashboard');
                 else{
-                    router.default.replace({name:'user_home'});
+                    router.default.replace({name:'homepage'});
                 }
             }
             else{
@@ -25,6 +25,7 @@ export default{
             }
         }
         catch(error){
+            console.log(error)
             if(error.response.data.error){
                 return error.response.data.error
             }

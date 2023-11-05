@@ -2,7 +2,6 @@ const adminService = require('../services/admin.service.js')
 
 // get both pending and approved enquiries
 async function getAllEnquiries(req,res){
-    console.log(req.query)
     try{
         const response = await adminService.getAllEnquiries(req.query);
         res.send(response);

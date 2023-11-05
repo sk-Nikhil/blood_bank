@@ -1,7 +1,8 @@
 <template>
-    <v-container class="enquiry-form">
-        <h2>Enquiry Form</h2>
+    <v-container>
+        <v-card class="py-4 px-3">
         <form @submit.prevent="submitForm">
+            <h2 class=text-center>Enquiry Form</h2>
             <v-text-field v-model="formData.name" label="Name" required></v-text-field>
             <v-text-field v-model="formData.email" label="Email" required></v-text-field>
             <v-select v-model="formData.bloodGroup" :items="bloodGroups" label="select bloodgroup" required></v-select>
@@ -10,19 +11,12 @@
                 <div id="location" style="display: inline; margin-left: 10px;" @click="getCurrentLocation">
                     <i class="fa-solid fa-location-dot"></i>
                 </div>
-                <!-- <input type="text" id="location" v-model="formData.location" @click="openMap" readonly> -->
                 <v-text-field prepend-icon="" v-model="formData.location" @click="openMap" readonly="" label="Location"></v-text-field>
             </div>
-
-            <!-- <div class="form-group">
-                <label for="message">Message</label>
-                <textarea name="message" id="message" placeholder="Add Your Message Here..." v-model="formData.message"
-                    required></textarea>
-            </div> -->
             <v-textarea v-model="formData.message" counter max="100" rows="2" auto-grow label="enter your message" class="custom-textarea" required></v-textarea>
-
-            <v-btn color="primary" type="submit" class="float-right">Submit</v-btn>
+            <v-btn color="primary" size="large" type="submit" class="float-right">Submit</v-btn>
         </form>
+    </v-card>
         <div id="backdrop">
             <div id="map" v-show="showMap" class="map"></div>
         </div>
@@ -170,31 +164,12 @@ export default {
 </script>
   
 <style scoped>
-.enquiry-form {
-    float: right;
-    /* clear: both; */
-    background-color: #fff;
-    padding: 20px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-    border-radius: 5px;
-    max-width: 400px;
-    width: 100%;
-    margin: -3vw 5vw 2vw 0;
-    text-align: center;
-}
-
-.form-group {
-    text-align: left;
-    margin: 10px 0;
-}
-
 #backdrop {
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
 }
-
 .map {
     width: 60vw;
     height: 400px;
