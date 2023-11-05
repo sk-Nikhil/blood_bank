@@ -62,16 +62,6 @@ export default{
         context.commit('updateRole', payload)
     },
 
-    async countTotalPendingEnquiries(context){
-        try{
-            const response = await axios.get('http://localhost:3000/getTotalPendingEnquiries');
-            context.commit('countTotalPendingEnquiries', response.data.data);
-        }
-        catch(err){
-            console.log(err)
-        }
-    },
-
     // set enquiries in store
     async setAllEnquiries(context, payload){
         try{
@@ -84,19 +74,31 @@ export default{
         }
     },
 
+    // fetch all pending enquiries and add it to store variable
     async setAllPendingEnquiries(context){
         const enquiries = await axios.get(`${url}/getPendingEnquiries`)
         console.log(enquiries)
         context.commit('setEnquiries', enquiries.data)
     },
 
+    async countTotalPendingEnquiries(context){
+        try{
+            const response = await axios.get('http://localhost:3000/getTotalPendingEnquiries');
+            context.commit('countTotalPendingEnquiries', response.data.data);
+        }
+        catch(err){
+            console.log(err)
+        }
+    },
 
+
+
+    // when admin approve or reject the request of any user
     async updateEnquiry(content, payload){
         const {id, action} = payload;
         const response = await axiosInstance.put(`/enquiry?_id=${id}&action=${action}`);
         console.log(response);
     },
-
     // donor record page
     approveUserRequest(context, payload){
         context.dispatch('updateEnquiry',{id:payload, action:"approve"});

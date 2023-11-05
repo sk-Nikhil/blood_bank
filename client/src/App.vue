@@ -1,8 +1,8 @@
 <template>
   <v-app>
     <the-header></the-header>
-    <v-main class="d-flex align-center">
-      <router-view class="router-view"></router-view>
+    <v-main>
+      <router-view></router-view>
     </v-main>
       <!-- <the-footer></the-footer> -->
   </v-app>

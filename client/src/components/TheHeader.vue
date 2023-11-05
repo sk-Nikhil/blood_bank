@@ -1,9 +1,28 @@
 <template>
     <v-container class="my-app-margin">
 
-        <v-navigation-drawer v-model="drawer" app location="left" permanent  v-if="getLoginStatus">
+        <v-navigation-drawer 
+            v-model="drawer"
+            app 
+            location="left" 
+            permanent 
+            v-if="getLoginStatus">
             <v-list>
-                <v-list-item to="/addDonor" prepend-icon="mdi-plus" :title="$t('addDonor')" ></v-list-item>
+                <v-list-item prepend-icon="mdi-account" :title="getRole.toUpperCase()"
+                    subtitle="nick@gmail.com"></v-list-item>
+            </v-list>
+            <v-divider></v-divider>
+            <v-list>
+                <v-list-item to="/addDonor" prepend-icon="mdi-plus" :title="$t('addDonor')"></v-list-item>
+                <div v-if="getRole === 'admin'">
+                    <v-list-item prepend-icon="mdi-account-multiple" title="Show All Enquiries" value="show_all_enquiries"
+                        to="/enquiries" @click="showAllEnquiries()">
+                    </v-list-item>
+                    <v-list-item prepend-icon="mdi-magnify" title="Search for User Enquiries"
+                        subtitle="get detailed information">
+                        <v-tooltip activator="parent" location="top">Search for User Enquiries</v-tooltip>
+                    </v-list-item>
+                </div>
             </v-list>
         </v-navigation-drawer>
 
@@ -13,16 +32,17 @@
                 <v-tabs v-model="activeTab">
                     <v-tab v-if="getRole === 'admin'" to="/dashboard">{{ $t('dashboard') }}</v-tab>
                     <v-tab v-if="getRole === 'user'" to="/homepage">{{ $t('home') }}</v-tab>
-                    <v-tab v-if="getRole === 'admin'" :to="getRole === 'admin' ? '/donors' : '/user_home'">{{$t('donorsRecords')}}</v-tab>
-                    <v-tab to="/Piechart">{{$t('piechart')}}</v-tab>
-                    <v-tab v-if="getRole === 'admin'" to="/enquiries">{{$t('enquiries')}}</v-tab>
+                    <v-tab v-if="getRole === 'admin'" :to="getRole === 'admin' ? '/donors' : '/user_home'">{{
+                        $t('donorsRecords') }}</v-tab>
+                    <v-tab to="/Piechart">{{ $t('piechart') }}</v-tab>
+                    <v-tab v-if="getRole === 'admin'" to="/enquiries">{{ $t('enquiries') }}</v-tab>
                 </v-tabs>
             </div>
 
             <v-spacer></v-spacer>
             <v-tab>
-                <v-select class="v-select" prepend-icon="mdi-translate" v-model="locale" :items="locales" label="Select Language"
-                    required></v-select>
+                <v-select class="v-select" prepend-icon="mdi-translate" v-model="locale" :items="locales"
+                    label="Select Language" required></v-select>
             </v-tab>
 
             <div v-if="getLoginStatus && getRole === 'admin'">
@@ -40,15 +60,6 @@
                     <v-list-item prepend-icon="mdi-home" title="Home" value="home"
                         :to="getRole === 'admin' ? '/dashboard' : '/homepage'">
                     </v-list-item>
-                    <div v-if="getRole === 'admin'">
-                        <v-list-item prepend-icon="mdi-account-multiple" title="Show All Enquiries" value="show_all_enquiries"
-                            to="/enquiries" @click="showAllEnquiries()">
-                        </v-list-item>
-                        <!-- <v-list-item prepend-icon="mdi-account" title="Show Pending Enquiries" value="show_pending_enquiries"
-                            to="/admin_home" @click="showPendingEnquiries()">
-                        </v-list-item> -->
-                    </div>
-
                 </v-list>
             </v-list>
             <v-divider></v-divider>
@@ -73,7 +84,7 @@ export default {
             menu: true,
             locale: '',
             locales: ["English", "French", "German"],
-            drawer:false
+            drawer: false
         }
     },
     methods: {
@@ -84,9 +95,6 @@ export default {
         showAllEnquiries() {
             this.setAllEnquiries()
             this.$router.push('/enquiries')
-        },
-        showPendingEnquiries() {
-            this.setAllPendingEnquiries()
         },
     },
     watch: {
@@ -108,19 +116,15 @@ export default {
 </script>
   
 <style scoped>
-.my-app-margin {
-    /* margin: -310px; */
-    /* Adjust the margin size as needed */
-}
-
 .btn-no-border {
     display: block !important;
     border: none !important;
     color: red
 }
-.v-select{
-    width:200px;
-    max-height: 50px;   
+
+.v-select {
+    width: 200px;
+    max-height: 50px;
     overflow: scroll;
 }
 </style>
