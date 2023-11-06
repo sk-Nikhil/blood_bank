@@ -13,7 +13,7 @@
                             @input="errMessage=''" required></v-text-field>
 
                             <v-card-text style="color:red" v-if="errMessage === '' ? false:true">{{ errMessage}}</v-card-text>
-                            <v-text>already have an account? <router-link to="/login">Login</router-link></v-text>
+                            <p>already have an account? <router-link to="/login">Login</router-link></p>
                             <v-btn class="ma-2 float-right" size="large" color="primary" type="submit">Signup</v-btn>
                         </v-form>
                     </v-card-text>
@@ -26,7 +26,6 @@
 <script>
 import { mapActions } from 'vuex'
 import { toast } from 'vue3-toastify';
-import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import 'vue3-toastify/dist/index.css';
 import router from '../routes'
@@ -99,7 +98,7 @@ export default {
                 autoClose: 1000,
             }); // ToastOptions
         }
-        return { notify, v$: useVuelidate() };
+        return { notify};
     },
 }
 </script>

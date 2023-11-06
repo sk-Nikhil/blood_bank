@@ -59,11 +59,6 @@ const routes = [
   },
 
   {
-    path: "/signup",
-    component: SignupPage,    //contains signup page
-  },
-
-  {
     path:"/enquiries",
     component:EnquiriesPage,    //contains enquiries of all users whether it is pending or approved
     meta: { requiresAuth: true, role:'admin' },
@@ -84,7 +79,7 @@ router.beforeEach((to, from, next) => {
     // Allow the page refresh, no route change
     next();
   } else {
-    if(!token){
+    if(!token && to.meta.requiredAuth){
       // if token is get expired and user tries to send a request
       next('/login')
     }

@@ -7,13 +7,13 @@
                     <v-card-text>
                         <v-form @submit.prevent="handleLogin()" ref="form">
                             <v-text-field label="Username" v-model="username" :rules="usernameRules"
-                                @blur="v$.username.$touch()" @input="errMessage = ''" required></v-text-field>
+                                @input="errMessage = ''" required></v-text-field>
                             <v-text-field label="Password" v-model="password" :rules="passwordRules"
                                 :type="showPassword ? 'text' : 'password'" @click:append="showPassword = !showPassword"
                                 @input="errMessage = ''" required></v-text-field>
                             <v-card-text style="color:red" v-if="errMessage === '' ? false : true">{{ errMessage
                             }}</v-card-text>
-                            <v-text>not registered yet? <router-link to="/signup">Register</router-link></v-text>
+                            <p>not registered yet? <router-link to="/signup">Register</router-link></p>
                             <v-btn class="ma-2 float-right" color="primary" type="submit">Login</v-btn>
                         </v-form>
                     </v-card-text>
@@ -25,13 +25,9 @@
 
 <script>
 import { mapActions } from "vuex";
-import { useVuelidate } from "@vuelidate/core";
 import { required, email } from "@vuelidate/validators";
 import "@mdi/font/css/materialdesignicons.css"; // Import MDI icons
 export default {
-    setup() {
-        return { v$: useVuelidate() };
-    },
     data() {
         return {
             username: "",

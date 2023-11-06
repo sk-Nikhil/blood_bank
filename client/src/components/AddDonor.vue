@@ -10,7 +10,7 @@
             </div>
         </transition>
         <v-form class="myForm" @submit.prevent="submitForm()" style="width:70%; height:30%;" ref="form">
-            <h1 class="text-center">Add Donor Form</h1>
+            <h1 class="text-center">{{ $t('addDonorDetails') }}</h1>
 
             <v-text-field v-model="donor.name" :counter="15" label="Name" :rules="nameRules" @input="v$.name.$touch()"
                 required></v-text-field>
