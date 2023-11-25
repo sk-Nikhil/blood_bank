@@ -1,0 +1,14 @@
+{
+    "greeting": "Hello!",
+    "welcome": "Welcome to our website.",
+    "login":"Login Form",
+    "register":"Registration Form",
+    "donorsRecords":"Donors Records",
+    "dashboard":"Dashboard",
+    "piechart":"PieChart",
+    "enquiries":"Enquiries",
+    "addDonor":"Add Donor",
+    "enquiriesRecords":"Enquiries Records",
+    "addDonorDetails":"Add Donor Details",
+    "updateDonorDetails":"Update Donor Details"
+}
